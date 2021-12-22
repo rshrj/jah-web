@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import { CssBaseline } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import { Global } from '@emotion/react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-function App() {
+import theme from './styles/theme';
+import globalStyles from './styles/global';
+
+import LoginPage from './pages/LoginPage';
+// import NotFoundPage from './pages/NotFoundPage';
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Global styles={globalStyles} />
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<LoginPage />} />
+          <Route path='/login' element={<LoginPage />} />
+          {/* <Route path='/404' element={<NotFoundPage />} /> */}
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
