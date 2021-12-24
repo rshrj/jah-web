@@ -3,6 +3,7 @@ import {
   Avatar,
   Button,
   Container,
+  Divider,
   IconButton,
   Menu,
   MenuItem,
@@ -64,7 +65,7 @@ const NavBar = ({ loggedIn }) => {
 
   return (
     <AppBar
-      position='static'
+      position='sticky'
       sx={{
         backgroundColor: theme.palette.common.white
       }}
@@ -252,6 +253,8 @@ const NavBar = ({ loggedIn }) => {
           )}
         </StyledToolbar>
       </Container>
+
+      <Divider />
     </AppBar>
   );
 };
