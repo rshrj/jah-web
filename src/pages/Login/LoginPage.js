@@ -6,21 +6,17 @@ import {
   FormControlLabel,
   Checkbox,
   Button,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  IconButton,
-  Link,
-  TextField,
-  FormHelperText,
-  FormLabel
+  Link
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useState } from 'react';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { Link as RouterLink } from 'react-router-dom';
+
 import validator from 'validator';
 
-import Background from './Background';
+import Background from '../../components/AuthBackground/AuthBackground';
+import { JInputField, JPasswordField } from '../../components/JInputField';
+import Loader from '../../components/Loader';
 
 const LoginPage = () => {
   const [values, setValues] = useState({
@@ -37,6 +33,11 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (prop) => (event) => {
+    setErrors({
+      ...errors,
+      email: '',
+      password: ''
+    });
     setValues({ ...values, [prop]: event.target.value });
   };
 
@@ -73,10 +74,6 @@ const LoginPage = () => {
     });
   };
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
   return (
     <Grid container>
       <Grid item container xs={12} sm={8} lg={6}>
@@ -102,80 +99,34 @@ const LoginPage = () => {
             </Typography>
 
             <FormGroup>
-              <FormControl
-                sx={{
-                  marginBottom: 2
-                }}>
-                <FormLabel
-                  sx={{
-                    color: 'text.primary',
-                    marginBottom: 1
-                  }}>
-                  Email
-                </FormLabel>
-                <TextField
-                  autoComplete='false'
-                  id='my-input'
-                  error={errors.email !== ''}
-                  aria-describedby='my-helper-text'
-                  onChange={handleChange('email')}
-                  label='Enter your email'
-                />
-                {errors.email !== '' && (
-                  <FormHelperText error={errors.email !== ''}>
-                    {errors.email !== ''
-                      ? errors.email
-                      : 'Must be 8 characters or more'}
-                  </FormHelperText>
-                )}
-              </FormControl>
+              <JInputField
+                topLabel='Email'
+                placeholder='Enter your email'
+                value={values.email}
+                handleChange={handleChange('email')}
+                errors={errors.email}
+                disabled={loading}
+              />
 
-              <FormLabel
-                sx={{
-                  color: 'text.primary',
-                  marginBottom: 1
-                }}>
-                Password
-              </FormLabel>
-              <FormControl
-                sx={{
-                  marginBottom: 2
-                }}>
-                <InputLabel htmlFor='login-password'>
-                  Enter your password
-                </InputLabel>
-                <OutlinedInput
-                  error={errors.password !== ''}
-                  id='login-password'
-                  type={values.showPassword ? 'text' : 'password'}
-                  value={values.password}
-                  aria-describedby='Login form password'
-                  onChange={handleChange('password')}
-                  endAdornment={
-                    <InputAdornment position='end'>
-                      <IconButton
-                        aria-label='toggle password visibility'
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge='end'>
-                        {values.showPassword ? <FaEyeSlash /> : <FaEye />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                  label='Enter your password'
-                />
-                <FormHelperText error={errors.password !== ''}>
-                  {errors.password !== ''
-                    ? errors.password
-                    : 'Must be 8 characters or more'}
-                </FormHelperText>
-              </FormControl>
+              <JPasswordField
+                topLabel='Password'
+                placeholder='Enter your password'
+                value={values.password}
+                handleChange={handleChange('password')}
+                errors={errors.password}
+                handleClickShowPassword={handleClickShowPassword}
+                showPassword={values.showPassword}
+                disabled={loading}
+              />
 
               <FormControl
                 sx={{
                   marginBottom: 2
                 }}>
-                <FormControlLabel control={<Checkbox />} label='Remember me' />
+                <FormControlLabel
+                  control={<Checkbox disabled={loading} />}
+                  label='Remember me'
+                />
               </FormControl>
 
               <FormControl
@@ -193,7 +144,7 @@ const LoginPage = () => {
                     }
                   }}
                   onClick={handleSubmit}>
-                  Login
+                  {loading ? <Loader /> : 'Login'}
                 </Button>
               </FormControl>
 
@@ -210,7 +161,11 @@ const LoginPage = () => {
                 sx={{
                   textAlign: 'center'
                 }}>
-                <Link href='#' underline='hover' color='primary'>
+                <Link
+                  component={RouterLink}
+                  to='/signup'
+                  underline='hover'
+                  color='primary'>
                   New here? Sign up
                 </Link>
               </FormControl>

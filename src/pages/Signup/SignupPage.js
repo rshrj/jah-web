@@ -1,0 +1,206 @@
+import {
+  FormGroup,
+  Grid,
+  Typography,
+  FormControl,
+  Button,
+  Link
+} from '@mui/material';
+import { Box } from '@mui/system';
+import { Link as RouterLink } from 'react-router-dom';
+import { useState } from 'react';
+
+import validator from 'validator';
+
+import Background from '../../components/AuthBackground/AuthBackground';
+import { JInputField, JPasswordField } from '../../components/JInputField';
+import Loader from '../../components/Loader';
+
+const SignupPage = () => {
+  const [values, setValues] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    password: '',
+    showPassword: false,
+    password2: '',
+    showPassword2: false
+  });
+
+  const [errors, setErrors] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    password: '',
+    password2: ''
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (prop) => (event) => {
+    setErrors({
+      ...errors,
+      name: '',
+      phone: '',
+      email: '',
+      password: '',
+      password2: ''
+    });
+    setValues({ ...values, [prop]: event.target.value });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (validator.isEmpty(values.email) || !validator.isEmail(values.email)) {
+      setErrors({
+        ...errors,
+        email: 'Please enter a valid email'
+      });
+
+      return;
+    }
+
+    setErrors({
+      ...errors,
+      email: ''
+    });
+
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+
+      alert('Logged in');
+    }, 4000);
+  };
+
+  const handleClickShowPassword = (prop) => () => {
+    setValues({
+      ...values,
+      [prop]: !values[prop]
+    });
+  };
+
+  return (
+    <Grid container>
+      <Grid item container xs={12} sm={8} lg={6}>
+        <Grid item xs={2} sm={2} lg={3} xl={4} />
+        <Grid item xs={8} sm={8} lg={6} xl={4}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100%',
+              height: '100%',
+              justifyContent: 'center'
+            }}>
+            <Typography
+              variant='h3'
+              bold
+              component='h2'
+              sx={{
+                marginBottom: 4,
+                fontWeight: 'bold'
+              }}>
+              Sign Up
+            </Typography>
+
+            <FormGroup>
+              <JInputField
+                topLabel='Name'
+                placeholder='Enter your name'
+                value={values.name}
+                handleChange={handleChange('name')}
+                errors={errors.name}
+                disabled={loading}
+              />
+
+              <JInputField
+                topLabel='Phone number'
+                placeholder='Enter your phone number'
+                value={values.phone}
+                type='tel'
+                handleChange={handleChange('phone')}
+                errors={errors.phone}
+                disabled={loading}
+              />
+
+              <JInputField
+                topLabel='Email'
+                placeholder='Enter your email'
+                value={values.email}
+                handleChange={handleChange('email')}
+                errors={errors.email}
+                disabled={loading}
+              />
+
+              <JPasswordField
+                topLabel='Password'
+                placeholder='Enter your password'
+                value={values.password}
+                handleChange={handleChange('password')}
+                errors={errors.password}
+                handleClickShowPassword={handleClickShowPassword(
+                  'showPassword'
+                )}
+                showPassword={values.showPassword}
+                disabled={loading}
+              />
+
+              <JPasswordField
+                topLabel='Confirm password'
+                placeholder='Confirm your password'
+                value={values.password2}
+                handleChange={handleChange('password2')}
+                errors={errors.password2}
+                handleClickShowPassword={handleClickShowPassword(
+                  'showPassword2'
+                )}
+                showPassword={values.showPassword2}
+                disabled={loading}
+                defaultHelperText=''
+              />
+
+              <FormControl
+                sx={{
+                  color: 'text.primary',
+                  marginBottom: 1
+                }}>
+                <Button
+                  disabled={loading}
+                  variant='contained'
+                  sx={{
+                    boxShadow: 'none',
+                    '&:hover': {
+                      boxShadow: 'none'
+                    }
+                  }}
+                  onClick={handleSubmit}>
+                  {loading ? <Loader /> : 'Sign Up'}
+                </Button>
+              </FormControl>
+
+              <FormControl
+                sx={{
+                  textAlign: 'center'
+                }}>
+                <Link
+                  component={RouterLink}
+                  to='/login'
+                  underline='hover'
+                  color='primary'>
+                  Already have an account? Log in
+                </Link>
+              </FormControl>
+            </FormGroup>
+          </Box>
+        </Grid>
+        <Grid item xs={2} sm={2} lg={3} xl={4} />
+      </Grid>
+      <Background />
+    </Grid>
+  );
+};
+
+export default SignupPage;
