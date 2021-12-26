@@ -26,13 +26,13 @@ const JInputField = ({
         {topLabel}
       </FormLabel>
       <TextField
-        error={errors !== ''}
+        error={errors !== undefined}
         value={value}
         onChange={handleChange}
         label={placeholder}
         {...rest}
       />
-      {errors !== '' && <FormHelperText error>{errors}</FormHelperText>}
+      {errors !== undefined && <FormHelperText error>{errors}</FormHelperText>}
     </FormControl>
   );
 };

@@ -1,14 +1,11 @@
 import {
   Avatar,
-  Collapse,
   Divider,
-  Grow,
   IconButton,
   ListItemIcon,
   ListItemText,
   MenuItem,
   MenuList,
-  Slide,
   Typography
 } from '@mui/material';
 import {

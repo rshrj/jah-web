@@ -42,7 +42,7 @@ const JPasswordField = ({
           {placeholder}
         </InputLabel>
         <OutlinedInput
-          error={errors !== ''}
+          error={errors !== undefined}
           id={'id' in rest ? rest.id : `password-field-${nanoid(6)}`}
           type={showPassword ? 'text' : 'password'}
           value={value}
@@ -61,8 +61,8 @@ const JPasswordField = ({
           label={placeholder}
           {...rest}
         />
-        <FormHelperText error={errors !== ''}>
-          {errors !== ''
+        <FormHelperText error={errors !== undefined}>
+          {errors !== undefined
             ? errors
             : 'defaultHelperText' in rest
             ? rest.defaultHelperText
