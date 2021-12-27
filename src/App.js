@@ -22,9 +22,7 @@ const App = () => {
 
   useEffect(() => {
     let token = localStorage.getItem('token');
-    if (token !== null) {
-      dispatch(loadUserByToken(token));
-    }
+    dispatch(loadUserByToken(token));
   }, [dispatch]);
 
   return (
@@ -35,6 +33,14 @@ const App = () => {
         <Routes>
           <Route
             index
+            element={
+              <PrivateRoute>
+                <DashboardPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/'
             element={
               <PrivateRoute>
                 <DashboardPage />

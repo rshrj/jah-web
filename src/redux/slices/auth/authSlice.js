@@ -5,7 +5,7 @@ import { createFormErrors } from '../errors/errorsSlice';
 import authService from '../../../services/authService';
 
 const initialState = {
-  loading: 'idle',
+  loading: 'init',
   user: {}
 };
 
@@ -43,6 +43,15 @@ const login = createAsyncThunk(
   }
 );
 
+const logout = createAsyncThunk('auth/logout', async (data, { dispatch }) => {
+  if (localStorage.getItem('token') !== null) {
+    localStorage.removeItem('token');
+    return;
+  }
+
+  return Promise.reject('Not logged in');
+});
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -54,6 +63,9 @@ export const authSlice = createSlice({
     builder.addCase(loadUserByToken.fulfilled, (state, action) => {
       state.loading = 'loggedIn';
       state.user = action.payload;
+    });
+    builder.addCase(loadUserByToken.rejected, (state, action) => {
+      state.loading = 'idle';
     });
 
     builder.addCase(login.pending, (state, action) => {
@@ -67,9 +79,14 @@ export const authSlice = createSlice({
       state.loading = 'idle';
       state.user = {};
     });
+
+    builder.addCase(logout.fulfilled, (state) => {
+      state.loading = 'idle';
+      state.user = {};
+    });
   }
 });
 
-export { loadUserByToken, login };
+export { loadUserByToken, login, logout };
 
 export default authSlice.reducer;

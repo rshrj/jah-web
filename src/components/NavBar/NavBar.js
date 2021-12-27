@@ -15,7 +15,10 @@ import { useTheme, styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { useState } from 'react';
 import { FaBars, FaPlus, FaSignInAlt } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
+
+import { logout } from '../../redux/slices/auth/authSlice';
 
 import { stringAvatar } from '../../utils/avatars';
 
@@ -29,7 +32,6 @@ const pages = [
 ];
 
 // TODO: Change settings pages
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   alignItems: 'center',
@@ -40,9 +42,19 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   // }
 }));
 
+const settings = [
+  {
+    label: 'Logout',
+    action: (dispatch) => {
+      dispatch(logout());
+    }
+  }
+];
+
 // Get login info from Redux
 const NavBar = ({ loggedIn }) => {
   const theme = useTheme();
+  const dispatch = useDispatch();
 
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -55,7 +67,8 @@ const NavBar = ({ loggedIn }) => {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (action) => () => {
+    action(dispatch);
     setAnchorElNav(null);
   };
 
@@ -213,8 +226,10 @@ const NavBar = ({ loggedIn }) => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}>
                 {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseNavMenu}>
-                    <Typography textAlign='center'>{setting}</Typography>
+                  <MenuItem
+                    key={setting.label}
+                    onClick={handleCloseNavMenu(setting.action)}>
+                    <Typography textAlign='center'>{setting.label}</Typography>
                   </MenuItem>
                 ))}
               </Menu>
