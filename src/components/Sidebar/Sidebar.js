@@ -19,21 +19,35 @@ import {
 import { Box } from '@mui/system';
 import { useTheme, lighten } from '@mui/material/styles';
 import { useState } from 'react';
-import { TransitionGroup } from 'react-transition-group';
+import { useSelector } from 'react-redux';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 import { stringAvatar } from '../../utils/avatars';
 
-const dashboardPages = [
-  { id: 1, name: 'Listings', icon: FaList },
-  { id: 2, name: 'Testimonials', icon: FaCheck },
-  { id: 3, name: 'Home Ad', icon: FaBell },
-  { id: 4, name: 'User', icon: FaUser }
+const adminPages = [
+  { id: 1, name: 'Listings', icon: FaList, to: '/dashboard/listings' },
+  { id: 2, name: 'Testimonials', icon: FaCheck, to: '/dashboard/testimonials' },
+  { id: 3, name: 'Home Ad', icon: FaBell, to: '/dashboard/homead' },
+  { id: 4, name: 'Users', icon: FaUser, to: '/dashboard/users' }
+];
+
+const customerPages = [
+  { id: 1, name: 'Listings', icon: FaList, to: '/dashboard/listings' },
+  { id: 2, name: 'My Account', icon: FaUser, to: '/dashboard/myaccount' }
 ];
 
 const Sidebar = () => {
   const theme = useTheme();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const [selectedTab, setSelectedTab] = useState(1);
+  let currentPath = location.pathname;
+
+  const role = useSelector((state) => state.auth.user.role);
+
+  let pages = role === 'admin' ? adminPages : customerPages;
+  let selectedTab = pages.find((page) => page.to === currentPath)?.id || 1;
+
   const [collapsed, setCollapsed] = useState(false);
 
   const handleSidebarCollapseClick = () => {
@@ -43,7 +57,8 @@ const Sidebar = () => {
   const handleMenuItemClick = (id) => (event) => {
     event.preventDefault();
 
-    setSelectedTab(id);
+    let page = pages.find((p) => p.id === id);
+    navigate(page.to, { state: { from: location } });
   };
 
   const styledMenu = {
@@ -87,105 +102,115 @@ const Sidebar = () => {
   };
 
   return (
-    <TransitionGroup>
+    <Box
+      sx={{
+        display: {
+          xs: 'none',
+          md: 'inline-flex'
+        },
+        width: {
+          md: collapsed ? 100 : 200,
+          lg: collapsed ? 100 : 300
+        },
+        height: 'calc(100vh - 80px)',
+        position: 'sticky',
+        top: 80
+      }}>
       <Box
         sx={{
-          display: {
-            xs: 'none',
-            md: 'inline-flex'
-          },
-          position: 'sticky',
-          top: 80,
           width: {
             md: collapsed ? 100 : 200,
             lg: collapsed ? 100 : 300
-          }
+          },
+          paddingTop: 10,
+          display: {
+            xs: 'none',
+            md: 'inline-block'
+          },
+          transition: '0.2 ease',
+          transitionProperty: 'width'
         }}>
+        <IconButton
+          sx={{
+            color: 'grey.400',
+            fontWeight: 'bold',
+            float: 'right',
+            mx: 1,
+            my: -8,
+            '&:hover': {
+              backgroundColor: lighten(theme.palette.primary.light, 0.9),
+              color: theme.palette.primary.light
+            }
+          }}
+          onClick={handleSidebarCollapseClick}>
+          {collapsed ? (
+            <FaChevronCircleRight fontSize={30} />
+          ) : (
+            <FaChevronCircleLeft fontSize={30} />
+          )}
+        </IconButton>
         <Box
           sx={{
-            width: {
-              md: collapsed ? 100 : 200,
-              lg: collapsed ? 100 : 300
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            px: collapsed ? 0 : 2,
+            py: 2,
+            mx: {
+              xs: 2,
+              md: 2,
+              lg: 6
             },
-            height: `calc(100vh - 80px)`,
-            paddingTop: 10,
-            display: {
-              xs: 'none',
-              md: 'inline-block'
-            },
-            transition: '0.2 ease',
-            transitionProperty: 'width'
+            marginBottom: 2,
+            backgroundColor: collapsed ? 'inherit' : 'grey.50',
+            borderRadius: 10
           }}>
-          <IconButton
-            sx={{
-              color: 'grey.400',
-              fontWeight: 'bold',
-              float: 'right',
-              mx: 1,
-              my: -8,
-              '&:hover': {
-                backgroundColor: lighten(theme.palette.primary.light, 0.9),
-                color: theme.palette.primary.light
-              }
-            }}
-            onClick={handleSidebarCollapseClick}>
-            {collapsed ? (
-              <FaChevronCircleRight fontSize={30} />
-            ) : (
-              <FaChevronCircleLeft fontSize={30} />
-            )}
-          </IconButton>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              px: collapsed ? 0 : 2,
-              py: 2,
-              mx: {
-                xs: 2,
-                md: 2,
-                lg: 6
-              },
-              marginBottom: 2,
-              backgroundColor: collapsed ? 'inherit' : 'grey.50',
-              borderRadius: 10
-            }}>
-            <Avatar
-              {...stringAvatar('Rishi Raj')}
-              src='/static/images/avatar/2.jpg'
-            />
-            {!collapsed && (
-              <Typography
-                variant='subtitle1'
-                color='grey.600'
-                sx={{ marginTop: 1 }}>
-                Welcome back, Rishi
-              </Typography>
-            )}
-          </Box>
-          <MenuList>
-            {dashboardPages.map((page) => (
-              <MenuItem
-                sx={
-                  page.id === selectedTab
-                    ? styledMenu.selected
-                    : styledMenu.normal
-                }
-                onClick={handleMenuItemClick(page.id)}>
-                <ListItemIcon sx={{ color: 'inherit' }}>
-                  {<page.icon />}
-                </ListItemIcon>
-                {!collapsed && <ListItemText>{page.name}</ListItemText>}
-              </MenuItem>
-            ))}
-          </MenuList>
+          <Avatar
+            {...stringAvatar('Rishi Raj')}
+            src='/static/images/avatar/2.jpg'
+          />
+          {!collapsed && (
+            <Typography
+              variant='subtitle1'
+              color='grey.600'
+              sx={{ marginTop: 1 }}>
+              Welcome back, Rishi
+            </Typography>
+          )}
         </Box>
-
-        <Divider orientation='vertical' flexItem />
+        <MenuList>
+          {pages.map((page) => (
+            <MenuItem
+              sx={
+                page.id === selectedTab
+                  ? styledMenu.selected
+                  : styledMenu.normal
+              }
+              onClick={handleMenuItemClick(page.id)}>
+              <ListItemIcon sx={{ color: 'inherit' }}>
+                {<page.icon />}
+              </ListItemIcon>
+              {!collapsed && <ListItemText>{page.name}</ListItemText>}
+            </MenuItem>
+          ))}
+        </MenuList>
       </Box>
-    </TransitionGroup>
+
+      <Divider orientation='vertical' flexItem />
+    </Box>
+  );
+
+  let blah = (
+    <Box
+      sx={{
+        position: 'sticky',
+        top: 80,
+        height: '100px',
+        backgroundColor: 'pink'
+      }}>
+      abracadabra
+    </Box>
   );
 };
 

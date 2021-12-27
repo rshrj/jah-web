@@ -8,12 +8,10 @@ const PrivateRoute = ({ children }) => {
   let loading = useSelector((state) => state.auth.loading);
 
   if (loading === 'loading' || loading === 'init') {
-    console.log('');
     return <SplashScreen />;
   }
 
   if (loading === 'idle') {
-    console.log('');
     return <Navigate to='/login' state={{ from: location }} />;
   }
 

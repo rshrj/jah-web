@@ -16,6 +16,7 @@ export const login = async (email, password) => {
     });
 
     if (!res) {
+      console.log('boop');
       throw new Error('Server did not respond', {
         cause: {
           success: false,
@@ -32,6 +33,17 @@ export const login = async (email, password) => {
 
     return data;
   } catch (e) {
+    if (e instanceof TypeError && e.message === 'Failed to fetch') {
+      return Promise.reject(
+        new Error('Server is offline', {
+          cause: {
+            message: {
+              email: 'Server is offline'
+            }
+          }
+        })
+      );
+    }
     return Promise.reject(e);
   }
 };

@@ -1,19 +1,33 @@
-import { Breadcrumbs, IconButton, Link, Typography } from '@mui/material';
+import {
+  Breadcrumbs,
+  IconButton,
+  Link,
+  Paper,
+  Typography
+} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { FaAngleRight, FaArrowLeft } from 'react-icons/fa';
+import { Outlet, Link as RouterLink, useLocation } from 'react-router-dom';
 
 import NavBar from '../../components/NavBar';
 import Sidebar from '../../components/Sidebar';
 
 const DashboardPage = () => {
   const theme = useTheme();
+  const location = useLocation();
+
+  let routes = location.pathname.split('/').filter((route) => route !== '');
 
   return (
     <>
       <NavBar loggedIn={true} />
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between'
+        }}>
         <Sidebar />
 
         <Box
@@ -23,7 +37,6 @@ const DashboardPage = () => {
             px: { xs: 2, md: 2, lg: 6 },
             py: { xs: 2, md: 2, lg: 3 },
             width: '100%',
-            height: `calc(100vh - 150px)`,
             backgroundColor: theme.palette.common.white,
             // backgroundColor: lighten(theme.palette.grey[50],
             borderRadius: 5
@@ -36,12 +49,19 @@ const DashboardPage = () => {
               aria-label='breadcrumb'
               sx={{ m: 1 }}
               separator={<FaAngleRight />}>
-              <Link underline='hover' color='inherit' href='/'>
-                Listings
-              </Link>
-              <Typography color='text.primary'>New Property</Typography>
+              {routes.slice(0, -1).map((route) => (
+                <Link
+                  component={RouterLink}
+                  underline='hover'
+                  color='inherit'
+                  to='/'>
+                  {route}
+                </Link>
+              ))}
+              <Typography color='text.primary'>{routes.at(-1)}</Typography>
             </Breadcrumbs>
           </Box>
+          <Outlet />
         </Box>
       </Box>
     </>

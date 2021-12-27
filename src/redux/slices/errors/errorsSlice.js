@@ -1,8 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { nanoid } from 'nanoid';
 
 const initialState = {
   formErrors: {},
-  toastErrors: {}
+  toastErrors: {
+    ids: [],
+    errors: {}
+  }
 };
 
 export const errorsSlice = createSlice({
@@ -15,20 +19,21 @@ export const errorsSlice = createSlice({
     clearFormErrors: (state) => {
       state.formErrors = {};
     },
-    createToastErrors: (state, action) => {
-      state.toastErrors = action.payload;
+    addToast: (state, action) => {
+      let id = nanoid(6);
+      state.toastErrors.ids.push(id);
+      state.toastErrors.errors[id] = action.payload;
     },
-    clearToastErrors: (state) => {
-      state.toastErrors = {};
+    clearToast: (state, action) => {
+      delete state.toastErrors.errors[action.payload];
+      state.toastErrors.ids = state.toastErrors.ids.filter(
+        (id) => id !== action.payload
+      );
     }
   }
 });
 
-export const {
-  createFormErrors,
-  clearFormErrors,
-  createToastErrors,
-  clearToastErrors
-} = errorsSlice.actions;
+export const { createFormErrors, clearFormErrors, addToast, clearToast } =
+  errorsSlice.actions;
 
 export default errorsSlice.reducer;
