@@ -28,6 +28,7 @@ import { clearToast } from './redux/slices/errors/errorsSlice';
 import JSnackbar from './components/JSnackbar/JSnackbar';
 import { Box } from '@mui/system';
 import MyAccount from './pages/MyAccount/MyAccount';
+import NewProperty from './pages/NewProperty/NewProperty';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -84,6 +85,7 @@ const App = () => {
               </PrivateRoute>
             }>
             <Route path='myaccount' element={<MyAccount />} />
+            <Route path='newproperty' element={<NewProperty />} />
           </Route>
           {/* <Route path='/404' element={<NotFoundPage />} /> */}
           {/* Testing */}

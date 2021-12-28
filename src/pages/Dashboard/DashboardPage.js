@@ -51,6 +51,7 @@ const DashboardPage = () => {
               separator={<FaAngleRight />}>
               {routes.slice(0, -1).map((route) => (
                 <Link
+                  key={route}
                   component={RouterLink}
                   underline='hover'
                   color='inherit'
