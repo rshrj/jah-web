@@ -1,4 +1,9 @@
-import { ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import {
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+  useMediaQuery
+} from '@mui/material';
 import { Box } from '@mui/system';
 import {
   MdLocationCity,
@@ -14,15 +19,37 @@ const NewProperty = () => {
     setVal(newVal);
   };
 
+  const matches = useMediaQuery('(min-width:600px)');
+
   return (
-    <Box sx={{ p: { xs: 0, md: 5 }, m: 2 }}>
+    <Box
+      sx={{
+        p: { xs: 0, md: 5 },
+        m: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}>
+      <Typography
+        variant='h3'
+        sx={{ textAlign: 'center', color: 'primary.main', marginBottom: 2 }}>
+        Add new property
+      </Typography>
+      <Typography
+        variant='h6'
+        sx={{ color: 'text.secondary', marginBottom: 1 }}>
+        What would you like to do?
+      </Typography>
       <ToggleButtonGroup
+        orientation={matches ? 'horizontal' : 'vertical'}
         value={val}
         exclusive
         color='primary'
         onChange={handleToggleClick}
         aria-label='text alignment'
-        sx={{ textDecoration: 'none' }}>
+        sx={{
+          textDecoration: 'none'
+        }}>
         <ToggleButton value='sellproject' aria-label='sell project'>
           <Box
             sx={{
@@ -30,7 +57,7 @@ const NewProperty = () => {
               justiftContent: 'center',
               alignItems: 'center',
               textDecoration: 'none',
-              px: 4
+              px: { xs: 0, md: 4 }
             }}>
             <MdLocationCity fontSize={40} />
             <Box
@@ -56,7 +83,7 @@ const NewProperty = () => {
               justiftContent: 'center',
               alignItems: 'center',
               textDecoration: 'none',
-              px: 4
+              px: { xs: 0, md: 4 }
             }}>
             <MdMapsHomeWork fontSize={40} />
             <Box
@@ -82,7 +109,7 @@ const NewProperty = () => {
               justiftContent: 'center',
               alignItems: 'center',
               textDecoration: 'none',
-              px: 4
+              px: { xs: 0, md: 4 }
             }}>
             <MdAccountBalance fontSize={40} />
             <Box
