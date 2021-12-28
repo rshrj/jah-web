@@ -28,6 +28,7 @@ import { clearToast } from './redux/slices/errors/errorsSlice';
 import JSnackbar from './components/JSnackbar/JSnackbar';
 import { Box } from '@mui/system';
 import MyAccount from './pages/MyAccount/MyAccount';
+import BuyHomes from './pages/BuyHomes';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -45,7 +46,7 @@ const App = () => {
       <Global styles={globalStyles} />
       {/* Toasts */}
       {toasts.ids.length !== 0 && (
-        <Stack spacing={2} sx={{ width: '100%' }}>
+        <Stack spacing={2} sx={{ width: "100%" }}>
           {toasts.ids.map((toastId) => (
             <JSnackbar
               key={toastId}
@@ -58,6 +59,7 @@ const App = () => {
 
       <BrowserRouter>
         <Routes>
+          <Route path='/forbuyers' element={<BuyHomes/>} />
           <Route
             index
             element={
