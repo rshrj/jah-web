@@ -37,7 +37,9 @@ const App = () => {
 
   useEffect(() => {
     let token = localStorage.getItem('token');
-    dispatch(loadUserByToken(token));
+    if(token){
+      dispatch(loadUserByToken(token));
+    }
   }, [dispatch]);
 
   const toasts = useSelector((state) => state.errors.toastErrors);

@@ -10,12 +10,15 @@ import {
   IconButton,
   Button,
   styled,
+  Grid,
+  Link
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 import NavBar from "../../components/NavBar";
 import PropertyCard from "../../components/PropertyCard";
 import { getBuyHomes } from "../../redux/slices/property/propertySlice";
+import Footer from "../../components/Footer";
 
 const SearchCard = styled(Card)({
   boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
@@ -61,6 +64,7 @@ const BuyHomes = () => {
   return (
     <>
       <NavBar loggedIn={false} />
+      
       <Box sx={{ pt: "30px" }}>
         <Typography variant='h3' color='grey.700' align='center'>
           Buy Homes
@@ -130,6 +134,7 @@ const BuyHomes = () => {
           ))}
         </Box>
       </Box>
+      <Footer/>
     </>
   );
 };
