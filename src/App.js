@@ -30,6 +30,7 @@ import { Box } from '@mui/system';
 import MyAccount from './pages/MyAccount/MyAccount';
 import BuyHomes from './pages/BuyHomes';
 import LandingPage from "./pages/LandingPage";
+import NewProperty from './pages/NewProperty/NewProperty';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -88,6 +89,7 @@ const App = () => {
               </PrivateRoute>
             }>
             <Route path='myaccount' element={<MyAccount />} />
+            <Route path='newproperty' element={<NewProperty />} />
           </Route>
           {/* <Route path='/404' element={<NotFoundPage />} /> */}
           {/* Testing */}
