@@ -190,7 +190,11 @@ const NavBar = ({ loggedIn }) => {
               <Box sx={{ flexGrow: 0 }}>
                 <Box sx={{ display: { xs: 'inline-block', md: 'none' } }}>
                   <Tooltip title='New property'>
-                    <IconButton color='primary' sx={{ mx: 3 }}>
+                    <IconButton
+                      component={RouterLink}
+                      to={'/dashboard/newproperty'}
+                      color='primary'
+                      sx={{ mx: 3 }}>
                       <FaPlus />
                     </IconButton>
                   </Tooltip>
@@ -198,6 +202,8 @@ const NavBar = ({ loggedIn }) => {
                 <Box sx={{ display: { xs: 'none', md: 'inline-block' } }}>
                   <Tooltip title='New property'>
                     <Button
+                      component={RouterLink}
+                      to={'/dashboard/newproperty'}
                       variant='text'
                       startIcon={<FaPlus />}
                       sx={{

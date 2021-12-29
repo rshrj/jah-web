@@ -8,7 +8,12 @@ import {
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { FaAngleRight, FaArrowLeft } from 'react-icons/fa';
-import { Outlet, Link as RouterLink, useLocation } from 'react-router-dom';
+import {
+  Outlet,
+  Link as RouterLink,
+  useLocation,
+  useNavigate
+} from 'react-router-dom';
 
 import NavBar from '../../components/NavBar';
 import Sidebar from '../../components/Sidebar';
@@ -16,8 +21,19 @@ import Sidebar from '../../components/Sidebar';
 const DashboardPage = () => {
   const theme = useTheme();
   const location = useLocation();
+  const navigate = useNavigate();
 
-  let routes = location.pathname.split('/').filter((route) => route !== '');
+  let routenames = location.pathname.split('/').filter((route) => route !== '');
+  let routes = Array.from(routenames.entries()).map(([index, routename]) => ({
+    name: routename,
+    to: `/${routenames.slice(0, index + 1).join('/')}`
+  }));
+
+  const handleBackClick = (e) => {
+    navigate(-1);
+  };
+
+  console.log(routes);
 
   return (
     <>
@@ -42,7 +58,7 @@ const DashboardPage = () => {
             borderRadius: 5
           }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton>
+            <IconButton onClick={handleBackClick}>
               <FaArrowLeft />
             </IconButton>
             <Breadcrumbs
@@ -51,15 +67,15 @@ const DashboardPage = () => {
               separator={<FaAngleRight />}>
               {routes.slice(0, -1).map((route) => (
                 <Link
-                  key={route}
+                  key={route.name}
                   component={RouterLink}
                   underline='hover'
                   color='inherit'
-                  to='/'>
-                  {route}
+                  to={route.to}>
+                  {route.name}
                 </Link>
               ))}
-              <Typography color='text.primary'>{routes.at(-1)}</Typography>
+              <Typography color='text.primary'>{routes.at(-1).name}</Typography>
             </Breadcrumbs>
           </Box>
           <Outlet />

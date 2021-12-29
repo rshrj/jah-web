@@ -3,6 +3,7 @@
 - [] New property form
 - [] Edit listing
 - [] Listings table view
+- [] Abstract out pages
 - [] Fix NavBar to display current logged in user's avatar if loggedIn or Login button if not logged in
 - [] Make sure server errors or other formless errors are displayed as error toasts
 - [] Make sure success messages are displayed as success toasts

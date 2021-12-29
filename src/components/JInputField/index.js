@@ -1,4 +1,5 @@
 import JInputField from './JInputField';
 import JPasswordField from './JPasswordField';
+import JInputSearch from './JInputSearch';
 
-export { JInputField, JPasswordField };
+export { JInputField, JPasswordField, JInputSearch };
