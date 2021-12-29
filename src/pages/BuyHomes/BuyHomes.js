@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   Box,
@@ -13,6 +14,8 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 
 import NavBar from "../../components/NavBar";
+import PropertyCard from "../../components/PropertyCard";
+import { getBuyHomes } from "../../redux/slices/property/propertySlice";
 
 const SearchCard = styled(Card)({
   boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
@@ -24,12 +27,7 @@ const SearchCard = styled(Card)({
 
 const Input = styled("input")({
   border: "none",
-  boxSizing: "border-box",
-  borderRadius: "10px",
   fontSize: "15px",
-  width: "100%",
-  maxWidth: "300px",
-  padding: "0 15px",
   outline: "none",
   color: "#6c757d",
   "&::placeholder": {
@@ -43,14 +41,21 @@ const Input = styled("input")({
 });
 
 const BuyHomes = () => {
+  const dispatch = useDispatch();
+  const buyHomes = useSelector((state) => state.property.buyHomes);
+
+  useEffect(() => {
+    dispatch(getBuyHomes());
+  }, []);
+
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const tabs = ["PROJECTS", "RESALE HOMES"].map((l) => (
-    <Tab label={l} id='simple-tab-0' sx={{ fontWeight: "bold" }} />
+  const tabs = ["PROJECTS", "RESALE HOMES"].map((l, i) => (
+    <Tab key={i} label={l} id='simple-tab-0' sx={{ fontWeight: "bold" }} />
   ));
 
   return (
@@ -76,7 +81,10 @@ const BuyHomes = () => {
             <IconButton sx={{ pr: "10px" }}>
               <SearchIcon sx={{ color: "#6C757D", fontSize: "30px" }} />
             </IconButton>
-            <Input placeholder='Enter Locality' />
+            <Input
+              sx={{ width: "100%", maxWidth: "300px", padding: "0 15px" }}
+              placeholder='Enter Locality'
+            />
             <Button
               size='small'
               variant='contained'
@@ -92,6 +100,35 @@ const BuyHomes = () => {
             </Button>
           </Box>
         </SearchCard>
+        <Box sx={{ mt: 4, ml: 12 }}>
+          <IconButton sx={{}}>
+            <SearchIcon sx={{ color: "#6C757D", fontSize: "30px" }} />
+          </IconButton>
+          <Input
+            sx={{ "::placeholder": { fontWeight: "bold" }, p: 0 }}
+            placeholder='Filter By Location'
+          />
+        </Box>
+        <Box sx={{ maxWidth: "1360px", margin: "20px auto 0" }}>
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((m, i) => (
+            <PropertyCard
+              key={i}
+              image='https://github.com/manikmmalhotra/slack-clone/blob/master/apartment%20(1)%201.png?raw=true'
+              title='Hiranandani Towers'
+              location='Vashi'
+              price='20-30L'
+            />
+          ))}
+          {buyHomes.map((m, i) => (
+            <PropertyCard
+              key={i}
+              image={m.image}
+              title={m.title}
+              location={m.location}
+              price={m.price}
+            />
+          ))}
+        </Box>
       </Box>
     </>
   );

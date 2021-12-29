@@ -29,6 +29,7 @@ import JSnackbar from './components/JSnackbar/JSnackbar';
 import { Box } from '@mui/system';
 import MyAccount from './pages/MyAccount/MyAccount';
 import BuyHomes from './pages/BuyHomes';
+import LandingPage from "./pages/LandingPage";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -59,7 +60,8 @@ const App = () => {
 
       <BrowserRouter>
         <Routes>
-          <Route path='/forbuyers' element={<BuyHomes/>} />
+          <Route path='/forbuyers' element={<BuyHomes />} />
+          <Route path='/home' element={<LandingPage />} />
           <Route
             index
             element={
