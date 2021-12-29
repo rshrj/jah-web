@@ -18,10 +18,11 @@ function stringToColor(string) {
   return color;
 }
 
-function stringAvatar(name) {
+function stringAvatar(name, sxmore) {
   return {
     sx: {
-      bgcolor: stringToColor(name)
+      bgcolor: stringToColor(name),
+      ...sxmore
     },
     children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`
   };

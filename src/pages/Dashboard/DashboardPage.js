@@ -1,6 +1,5 @@
 import {
   Breadcrumbs,
-  Button,
   IconButton,
   Link,
   Paper,
@@ -14,6 +13,8 @@ import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { FaAngleRight, FaArrowLeft,FaSearch} from 'react-icons/fa';
 import { withStyles } from "@material-ui/core/styles";
+import { Outlet, Link as RouterLink, useLocation } from 'react-router-dom';
+import InputAdornment from '@mui/material/InputAdornment';
 
 import NavBar from '../../components/NavBar';
 import Sidebar from '../../components/Sidebar';
@@ -27,6 +28,10 @@ const styles = {
 function Dashboard(props) {
   const {loading=false} =props;
   const theme = useTheme();
+  const location = useLocation();
+
+  let routes = location.pathname.split('/').filter((route) => route !== '');
+
   return (
     <>
       {/* <Box>
@@ -40,17 +45,14 @@ function Dashboard(props) {
         )}
       </Box> */}
       <NavBar loggedIn={true} />
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-      <Box>
-        {loading ?(
-          <>
-          <Skeleton sx={{width:150, height:90}} style={{marginLeft:45, borderRadius:20,marginTop:100}} animation="wave" variant="rectangular" />
-          <Skeleton sx={{ height: 300,width:200 }} style={{marginTop:20,borderRadius:10,marginLeft:20}} animation="wave" variant="rectangular" />
-          </>
-        ):(
-          <Sidebar />
-        )}
-        </Box>
+
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between'
+        }}>
+        <Sidebar />
+
         <Box
           sx={{
             my: 0,
@@ -58,7 +60,6 @@ function Dashboard(props) {
             px: { xs: 2, md: 2, lg: 6 },
             py: { xs: 2, md: 2, lg: 3 },
             width: '100%',
-            height: `calc(100vh - 150px)`,
             backgroundColor: theme.palette.common.white,
             // backgroundColor: lighten(theme.palette.grey[50],
             borderRadius: 5
@@ -71,35 +72,33 @@ function Dashboard(props) {
               aria-label='breadcrumb'
               sx={{ m: 1 }}
               separator={<FaAngleRight />}>
-              <Link underline='hover' color='inherit' href='/'>
-                Listings
-              </Link>
-              <Typography color='text.primary'>New Property</Typography>
+              {routes.slice(0, -1).map((route) => (
+                <Link
+                  key={route}
+                  component={RouterLink}
+                  underline='hover'
+                  color='inherit'
+                  to='/'>
+                  {route}
+                </Link>
+              ))}
+              <Typography color='text.primary'>{routes.at(-1)}</Typography>
             </Breadcrumbs>
-          </Box>
-          <Box>
-          {loading?(
-            <Skeleton animation="wave" height={90} width="25%" style={{marginLeft:20}} />
-          ):(
-            <Typography variant="h4">Active Listings</Typography>
-          )}
-            {/* <TextField
-            // sx={{width:282,height:11}}
-            placeholder='Search'
-            InputProps={{
-              classes: { input: props.classes.input },
-            endAdornment: (
-            <FaSearch />
+            <Typography variant='h4'>Active Listings</Typography>
+            <TextField
+              placeholder="Search"
+              size="small"
+              InputProps={{
+              startAdornment: (
+            <InputAdornment position="start">
+              <FaSearch />
+            </InputAdornment>
           ),
-          }}/> */}
+        }}
+            />
           </Box>
-          <Box>
-          {loading?(
-            <Skeleton sx={{ height: 400,width:1100 }} style={{marginTop:10,borderRadius:10,marginLeft:20}} animation="wave" variant="rectangular" />
-          ):(
-            <Table/>
-          )}
-          </Box>
+          <Outlet />
+          <Table/>
         </Box>
       </Box>
     </>
@@ -113,7 +112,7 @@ const StyledDashboard = withStyles(styles)(Dashboard);
 export default function DashboardPage(){
   return(
     <>
-      <StyledDashboard loading/>
+      {/* <StyledDashboard loading/> */}
       <StyledDashboard/>
     </>
   )
