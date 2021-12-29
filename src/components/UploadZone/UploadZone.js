@@ -19,6 +19,10 @@ const FileBox = ({ file, selected = false, onImgClick, onDeleteClick }) => {
       return;
     }
 
+    if (!/^image\/[a-zA-Z]+$/i.test(file.type)) {
+      return;
+    }
+
     const objectUrl = URL.createObjectURL(file);
     setPreview(objectUrl);
 
@@ -48,17 +52,19 @@ const FileBox = ({ file, selected = false, onImgClick, onDeleteClick }) => {
         onClick={onDeleteClick}>
         Remove
       </Button>
-      <img
-        src={preview}
-        alt='blah'
-        height='80'
-        style={{
-          borderRadius: 5,
-          overflow: 'hidden',
-          marginBottom: 5
-        }}
-        onClick={onImgClick}
-      />
+      {/^image\/[a-zA-Z]+$/i.test(file.type) && (
+        <img
+          src={preview}
+          alt='blah'
+          height='80'
+          style={{
+            borderRadius: 5,
+            overflow: 'hidden',
+            marginBottom: 5
+          }}
+          onClick={onImgClick}
+        />
+      )}
       <Typography>{file.name}</Typography>
     </Box>
   );
@@ -66,13 +72,20 @@ const FileBox = ({ file, selected = false, onImgClick, onDeleteClick }) => {
 
 const UploadZone = ({
   files = [],
+  file,
   selectedFile,
   onFilesChange,
-  onSelectedFileChange
+  onSelectedFileChange,
+  accept = 'image/*',
+  multiple = true,
+  label1,
+  label2
 }) => {
   const theme = useTheme();
 
-  useEffect(() => {}, [files]);
+  useEffect(() => {
+    console.log(files);
+  }, [files]);
 
   const handleChange = (e) => {
     if (!onFilesChange) {
@@ -126,17 +139,43 @@ const UploadZone = ({
     onSelectedFileChange(event, file);
   };
 
+  const handleSingleChange = (e) => {
+    if (!onFilesChange) {
+      return;
+    }
+
+    let newFile = e.target.files[0];
+
+    if (!newFile) {
+      return;
+    }
+
+    if (newFile === file) {
+      return;
+    }
+
+    onFilesChange(e, newFile);
+  };
+
+  const handleSingleDeleteClick = (event) => {
+    if (!onFilesChange) {
+      return;
+    }
+
+    onFilesChange(event, undefined);
+  };
+
   let isFiles = files.length > 0;
 
   return (
     <>
       <label htmlFor='contained-button-file'>
         <Input
-          accept='image/*'
+          accept={accept}
           id='contained-button-file'
-          multiple
+          multiple={multiple}
           type='file'
-          onChange={handleChange}
+          onChange={multiple ? handleChange : handleSingleChange}
         />
         <Box
           sx={{
@@ -155,25 +194,34 @@ const UploadZone = ({
           }}>
           <FaCloudUploadAlt fontSize={50} color={theme.palette.primary.main} />
           <Typography color='text.secondary' sx={{ marginTop: 1 }}>
-            Drag and drop or click to choose files
+            {label1}
           </Typography>
         </Box>
       </label>
       <Typography variant='body1' color='text.secondary' sx={{ marginLeft: 2 }}>
-        Select one of the uploads below as the featured picture
+        {label2}
       </Typography>
       {isFiles && (
         <Stack direction='row' spacing={2} sx={{ flexWrap: 'wrap', m: 2 }}>
-          {files.map((file) => (
+          {files.map((filep) => (
             <FileBox
-              key={file.name}
-              file={file}
-              selected={selectedFile !== undefined && selectedFile === file}
-              onDeleteClick={handleDeleteClick(file)}
-              onImgClick={handleImgClick(file)}
+              key={filep.name}
+              file={filep}
+              selected={selectedFile !== undefined && selectedFile === filep}
+              onDeleteClick={handleDeleteClick(filep)}
+              onImgClick={handleImgClick(filep)}
             />
           ))}
         </Stack>
+      )}
+      {file !== undefined && (
+        <Box sx={{ m: 2 }}>
+          <FileBox
+            key={file.name}
+            file={file}
+            onDeleteClick={handleSingleDeleteClick(file)}
+          />
+        </Box>
       )}
     </>
   );

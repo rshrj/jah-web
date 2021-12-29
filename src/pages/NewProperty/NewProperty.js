@@ -13,7 +13,10 @@ import {
   MdAccountBalance
 } from 'react-icons/md';
 import { useState } from 'react';
+
 import RentLeaseForm from './RentLeaseForm';
+import SellApartmentForm from './SellApartmentForm';
+import SellProjectForm from './SellProject';
 
 const NewProperty = () => {
   const [tab, setTab] = useState('');
@@ -41,7 +44,65 @@ const NewProperty = () => {
       availableFrom: new Date(),
       willingToRentOutTo: [],
       pictures: [],
-      featuredPicture: undefined
+      featuredPicture: undefined,
+      videoLink: ''
+    },
+    sellapartment: {
+      location: '',
+      landmark: '',
+      apartmentType: '1rk',
+      price: '',
+      pricePerSqFt: '',
+      allInclusivePrice: false,
+      taxAndGovtChargesExcluded: true,
+      priceNegotiable: false,
+      numBathrooms: '1',
+      numBalconies: '1',
+      builtUpArea: '',
+      superBuiltUpArea: '',
+      otherRooms: [],
+      furnishing: '',
+      coveredParking: 0,
+      openParking: 0,
+      totalFloors: '',
+      propertyOnFloor: '',
+      ageOfProperty: '',
+      availabilityStatus: 'readyToMove',
+      possessionBy: new Date(),
+      ownershipType: 'freehold',
+      usp: 'Spacious rooms, well maintained facilities, sufficient ventilation',
+      pictures: [],
+      featuredPicture: undefined,
+      videoLink: ''
+    },
+    sellproject: {
+      location: '',
+      landmark: '',
+      apartmentType: '1rk',
+      price: '',
+      pricePerSqFt: '',
+      allInclusivePrice: false,
+      taxAndGovtChargesExcluded: true,
+      priceNegotiable: false,
+      numBathrooms: '1',
+      numBalconies: '1',
+      builtUpArea: '',
+      superBuiltUpArea: '',
+      otherRooms: [],
+      furnishing: '',
+      coveredParking: 0,
+      openParking: 0,
+      totalFloors: '',
+      propertyOnFloor: '',
+      ageOfProperty: '',
+      availabilityStatus: 'readyToMove',
+      possessionBy: new Date(),
+      ownershipType: 'freehold',
+      usp: 'Spacious rooms, well maintained facilities, sufficient ventilation',
+      pictures: [],
+      brochure: undefined,
+      featuredPicture: undefined,
+      videoLink: ''
     }
   });
 
@@ -49,15 +110,11 @@ const NewProperty = () => {
     setTab(newVal);
   };
 
-  const handleRentLeaseChange = (newVal) => {
-    setValues({ ...values, rentlease: newVal });
+  const handleChange = (prop) => (newVal) => {
+    setValues({ ...values, [prop]: newVal });
   };
 
   const isPhone = useMediaQuery('(min-width:600px)');
-
-  let projectForm = <Box></Box>;
-
-  let apartmentForm = <Box></Box>;
 
   return (
     <Box
@@ -178,11 +235,21 @@ const NewProperty = () => {
         {tab === 'rentlease' && (
           <RentLeaseForm
             values={values.rentlease}
-            onChange={handleRentLeaseChange}
+            onChange={handleChange('rentlease')}
           />
         )}
-        {tab === 'sellproject' && projectForm}
-        {tab === 'sellapartment' && apartmentForm}
+        {tab === 'sellproject' && (
+          <SellProjectForm
+            values={values.sellproject}
+            onChange={handleChange('sellproject')}
+          />
+        )}
+        {tab === 'sellapartment' && (
+          <SellApartmentForm
+            values={values.sellapartment}
+            onChange={handleChange('sellapartment')}
+          />
+        )}
       </FormGroup>
     </Box>
   );

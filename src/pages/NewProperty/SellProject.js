@@ -13,6 +13,7 @@ import {
   lighten,
   Link,
   OutlinedInput,
+  TextareaAutosize,
   TextField,
   Typography,
   useMediaQuery
@@ -27,16 +28,9 @@ import locationOptions from './locationOptions.json';
 
 import { ChipOption, ChipSelect } from '../../components/ChipSelect';
 import CountInput from '../../components/CountInput/CountInput';
-import Emoji from '../../components/Emoji/Emoji';
 import { JInputField, JInputSearch } from '../../components/JInputField';
 import { useState } from 'react';
 import UploadZone from '../../components/UploadZone';
-import {
-  MdArrowCircleDown,
-  MdArrowRight,
-  MdArrowRightAlt,
-  MdExitToApp
-} from 'react-icons/md';
 
 const isNumeric = (str) => {
   if (typeof str != 'string') return false; // we only process strings!
@@ -86,15 +80,16 @@ const genOptions = (initOptions, totalCount) => {
   return newOptions;
 };
 
-const RentLeaseForm = ({
+const SellProjectForm = ({
   values = {
     location: '',
     landmark: '',
-    apartmentType: '1rk',
-    rent: '',
-    electricityIncluded: false,
+    apartmentTypes: ['1rk'],
+    price: '',
+    pricePerSqFt: '',
+    allInclusivePrice: false,
+    taxAndGovtChargesExcluded: true,
     priceNegotiable: false,
-    deposit: '',
     numBathrooms: '1',
     numBalconies: '1',
     carpetArea: '',
@@ -107,11 +102,14 @@ const RentLeaseForm = ({
     totalFloors: '',
     propertyOnFloor: '',
     ageOfProperty: '',
-    availableFrom: new Date(),
-    willingToRentOutTo: [],
+    availabilityStatus: 'readyToMove',
+    possessionBy: new Date(),
+    ownershipType: 'freehold',
+    usp: 'Spacious rooms, well maintained facilities, sufficient ventilation',
     pictures: [],
     featuredPicture: undefined,
-    videoLink: ''
+    videoLink: '',
+    brochureLink: ''
   },
   onChange,
   disabled = false
@@ -158,14 +156,14 @@ const RentLeaseForm = ({
     setAddSuperBuiltUpArea(!addSuperBuiltUpArea);
   };
 
-  const handleDateChange = (newDate) => {
+  const handleDateChange = (prop) => (newDate) => {
     if (!onChange) {
       return;
     }
 
     onChange({
       ...values,
-      availableFrom: newDate
+      [prop]: newDate
     });
   };
 
@@ -204,7 +202,7 @@ const RentLeaseForm = ({
         }
         options={locationOptions}
         spacing={5}
-        placeholder='Where is your property located?'
+        placeholder='Where is your project located?'
         value={values.location}
         handleChange={handleChange('location')}
         disabled={false}
@@ -219,7 +217,7 @@ const RentLeaseForm = ({
             Landmark<span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
           </Typography>
         }
-        placeholder='Enter the closest landmark to your property'
+        placeholder='Enter the closest landmark to your project'
         value={values.landmark}
         spacing={5}
         handleChange={handleChange('landmark')}
@@ -252,13 +250,13 @@ const RentLeaseForm = ({
         </ChipSelect>
       </FormControl>
 
-      <JInputField
+      {/* <JInputField
         topLabel={
           <Typography
             variant='h6'
             color='text.secondary'
             sx={{ fontWeight: 'bold' }}>
-            Rent Details
+            Price Details
             <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
           </Typography>
         }
@@ -272,7 +270,83 @@ const RentLeaseForm = ({
             ? toWords.convert(values.rent)
             : 'Rent in words'
         }
-      />
+      /> */}
+      <FormControl
+        sx={{
+          marginBottom: 5
+        }}>
+        <FormLabel
+          sx={{
+            color: 'text.primary',
+            marginBottom: 1
+          }}>
+          <Typography
+            variant='h6'
+            color='text.secondary'
+            sx={{
+              fontWeight: 'bold',
+              display: 'inline-block',
+              marginRight: 1
+            }}>
+            Price Details
+            <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
+          </Typography>
+          {/* <Typography
+            variant='body2'
+            color='text.secondary'
+            sx={{ display: 'inline-block' }}>
+            (Add at least one type)
+          </Typography> */}
+        </FormLabel>
+
+        <FormGroup
+          row
+          sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <FormGroup sx={{ width: '48%' }}>
+            <TextField
+              error={undefined !== undefined}
+              value={values.price}
+              onChange={handleChange('price')}
+              label='Expected price in Rupees'
+              sx={{ width: '100%' }}
+            />
+            <FormHelperText>
+              {values.price !== '' && isNumeric(values.price)
+                ? toWords.convert(values.price)
+                : 'Price in words'}
+            </FormHelperText>
+            {undefined !== undefined ? (
+              <FormHelperText error>{undefined}</FormHelperText>
+            ) : (
+              undefined !== undefined && (
+                <FormHelperText>{undefined}</FormHelperText>
+              )
+            )}
+          </FormGroup>
+
+          <FormGroup sx={{ width: '48%' }}>
+            <TextField
+              error={undefined !== undefined}
+              value={values.pricePerSqFt}
+              onChange={handleChange('pricePerSqFt')}
+              label='Price per sq. ft.'
+              sx={{ width: '100%' }}
+            />
+            <FormHelperText>
+              {values.pricePerSqFt !== '' && isNumeric(values.pricePerSqFt)
+                ? toWords.convert(values.pricePerSqFt)
+                : 'Price in words'}
+            </FormHelperText>
+            {undefined !== undefined ? (
+              <FormHelperText error>{undefined}</FormHelperText>
+            ) : (
+              undefined !== undefined && (
+                <FormHelperText>{undefined}</FormHelperText>
+              )
+            )}
+          </FormGroup>
+        </FormGroup>
+      </FormControl>
 
       <FormControl
         sx={{
@@ -284,11 +358,20 @@ const RentLeaseForm = ({
         <FormControlLabel
           control={
             <Checkbox
-              checked={values.electricityIncluded}
-              onChange={handleCheck('electricityIncluded')}
+              checked={values.allInclusivePrice}
+              onChange={handleCheck('allInclusivePrice')}
             />
           }
-          label='Electricity and Water charges included'
+          label='All Inclusive Price'
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={values.taxAndGovtChargesExcluded}
+              onChange={handleCheck('taxAndGovtChargesExcluded')}
+            />
+          }
+          label='Tax &amp; Govt. charges excluded'
         />
         <FormControlLabel
           control={
@@ -300,40 +383,6 @@ const RentLeaseForm = ({
           label='Price Negotiable'
         />
       </FormControl>
-
-      <JInputField
-        topLabel={
-          <>
-            <Typography
-              variant='h6'
-              color='text.secondary'
-              sx={{
-                fontWeight: 'bold',
-                display: 'inline-block',
-                marginRight: 1
-              }}>
-              Security Deposit
-              <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
-            </Typography>
-            <Typography
-              variant='body2'
-              color='text.secondary'
-              sx={{ display: 'inline-block' }}>
-              (Type '0' if deposit is not required)
-            </Typography>
-          </>
-        }
-        placeholder='Deposit value in Rupees'
-        value={values.deposit}
-        handleChange={handleChange('deposit')}
-        disabled={false}
-        spacing={5}
-        helperText={
-          values.deposit !== '' && isNumeric(values.deposit)
-            ? toWords.convert(values.deposit)
-            : 'Deposit in words'
-        }
-      />
 
       <FormControl sx={{ marginBottom: 5 }}>
         <FormLabel
@@ -664,21 +713,6 @@ const RentLeaseForm = ({
               <FormHelperText>{undefined}</FormHelperText>
             )
           )}
-
-          <Autocomplete
-            disablePortal
-            options={genOptions(floorOptions, values.totalFloors)}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                error={undefined !== undefined}
-                value={values.propertyOnFloor}
-                onChange={handleChange('propertyOnFloor')}
-                label='Property on Floor'
-              />
-            )}
-            sx={{ width: '48%' }}
-          />
         </FormGroup>
       </FormControl>
 
@@ -692,7 +726,7 @@ const RentLeaseForm = ({
             variant='h6'
             color='text.secondary'
             sx={{ fontWeight: 'bold' }}>
-            Age of Property
+            Age of Project
             <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
           </Typography>
         </FormLabel>
@@ -717,18 +751,42 @@ const RentLeaseForm = ({
             variant='h6'
             color='text.secondary'
             sx={{ fontWeight: 'bold' }}>
-            Available From
+            Availability Status
             <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
           </Typography>
         </FormLabel>
-        <DatePicker
-          label='When is the property available from?'
-          openTo='day'
-          views={['year', 'month', 'day']}
-          value={values.availableFrom}
-          onChange={handleDateChange}
-          renderInput={(params) => <TextField {...params} />}
-        />
+        <ChipSelect
+          value={values.availabilityStatus}
+          onChange={handleToggle('availabilityStatus')}
+          exclusive>
+          <ChipOption value='readyToMove' label='Ready to move' />
+          <ChipOption value='underConstruction' label='Under construction' />
+        </ChipSelect>
+        {values.availabilityStatus === 'underConstruction' && (
+          <>
+            <FormLabel
+              sx={{
+                color: 'text.primary',
+                marginBottom: 1,
+                marginTop: 1
+              }}>
+              <Typography
+                variant='body1'
+                color='text.secondary'
+                sx={{ fontWeight: 'bold' }}>
+                Possession by:
+              </Typography>
+            </FormLabel>
+            <DatePicker
+              label='Enter the ready-to-move-in date'
+              openTo='year'
+              views={['year', 'month']}
+              value={values.possessionBy}
+              onChange={handleDateChange('possessionBy')}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </>
+        )}
       </FormControl>
 
       <FormControl sx={{ marginBottom: 5 }}>
@@ -741,46 +799,17 @@ const RentLeaseForm = ({
             variant='h6'
             color='text.secondary'
             sx={{ fontWeight: 'bold' }}>
-            Willing to rent out to
+            Ownership Type
             <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
           </Typography>
         </FormLabel>
         <ChipSelect
-          value={values.willingToRentOutTo}
-          onChange={handleToggle('willingToRentOutTo')}
-          direction={isPhone ? 'row' : 'column'}>
-          <ChipOption
-            value='family'
-            label={
-              <>
-                <Emoji symbol='👨‍👩‍👧‍👦' /> Family
-              </>
-            }
-          />
-          <ChipOption
-            value='singleMen'
-            label={
-              <>
-                <Emoji symbol='👨' /> Single Men
-              </>
-            }
-          />
-          <ChipOption
-            value='singleWomen'
-            label={
-              <>
-                <Emoji symbol='👩' /> Single Women
-              </>
-            }
-          />
-          <ChipOption
-            value='unmarriedCouples'
-            label={
-              <>
-                <Emoji symbol='👫' /> Unmarried Couple
-              </>
-            }
-          />
+          value={values.ownershipType}
+          onChange={handleToggle('ownershipType')}
+          exclusive>
+          <ChipOption value='freehold' label='Freehold' />
+          <ChipOption value='leasehold' label='Leasehold' />
+          <ChipOption value='cooperativeSociety' label='Cooperative Society' />
         </ChipSelect>
       </FormControl>
 
@@ -793,8 +822,39 @@ const RentLeaseForm = ({
           <Typography
             variant='h6'
             color='text.secondary'
+            sx={{
+              fontWeight: 'bold',
+              display: 'inline-block',
+              marginRight: 1
+            }}>
+            What makes the project unique?
+          </Typography>
+        </FormLabel>
+        <TextareaAutosize
+          aria-label='What makes the project unique?'
+          minRows={3}
+          value={values.usp}
+          onChange={handleChange('usp')}
+          placeholder='Spacious rooms, well maintained facilities, sufficient ventilation'
+          style={{ fontFamily: 'inherit' }}
+          disabled={values.usp.length > 5000}
+        />
+        <Typography color='text.secondary' sx={{ marginTop: 1 }}>
+          {values.usp.length} / 5000
+        </Typography>
+      </FormControl>
+
+      <FormControl sx={{ marginBottom: 5 }}>
+        <FormLabel
+          sx={{
+            color: 'text.primary',
+            marginBottom: 1
+          }}>
+          <Typography
+            variant='h6'
+            color='text.secondary'
             sx={{ fontWeight: 'bold' }}>
-            Add pictures of your property
+            Add pictures of the project
             <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
           </Typography>
         </FormLabel>
@@ -820,7 +880,7 @@ const RentLeaseForm = ({
                 display: 'inline-block',
                 marginRight: 1
               }}>
-              Video of the property
+              Project Brochure
             </Typography>
             <Typography
               variant='body2'
@@ -830,7 +890,63 @@ const RentLeaseForm = ({
             </Typography>
           </>
         }
-        placeholder='Enter a link to a property video (YouTube / Vimeo)'
+        placeholder='Enter a link to a project brochure'
+        helperText={
+          <span>
+            You can host your file on{' '}
+            <Link
+              href='https://drive.google.com'
+              target='_blank'
+              rel='noopener noreferrer'
+              underline='hover'>
+              Google drive
+            </Link>{' '}
+            or{' '}
+            <Link
+              href='https://dropbox.com'
+              target='_blank'
+              rel='noopener noreferrer'
+              underline='hover'>
+              Dropbox
+            </Link>{' '}
+            with link sharing on or{' '}
+            <Link
+              href='https://pdfhost.io'
+              target='_blank'
+              rel='noopener noreferrer'
+              underline='hover'>
+              pdfhost.io
+            </Link>
+          </span>
+        }
+        value={values.brochureLink}
+        handleChange={handleChange('brochureLink')}
+        disabled={false}
+        spacing={5}
+      />
+
+      <JInputField
+        topLabel={
+          <>
+            <Typography
+              variant='h6'
+              color='text.secondary'
+              sx={{
+                fontWeight: 'bold',
+                display: 'inline-block',
+                marginRight: 1
+              }}>
+              Video of the project
+            </Typography>
+            <Typography
+              variant='body2'
+              color='text.secondary'
+              sx={{ display: 'inline-block' }}>
+              (Optional)
+            </Typography>
+          </>
+        }
+        placeholder='Enter a link to a project video (YouTube / Vimeo)'
         value={values.videoLink}
         handleChange={handleChange('videoLink')}
         disabled={false}
@@ -854,4 +970,4 @@ const RentLeaseForm = ({
   );
 };
 
-export default RentLeaseForm;
+export default SellProjectForm;
