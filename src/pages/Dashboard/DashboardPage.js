@@ -1,10 +1,4 @@
-import {
-  Breadcrumbs,
-  IconButton,
-  Link,
-  Paper,
-  Typography
-} from '@mui/material';
+import { Breadcrumbs, IconButton, Link, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { FaAngleRight, FaArrowLeft } from 'react-icons/fa';
@@ -32,8 +26,6 @@ const DashboardPage = () => {
   const handleBackClick = (e) => {
     navigate(-1);
   };
-
-  console.log(routes);
 
   return (
     <>
