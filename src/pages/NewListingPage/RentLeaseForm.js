@@ -2,7 +2,6 @@ import {
   Autocomplete,
   Button,
   Checkbox,
-  Chip,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -11,34 +10,33 @@ import {
   IconButton,
   InputAdornment,
   InputLabel,
+  lighten,
   Link,
   OutlinedInput,
-  Stack,
   TextField,
-  ToggleButton,
-  ToggleButtonGroup,
   Typography,
   useMediaQuery
 } from '@mui/material';
+import { DatePicker } from '@mui/lab';
 import { Box } from '@mui/system';
-import {
-  MdLocationCity,
-  MdMapsHomeWork,
-  MdAccountBalance,
-  MdFamilyRestroom
-} from 'react-icons/md';
-import { useState } from 'react';
-import { lighten } from '@mui/material/styles';
+import { FaArrowCircleRight, FaTimes } from 'react-icons/fa';
 import { ToWords } from 'to-words';
 
 import floorOptions from './floorOptions.json';
+import locationOptions from './locationOptions.json';
 
-import { JInputField, JInputSearch } from '../../components/JInputField';
 import { ChipOption, ChipSelect } from '../../components/ChipSelect';
-import { FaFemale, FaMale, FaPlus, FaTimes } from 'react-icons/fa';
 import CountInput from '../../components/CountInput/CountInput';
-import { DatePicker } from '@mui/lab';
 import Emoji from '../../components/Emoji/Emoji';
+import { JInputField, JInputSearch } from '../../components/JInputField';
+import { useState } from 'react';
+import UploadZone from '../../components/UploadZone';
+import {
+  MdArrowCircleDown,
+  MdArrowRight,
+  MdArrowRightAlt,
+  MdExitToApp
+} from 'react-icons/md';
 
 const isNumeric = (str) => {
   if (typeof str != 'string') return false; // we only process strings!
@@ -55,9 +53,41 @@ const toWords = new ToWords({
   }
 });
 
-const NewProperty = () => {
-  const [values, setValues] = useState({
-    tab: '',
+const genOptions = (initOptions, totalCount) => {
+  let count =
+    totalCount === undefined ||
+    totalCount === '' ||
+    parseInt(totalCount, 10) < 1 ||
+    parseInt(totalCount, 10) > 100
+      ? 25
+      : parseInt(totalCount, 10);
+  let newOptions = [
+    {
+      id: -2,
+      label: 'Basement'
+    },
+    {
+      id: -1,
+      label: 'Lower Ground'
+    },
+    {
+      id: 0,
+      label: 'Ground'
+    }
+  ];
+
+  for (let i = 1; i <= count; ++i) {
+    newOptions.push({
+      id: i,
+      label: `${i}`
+    });
+  }
+
+  return newOptions;
+};
+
+const RentLeaseForm = ({
+  values = {
     location: '',
     landmark: '',
     apartmentType: '1rk',
@@ -67,6 +97,7 @@ const NewProperty = () => {
     deposit: '',
     numBathrooms: '1',
     numBalconies: '1',
+    carpetArea: '',
     builtUpArea: '',
     superBuiltUpArea: '',
     otherRooms: [],
@@ -77,40 +108,41 @@ const NewProperty = () => {
     propertyOnFloor: '',
     ageOfProperty: '',
     availableFrom: new Date(),
-    willingToRentOutTo: []
-  });
+    willingToRentOutTo: [],
+    pictures: [],
+    featuredPicture: undefined,
+    videoLink: ''
+  },
+  onChange,
+  disabled = false
+}) => {
+  const isPhone = useMediaQuery('(min-width:600px)');
 
   const [addBuiltUpArea, setAddBuiltUpArea] = useState(false);
   const [addSuperBuiltUpArea, setAddSuperBuiltUpArea] = useState(false);
 
-  const options = [
-    { id: 1, label: 'Vashi' },
-    { id: 2, label: 'Mankhurd' },
-    { id: 3, label: 'Kharghar' },
-    { id: 4, label: 'Vash1i' },
-    { id: 5, label: 'Mankh4urd' },
-    { id: 6, label: 'Kha5rghar' },
-    { id: 7, label: 'Vas3hi' },
-    { id: 8, label: 'Mank3hurd' },
-    { id: 9, label: 'Khar2ghar' },
-    { id: 10, label: 'Vas4hi' },
-    { id: 11, label: 'Ma5nkhurd' },
-    { id: 12, label: 'Kha6rghar' },
-    { id: 13, label: 'Vash7i' },
-    { id: 14, label: 'Maynkhurd' },
-    { id: 15, label: 'Khagrghar' }
-  ];
-
   const handleToggle = (prop) => (event, newVal) => {
-    setValues({ ...values, [prop]: newVal });
+    if (!onChange) {
+      return;
+    }
+
+    onChange({ ...values, [prop]: newVal });
   };
 
   const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
+    if (!onChange) {
+      return;
+    }
+
+    onChange({ ...values, [prop]: event.target.value });
   };
 
   const handleCheck = (prop) => (event) => {
-    setValues({
+    if (!onChange) {
+      return;
+    }
+
+    onChange({
       ...values,
       [prop]: event.target.checked
     });
@@ -127,15 +159,39 @@ const NewProperty = () => {
   };
 
   const handleDateChange = (newDate) => {
-    setValues({
+    if (!onChange) {
+      return;
+    }
+
+    onChange({
       ...values,
       availableFrom: newDate
     });
   };
 
-  const isPhone = useMediaQuery('(min-width:600px)');
+  const handleFilesChange = (event, newFiles) => {
+    if (!onChange) {
+      return;
+    }
 
-  let rentForm = (
+    onChange({
+      ...values,
+      pictures: newFiles
+    });
+  };
+
+  const handleSelectedFileChange = (event, file) => {
+    if (!onChange) {
+      return;
+    }
+
+    onChange({
+      ...values,
+      featuredPicture: file
+    });
+  };
+
+  return (
     <>
       <JInputSearch
         topLabel={
@@ -146,7 +202,7 @@ const NewProperty = () => {
             Location<span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
           </Typography>
         }
-        options={options}
+        options={locationOptions}
         spacing={5}
         placeholder='Where is your property located?'
         value={values.location}
@@ -611,7 +667,7 @@ const NewProperty = () => {
 
           <Autocomplete
             disablePortal
-            options={floorOptions}
+            options={genOptions(floorOptions, values.totalFloors)}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -727,135 +783,75 @@ const NewProperty = () => {
           />
         </ChipSelect>
       </FormControl>
-    </>
-  );
 
-  let projectForm = <Box></Box>;
-
-  let apartmentForm = <Box></Box>;
-
-  return (
-    <Box
-      sx={{
-        p: { xs: 0, md: 5 },
-        m: 2,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
-      }}>
-      <Typography
-        variant='h4'
-        sx={{
-          textAlign: 'center',
-          color: 'primary.main',
-          marginBottom: 2
-        }}>
-        Add new property
-      </Typography>
-      <FormGroup>
-        <FormControl sx={{ marginBottom: 5 }}>
+      <FormControl sx={{ marginBottom: 5 }}>
+        <FormLabel
+          sx={{
+            color: 'text.primary',
+            marginBottom: 1
+          }}>
           <Typography
-            variant='body1'
-            sx={{ color: 'text.secondary', marginBottom: 1 }}>
-            What would you like to do?
+            variant='h6'
+            color='text.secondary'
+            sx={{ fontWeight: 'bold' }}>
+            Add pictures of your property
+            <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
           </Typography>
-          <ToggleButtonGroup
-            orientation={isPhone ? 'horizontal' : 'vertical'}
-            value={values.tab}
-            exclusive
-            color='primary'
-            onChange={handleToggle('tab')}
-            aria-label='what would you like to do?'
-            sx={{
-              textDecoration: 'none'
-            }}>
-            <ToggleButton value='sellproject' aria-label='sell project'>
-              <Box
-                sx={{
-                  display: 'inline-flex',
-                  justiftContent: 'center',
-                  alignItems: 'center',
-                  textDecoration: 'none',
-                  px: { xs: 7, md: 4 }
-                }}>
-                <MdLocationCity fontSize={40} />
-                <Box
-                  sx={{
-                    display: 'inline-flex',
-                    flexDirection: 'column',
-                    justiftContent: 'center',
-                    alignItems: 'center',
-                    textDecoration: 'none',
-                    marginLeft: 2
-                  }}>
-                  <Typography>Sell Project</Typography>
-                  <Typography
-                    variant='caption'
-                    sx={{ color: 'text.secondary' }}>
-                    (several flats)
-                  </Typography>
-                </Box>
-              </Box>
-            </ToggleButton>
-            <ToggleButton value='sellapartment' aria-label='sell apartment'>
-              <Box
-                sx={{
-                  display: 'inline-flex',
-                  justiftContent: 'center',
-                  alignItems: 'center',
-                  textDecoration: 'none',
-                  px: { xs: 7, md: 4 }
-                }}>
-                <MdMapsHomeWork fontSize={40} />
-                <Box
-                  sx={{
-                    display: 'inline-flex',
-                    flexDirection: 'column',
-                    justiftContent: 'center',
-                    alignItems: 'center',
-                    textDecoration: 'none',
-                    marginLeft: 2
-                  }}>
-                  <Typography>Sell Apartment</Typography>
-                  <Typography
-                    variant='caption'
-                    sx={{ color: 'text.secondary' }}>
-                    (resell homes)
-                  </Typography>
-                </Box>
-              </Box>
-            </ToggleButton>
-            <ToggleButton value='rentlease' aria-label='rent lease'>
-              <Box
-                sx={{
-                  display: 'inline-flex',
-                  justiftContent: 'center',
-                  alignItems: 'center',
-                  textDecoration: 'none',
-                  px: { xs: 7, md: 4 }
-                }}>
-                <MdAccountBalance fontSize={40} />
-                <Box
-                  sx={{
-                    display: 'inline-flex',
-                    flexDirection: 'column',
-                    justiftContent: 'center',
-                    alignItems: 'center',
-                    textDecoration: 'none',
-                    marginLeft: 2
-                  }}>
-                  <Typography>Rent / Lease</Typography>
-                </Box>
-              </Box>
-            </ToggleButton>
-          </ToggleButtonGroup>
-        </FormControl>
-        {values.tab === 'rentlease' && rentForm}
-        {values.tab === 'sellproject' && projectForm}
-        {values.tab === 'sellapartment' && apartmentForm}
-      </FormGroup>
-    </Box>
+        </FormLabel>
+        <UploadZone
+          files={values.pictures}
+          selectedFile={values.featuredPicture}
+          onFilesChange={handleFilesChange}
+          onSelectedFileChange={handleSelectedFileChange}
+          label1='Drag and drop or click to choose files'
+          label2='Select one of the uploads below as the featured image'
+          accept='image/*'
+        />
+      </FormControl>
+
+      <JInputField
+        topLabel={
+          <>
+            <Typography
+              variant='h6'
+              color='text.secondary'
+              sx={{
+                fontWeight: 'bold',
+                display: 'inline-block',
+                marginRight: 1
+              }}>
+              Video of the property
+            </Typography>
+            <Typography
+              variant='body2'
+              color='text.secondary'
+              sx={{ display: 'inline-block' }}>
+              (Optional)
+            </Typography>
+          </>
+        }
+        placeholder='Enter a link to a property video (YouTube / Vimeo)'
+        value={values.videoLink}
+        handleChange={handleChange('videoLink')}
+        disabled={false}
+        spacing={5}
+      />
+
+      <FormControl
+        sx={{
+          display: 'flex',
+          justifyContents: 'center',
+          alignItems: 'center'
+        }}>
+        <Button
+          variant='contained'
+          sx={{ width: 'fit-content', textAlign: 'center' }}
+          endIcon={<FaArrowCircleRight />}>
+          Submit
+        </Button>
+      </FormControl>
+    </>
   );
 };
 
-export default NewProperty;
+export default RentLeaseForm;

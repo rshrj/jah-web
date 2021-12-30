@@ -1,14 +1,4 @@
-import {
-  Breadcrumbs,
-  IconButton,
-  Link,
-  Paper,
-  TextField,
-  Typography,
-  Skeleton
-} from '@mui/material';
-import React from 'react';
-import PropTypes from 'prop-types';
+import { Breadcrumbs, IconButton, Link, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/system';
 
@@ -46,8 +36,6 @@ function Dashboard(props) {
   const handleBackClick = (e) => {
     navigate(-1);
   };
-
-  console.log(routes);
 
   return (
     <>
