@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-import React from "react";
-=======
 import React from 'react';
->>>>>>> bimalesh
-
 import NavBar from '../../components/NavBar';
 import { Box, styled, CardMedia, Grid } from '@mui/material';
 
@@ -37,20 +31,5 @@ const LandingPage = () => {
     </>
   );
 };
-<<<<<<< HEAD
-const Item = styled(Paper)(({ theme }) => ({
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
-=======
-const LandingPage = () => {
-  return <div>Landing Page</div>;
-};
 
->>>>>>> f67ce2adee1d02a3b2053ca4f320965e07c8f0ae
-=======
-
->>>>>>> bimalesh
 export default LandingPage;
