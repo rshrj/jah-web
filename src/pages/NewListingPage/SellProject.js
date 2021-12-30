@@ -1,7 +1,7 @@
 import {
-  Autocomplete,
   Button,
   Checkbox,
+  Divider,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -23,7 +23,6 @@ import { Box } from '@mui/system';
 import { FaArrowCircleRight, FaTimes } from 'react-icons/fa';
 import { ToWords } from 'to-words';
 
-import floorOptions from './floorOptions.json';
 import locationOptions from './locationOptions.json';
 
 import { ChipOption, ChipSelect } from '../../components/ChipSelect';
@@ -47,44 +46,17 @@ const toWords = new ToWords({
   }
 });
 
-const genOptions = (initOptions, totalCount) => {
-  let count =
-    totalCount === undefined ||
-    totalCount === '' ||
-    parseInt(totalCount, 10) < 1 ||
-    parseInt(totalCount, 10) > 100
-      ? 25
-      : parseInt(totalCount, 10);
-  let newOptions = [
-    {
-      id: -2,
-      label: 'Basement'
-    },
-    {
-      id: -1,
-      label: 'Lower Ground'
-    },
-    {
-      id: 0,
-      label: 'Ground'
-    }
-  ];
-
-  for (let i = 1; i <= count; ++i) {
-    newOptions.push({
-      id: i,
-      label: `${i}`
-    });
-  }
-
-  return newOptions;
+const unitLabels = {
+  '1rk': '1 RK',
+  '1bhk': '1 BHK',
+  '2bhk': '2 BHK',
+  '3bhk': '3 BHK',
+  '4bhk': '4 BHK'
 };
 
-const SellProjectForm = ({
-  values = {
-    location: '',
-    landmark: '',
-    apartmentTypes: ['1rk'],
+const UnitForm = ({
+  unit,
+  unitValues = {
     price: '',
     pricePerSqFt: '',
     allInclusivePrice: false,
@@ -96,55 +68,14 @@ const SellProjectForm = ({
     builtUpArea: '',
     superBuiltUpArea: '',
     otherRooms: [],
-    furnishing: '',
-    coveredParking: 0,
-    openParking: 0,
-    totalFloors: '',
-    propertyOnFloor: '',
-    ageOfProperty: '',
-    availabilityStatus: 'readyToMove',
-    possessionBy: new Date(),
-    ownershipType: 'freehold',
-    usp: 'Spacious rooms, well maintained facilities, sufficient ventilation',
-    pictures: [],
-    featuredPicture: undefined,
-    videoLink: '',
-    brochureLink: ''
+    furnishing: ''
   },
-  onChange,
-  disabled = false
+  onChange
 }) => {
   const isPhone = useMediaQuery('(min-width:600px)');
 
   const [addBuiltUpArea, setAddBuiltUpArea] = useState(false);
   const [addSuperBuiltUpArea, setAddSuperBuiltUpArea] = useState(false);
-
-  const handleToggle = (prop) => (event, newVal) => {
-    if (!onChange) {
-      return;
-    }
-
-    onChange({ ...values, [prop]: newVal });
-  };
-
-  const handleChange = (prop) => (event) => {
-    if (!onChange) {
-      return;
-    }
-
-    onChange({ ...values, [prop]: event.target.value });
-  };
-
-  const handleCheck = (prop) => (event) => {
-    if (!onChange) {
-      return;
-    }
-
-    onChange({
-      ...values,
-      [prop]: event.target.checked
-    });
-  };
 
   const handleAddBuiltUpArea = (e) => {
     e.preventDefault();
@@ -156,124 +87,39 @@ const SellProjectForm = ({
     setAddSuperBuiltUpArea(!addSuperBuiltUpArea);
   };
 
-  const handleDateChange = (prop) => (newDate) => {
+  const handleToggle = (prop) => (event, newVal) => {
     if (!onChange) {
       return;
     }
 
-    onChange({
-      ...values,
-      [prop]: newDate
-    });
+    onChange({ ...unitValues, [prop]: newVal });
   };
 
-  const handleFilesChange = (event, newFiles) => {
+  const handleChange = (prop) => (event) => {
     if (!onChange) {
       return;
     }
 
-    onChange({
-      ...values,
-      pictures: newFiles
-    });
+    onChange({ ...unitValues, [prop]: event.target.value });
   };
 
-  const handleSelectedFileChange = (event, file) => {
+  const handleCheck = (prop) => (event) => {
     if (!onChange) {
       return;
     }
 
     onChange({
-      ...values,
-      featuredPicture: file
+      ...unitValues,
+      [prop]: event.target.checked
     });
   };
 
   return (
     <>
-      <JInputSearch
-        topLabel={
-          <Typography
-            variant='h6'
-            color='text.secondary'
-            sx={{ fontWeight: 'bold' }}>
-            Location<span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
-          </Typography>
-        }
-        options={locationOptions}
-        spacing={5}
-        placeholder='Where is your project located?'
-        value={values.location}
-        handleChange={handleChange('location')}
-        disabled={false}
-      />
-
-      <JInputField
-        topLabel={
-          <Typography
-            variant='h6'
-            color='text.secondary'
-            sx={{ fontWeight: 'bold' }}>
-            Landmark<span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
-          </Typography>
-        }
-        placeholder='Enter the closest landmark to your project'
-        value={values.landmark}
-        spacing={5}
-        handleChange={handleChange('landmark')}
-        disabled={false}
-      />
-
-      <FormControl sx={{ marginBottom: 5 }}>
-        <FormLabel
-          sx={{
-            color: 'text.primary',
-            marginBottom: 1
-          }}>
-          <Typography
-            variant='h6'
-            color='text.secondary'
-            sx={{ fontWeight: 'bold' }}>
-            Type of Apartment
-            <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
-          </Typography>
-        </FormLabel>
-        <ChipSelect
-          value={values.apartmentType}
-          onChange={handleToggle('apartmentType')}
-          exclusive>
-          <ChipOption value='1rk' label='1RK' />
-          <ChipOption value='1bhk' label='1BHK' />
-          <ChipOption value='2bhk' label='2BHK' />
-          <ChipOption value='3bhk' label='3BHK' />
-          <ChipOption value='4bhk' label='4BHK' />
-        </ChipSelect>
-      </FormControl>
-
-      {/* <JInputField
-        topLabel={
-          <Typography
-            variant='h6'
-            color='text.secondary'
-            sx={{ fontWeight: 'bold' }}>
-            Price Details
-            <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
-          </Typography>
-        }
-        placeholder='Expected rent in Rupees'
-        value={values.rent}
-        handleChange={handleChange('rent')}
-        disabled={false}
-        spacing={5}
-        helperText={
-          values.rent !== '' && isNumeric(values.rent)
-            ? toWords.convert(values.rent)
-            : 'Rent in words'
-        }
-      /> */}
       <FormControl
         sx={{
-          marginBottom: 5
+          marginBottom: 5,
+          marginTop: 3
         }}>
         <FormLabel
           sx={{
@@ -288,7 +134,7 @@ const SellProjectForm = ({
               display: 'inline-block',
               marginRight: 1
             }}>
-            Price Details
+            Price Details for {unitLabels[unit]}
             <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
           </Typography>
           {/* <Typography
@@ -305,14 +151,14 @@ const SellProjectForm = ({
           <FormGroup sx={{ width: '48%' }}>
             <TextField
               error={undefined !== undefined}
-              value={values.price}
+              value={unitValues.price}
               onChange={handleChange('price')}
               label='Expected price in Rupees'
               sx={{ width: '100%' }}
             />
             <FormHelperText>
-              {values.price !== '' && isNumeric(values.price)
-                ? toWords.convert(values.price)
+              {unitValues.price !== '' && isNumeric(unitValues.price)
+                ? toWords.convert(unitValues.price)
                 : 'Price in words'}
             </FormHelperText>
             {undefined !== undefined ? (
@@ -327,14 +173,15 @@ const SellProjectForm = ({
           <FormGroup sx={{ width: '48%' }}>
             <TextField
               error={undefined !== undefined}
-              value={values.pricePerSqFt}
+              value={unitValues.pricePerSqFt}
               onChange={handleChange('pricePerSqFt')}
               label='Price per sq. ft.'
               sx={{ width: '100%' }}
             />
             <FormHelperText>
-              {values.pricePerSqFt !== '' && isNumeric(values.pricePerSqFt)
-                ? toWords.convert(values.pricePerSqFt)
+              {unitValues.pricePerSqFt !== '' &&
+              isNumeric(unitValues.pricePerSqFt)
+                ? toWords.convert(unitValues.pricePerSqFt)
                 : 'Price in words'}
             </FormHelperText>
             {undefined !== undefined ? (
@@ -358,7 +205,7 @@ const SellProjectForm = ({
         <FormControlLabel
           control={
             <Checkbox
-              checked={values.allInclusivePrice}
+              checked={unitValues.allInclusivePrice}
               onChange={handleCheck('allInclusivePrice')}
             />
           }
@@ -367,7 +214,7 @@ const SellProjectForm = ({
         <FormControlLabel
           control={
             <Checkbox
-              checked={values.taxAndGovtChargesExcluded}
+              checked={unitValues.taxAndGovtChargesExcluded}
               onChange={handleCheck('taxAndGovtChargesExcluded')}
             />
           }
@@ -376,7 +223,7 @@ const SellProjectForm = ({
         <FormControlLabel
           control={
             <Checkbox
-              checked={values.priceNegotiable}
+              checked={unitValues.priceNegotiable}
               onChange={handleCheck('priceNegotiable')}
             />
           }
@@ -394,12 +241,12 @@ const SellProjectForm = ({
             variant='h6'
             color='text.secondary'
             sx={{ fontWeight: 'bold' }}>
-            Number of Bathrooms
+            Number of Bathrooms in {unitLabels[unit]}
             <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
           </Typography>
         </FormLabel>
         <ChipSelect
-          value={values.numBathrooms}
+          value={unitValues.numBathrooms}
           onChange={handleToggle('numBathrooms')}
           exclusive>
           <ChipOption value='1' label='1' />
@@ -419,12 +266,12 @@ const SellProjectForm = ({
             variant='h6'
             color='text.secondary'
             sx={{ fontWeight: 'bold' }}>
-            Number of Balconies
+            Number of Balconies in {unitLabels[unit]}
             <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
           </Typography>
         </FormLabel>
         <ChipSelect
-          value={values.numBalconies}
+          value={unitValues.numBalconies}
           onChange={handleToggle('numBalconies')}
           exclusive>
           <ChipOption value='0' label='0' />
@@ -452,7 +299,7 @@ const SellProjectForm = ({
               display: 'inline-block',
               marginRight: 1
             }}>
-            Area Details
+            Area Details of {unitLabels[unit]}
             <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
           </Typography>
           <Typography
@@ -464,7 +311,7 @@ const SellProjectForm = ({
         </FormLabel>
         <TextField
           error={undefined !== undefined}
-          value={values.carpetArea}
+          value={unitValues.carpetArea}
           onChange={handleChange('carpetArea')}
           label='Carpet Area in sq. ft.'
         />
@@ -484,7 +331,7 @@ const SellProjectForm = ({
             <OutlinedInput
               error={undefined !== undefined}
               id='builtUpArea-field'
-              value={values.builtUpArea}
+              value={unitValues.builtUpArea}
               onChange={handleChange('builtUpArea')}
               endAdornment={
                 <InputAdornment position='end'>
@@ -517,7 +364,7 @@ const SellProjectForm = ({
             <OutlinedInput
               error={undefined !== undefined}
               id='superBuiltUpArea-field'
-              value={values.superBuiltUpArea}
+              value={unitValues.superBuiltUpArea}
               onChange={handleChange('superBuiltUpArea')}
               endAdornment={
                 <InputAdornment position='end'>
@@ -581,7 +428,7 @@ const SellProjectForm = ({
               display: 'inline-block',
               marginRight: 1
             }}>
-            Other Rooms
+            Other Rooms in {unitLabels[unit]}
           </Typography>
           <Typography
             variant='body2'
@@ -591,7 +438,7 @@ const SellProjectForm = ({
           </Typography>
         </FormLabel>
         <ChipSelect
-          value={values.otherRooms}
+          value={unitValues.otherRooms}
           onChange={handleToggle('otherRooms')}
           direction={isPhone ? 'row' : 'column'}>
           <ChipOption value='poojaRoom' label='Pooja Room' />
@@ -600,6 +447,169 @@ const SellProjectForm = ({
           <ChipOption value='storeRoom' label='Store Room' />
         </ChipSelect>
       </FormControl>
+
+      <FormControl sx={{ marginBottom: 3 }}>
+        <FormLabel
+          sx={{
+            color: 'text.primary',
+            marginBottom: 1
+          }}>
+          <Typography
+            variant='h6'
+            color='text.secondary'
+            sx={{ fontWeight: 'bold' }}>
+            Furnishing in {unitLabels[unit]}
+            <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
+          </Typography>
+        </FormLabel>
+        <ChipSelect
+          value={unitValues.furnishing}
+          onChange={handleToggle('furnishing')}
+          exclusive>
+          <ChipOption value='furnished' label='Furnished' />
+          <ChipOption value='semiFurnished' label='Semi-furnished' />
+          <ChipOption value='unFurnished' label='Un-furnished' />
+        </ChipSelect>
+      </FormControl>
+
+      <Divider variant='middle' />
+    </>
+  );
+};
+
+const SellProjectForm = ({
+  values = {
+    location: '',
+    landmark: '',
+    apartmentTypes: ['1rk'],
+    units: {},
+    coveredParking: 0,
+    openParking: 0,
+    totalFloors: '',
+    propertyOnFloor: '',
+    ageOfProperty: '',
+    availabilityStatus: 'readyToMove',
+    possessionBy: new Date(),
+    ownershipType: 'freehold',
+    usp: 'Spacious rooms, well maintained facilities, sufficient ventilation',
+    pictures: [],
+    featuredPicture: undefined,
+    videoLink: '',
+    brochureLink: ''
+  },
+  onChange,
+  disabled = false
+}) => {
+  const isPhone = useMediaQuery('(min-width:600px)');
+
+  const handleToggle = (prop) => (event, newVal) => {
+    if (!onChange) {
+      return;
+    }
+
+    onChange({ ...values, [prop]: newVal });
+  };
+
+  const handleChange = (prop) => (event) => {
+    if (!onChange) {
+      return;
+    }
+
+    onChange({ ...values, [prop]: event.target.value });
+  };
+
+  const handleCheck = (prop) => (event) => {
+    if (!onChange) {
+      return;
+    }
+
+    onChange({
+      ...values,
+      [prop]: event.target.checked
+    });
+  };
+
+  const handleDateChange = (prop) => (newDate) => {
+    if (!onChange) {
+      return;
+    }
+
+    onChange({
+      ...values,
+      [prop]: newDate
+    });
+  };
+
+  const handleFilesChange = (event, newFiles) => {
+    if (!onChange) {
+      return;
+    }
+
+    onChange({
+      ...values,
+      pictures: newFiles
+    });
+  };
+
+  const handleSelectedFileChange = (event, file) => {
+    if (!onChange) {
+      return;
+    }
+
+    onChange({
+      ...values,
+      featuredPicture: file
+    });
+  };
+
+  const handleUnitChange = (unit) => (newValue) => {
+    if (!onChange) {
+      return;
+    }
+
+    onChange({
+      ...values,
+      units: {
+        ...values.units,
+        [unit]: newValue
+      }
+    });
+  };
+
+  return (
+    <>
+      <JInputSearch
+        topLabel={
+          <Typography
+            variant='h6'
+            color='text.secondary'
+            sx={{ fontWeight: 'bold' }}>
+            Location<span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
+          </Typography>
+        }
+        options={locationOptions}
+        spacing={5}
+        placeholder='Where is your project located?'
+        value={values.location}
+        handleChange={handleChange('location')}
+        disabled={false}
+      />
+
+      <JInputField
+        topLabel={
+          <Typography
+            variant='h6'
+            color='text.secondary'
+            sx={{ fontWeight: 'bold' }}>
+            Landmark<span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
+          </Typography>
+        }
+        placeholder='Enter the closest landmark to your project'
+        value={values.landmark}
+        spacing={5}
+        handleChange={handleChange('landmark')}
+        disabled={false}
+      />
 
       <FormControl sx={{ marginBottom: 5 }}>
         <FormLabel
@@ -611,21 +621,53 @@ const SellProjectForm = ({
             variant='h6'
             color='text.secondary'
             sx={{ fontWeight: 'bold' }}>
-            Furnishing
+            Type of Apartment
             <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
           </Typography>
         </FormLabel>
         <ChipSelect
-          value={values.furnishing}
-          onChange={handleToggle('furnishing')}
-          exclusive>
-          <ChipOption value='furnished' label='Furnished' />
-          <ChipOption value='semiFurnished' label='Semi-furnished' />
-          <ChipOption value='unFurnished' label='Un-furnished' />
+          value={values.apartmentTypes}
+          onChange={handleToggle('apartmentTypes')}>
+          <ChipOption value='1rk' label='1RK' />
+          <ChipOption value='1bhk' label='1BHK' />
+          <ChipOption value='2bhk' label='2BHK' />
+          <ChipOption value='3bhk' label='3BHK' />
+          <ChipOption value='4bhk' label='4BHK' />
         </ChipSelect>
       </FormControl>
 
-      <FormControl sx={{ marginBottom: 5 }}>
+      {values.apartmentTypes.map((unit) => (
+        <UnitForm
+          unit={unit}
+          key={unit}
+          unitValues={values.units[unit]}
+          onChange={handleUnitChange(unit)}
+        />
+      ))}
+
+      {/* <JInputField
+        topLabel={
+          <Typography
+            variant='h6'
+            color='text.secondary'
+            sx={{ fontWeight: 'bold' }}>
+            Price Details
+            <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
+          </Typography>
+        }
+        placeholder='Expected rent in Rupees'
+        value={values.rent}
+        handleChange={handleChange('rent')}
+        disabled={false}
+        spacing={5}
+        helperText={
+          values.rent !== '' && isNumeric(values.rent)
+            ? toWords.convert(values.rent)
+            : 'Rent in words'
+        }
+      /> */}
+
+      <FormControl sx={{ marginBottom: 5, marginTop: 5 }}>
         <FormLabel
           sx={{
             color: 'text.primary',
@@ -685,7 +727,7 @@ const SellProjectForm = ({
               display: 'inline-block',
               marginRight: 1
             }}>
-            Floor Details
+            Floor Details of the project
             <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
           </Typography>
           {/* <Typography
@@ -696,24 +738,19 @@ const SellProjectForm = ({
           </Typography> */}
         </FormLabel>
 
-        <FormGroup
-          row
-          sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <TextField
-            error={undefined !== undefined}
-            value={values.totalFloors}
-            onChange={handleChange('totalFloors')}
-            label='Total Floors'
-            sx={{ width: '48%' }}
-          />
-          {undefined !== undefined ? (
-            <FormHelperText error>{undefined}</FormHelperText>
-          ) : (
-            undefined !== undefined && (
-              <FormHelperText>{undefined}</FormHelperText>
-            )
-          )}
-        </FormGroup>
+        <TextField
+          error={undefined !== undefined}
+          value={values.totalFloors}
+          onChange={handleChange('totalFloors')}
+          label='Total Floors in the project'
+        />
+        {undefined !== undefined ? (
+          <FormHelperText error>{undefined}</FormHelperText>
+        ) : (
+          undefined !== undefined && (
+            <FormHelperText>{undefined}</FormHelperText>
+          )
+        )}
       </FormControl>
 
       <FormControl sx={{ marginBottom: 5 }}>

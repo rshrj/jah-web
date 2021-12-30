@@ -27,14 +27,14 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { stringAvatar } from '../../utils/avatars';
 import { MdArrowLeft, MdArrowRight, MdMenu, MdMenuOpen } from 'react-icons/md';
 
-const adminPages = [
+export const adminPages = [
   { id: 1, name: 'Listings', icon: FaList, to: '/dashboard/listings' },
   { id: 2, name: 'Testimonials', icon: FaCheck, to: '/dashboard/testimonials' },
   { id: 3, name: 'Home Ad', icon: FaBell, to: '/dashboard/homead' },
   { id: 4, name: 'Users', icon: FaUser, to: '/dashboard/users' }
 ];
 
-const customerPages = [
+export const customerPages = [
   { id: 1, name: 'Listings', icon: FaList, to: '/dashboard/listings' },
   { id: 2, name: 'My Account', icon: FaUser, to: '/dashboard/myaccount' }
 ];
@@ -50,7 +50,7 @@ const Sidebar = () => {
 
   let pages = role === 'ADMIN' ? adminPages : customerPages;
   let pagesBottom = [
-    { id: -1, name: 'New Property', icon: FaPlus, to: '/dashboard/newproperty' }
+    { id: -1, name: 'New listing', icon: FaPlus, to: '/dashboard/newlisting' }
   ];
   let selectedTab =
     pages.find((page) => page.to === currentPath)?.id ||

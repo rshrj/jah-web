@@ -15,13 +15,11 @@ import SignupPage from './pages/Signup';
 import SplashScreen from './components/SplashScreen';
 import DashboardPage from './pages/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
-import { clearToast } from './redux/slices/errors/errorsSlice';
-import JSnackbar from './components/JSnackbar/JSnackbar';
-import { Box } from '@mui/system';
-import MyAccount from './pages/MyAccount/MyAccount';
-import BuyHomes from './pages/BuyHomes';
+import JSnackbar from './components/JSnackbar';
+import MyAccount from './pages/MyAccount';
+import NewListingPage from './pages/NewListingPage';
 import LandingPage from './pages/LandingPage';
-import NewProperty from './pages/NewProperty/NewProperty';
+import BuyHomes from './pages/BuyHomes/BuyHomes';
 import NotFoundPage from './pages/NotFoundPage';
 
 const App = () => {
@@ -66,10 +64,10 @@ const App = () => {
                 </PrivateRoute>
               }>
               <Route path='myaccount' element={<MyAccount />} />
-              <Route path='newproperty' element={<NewProperty />} />
+              <Route path='newlisting' element={<NewListingPage />} />
             </Route>
             {/* Testing */}
-            <Route path='/splash' element={<SplashScreen />} />
+            <Route path='splash' element={<SplashScreen />} />
           </Route>
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
