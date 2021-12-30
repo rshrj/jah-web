@@ -43,6 +43,27 @@ const login = createAsyncThunk(
   }
 );
 
+const signup = createAsyncThunk(
+  'auth/signup',
+  async (formData, { dispatch }) => {
+    try {
+      const data = await authService.signup(formData);
+      
+      localStorage.setItem('token', data.payload);
+
+      const data2 = await authService.loadUserByToken(data.payload);
+      return data2.payload;
+    } catch (e) {
+      dispatch(createFormErrors(e.cause.message));
+
+      if (localStorage.getItem('token') !== null) {
+        localStorage.removeItem('token');
+      }
+      return Promise.reject(e);
+    }
+  }
+);
+
 const logout = createAsyncThunk('auth/logout', async (data, { dispatch }) => {
   if (localStorage.getItem('token') !== null) {
     localStorage.removeItem('token');
@@ -57,6 +78,17 @@ export const authSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(signup.pending, (state, action) => {
+      state.loading = 'loading';
+    });
+    builder.addCase(signup.fulfilled, (state, action) => {
+      state.loading = 'loggedIn';
+      state.user = action.payload;
+    });
+    builder.addCase(signup.rejected, (state, action) => {
+      state.loading = 'idle';
+    });
+
     builder.addCase(loadUserByToken.pending, (state, action) => {
       state.loading = 'loading';
     });
@@ -87,6 +119,6 @@ export const authSlice = createSlice({
   }
 });
 
-export { loadUserByToken, login, logout };
+export { loadUserByToken, login, logout, signup };
 
 export default authSlice.reducer;

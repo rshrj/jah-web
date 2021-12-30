@@ -50,32 +50,35 @@ export const login = async (email, password) => {
   }
 };
 
-export const signup = async (email, name, password, password2) => {
+export const signup = async ({email, name, password, password2, phone}) => {
   try {
     const res = await fetch(`${apiUrl}/users/signup`, {
       method: 'POST',
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
+        'Content-Type': 'application/json;charset=UTF-8',
       },
       body: JSON.stringify({
         email,
         name,
         password,
-        password2
-      })
+        password2,
+        phone,
+      }),
     });
 
+    
     if (!res) {
       throw new Error({
         success: false,
         message: 'Server did not respond'
       });
     }
-
+    
     const data = await res.json();
-
+    console.log(data);
+    
     if (!res.ok) {
       throw new Error(data);
     }

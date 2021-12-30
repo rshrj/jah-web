@@ -7,16 +7,34 @@ import {
   Link
 } from '@mui/material';
 import { Box } from '@mui/system';
-import { Link as RouterLink } from 'react-router-dom';
-import { useState } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import validator from 'validator';
+
+import { signup } from '../../redux/slices/auth/authSlice';
 
 import Background from '../../components/AuthBackground/AuthBackground';
 import { JInputField, JPasswordField } from '../../components/JInputField';
 import Loader from '../../components/Loader';
 
 const SignupPage = () => {
+
+  const navigate = useNavigate();
+  
+  const dispatch = useDispatch();
+
+  const loading = useSelector((store) => store.auth.loading === 'loading');
+
+  const loggedIn = useSelector((store) => store.auth.loading === 'loggedIn');
+
+  useEffect(() => {
+    if (loggedIn) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [loggedIn, navigate]);
+
   const [values, setValues] = useState({
     name: '',
     phone: '',
@@ -35,7 +53,7 @@ const SignupPage = () => {
     password2: ''
   });
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   const handleChange = (prop) => (event) => {
     setErrors({
@@ -66,13 +84,25 @@ const SignupPage = () => {
       email: ''
     });
 
-    setLoading(true);
+    const [first, last] = values.name.split(' ');
 
-    setTimeout(() => {
-      setLoading(false);
+    dispatch(
+      signup({
+        email: values.email,
+        password: values.password,
+        password2: values.password2,
+        name: {first, last},
+        phone: values.phone
+      })
+    );
 
-      alert('Logged in');
-    }, 4000);
+    // setLoading(true);
+
+    // setTimeout(() => {
+    //   setLoading(false);
+
+    //   alert('Logged in');
+    // }, 4000);
   };
 
   const handleClickShowPassword = (prop) => () => {

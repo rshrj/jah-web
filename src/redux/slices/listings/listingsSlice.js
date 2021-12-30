@@ -95,9 +95,9 @@ export const listingsSlice = createSlice({
     builder.addCase(addNewListing.fulfilled, (state, action) => {
       state.loading = 'idle';
     });
-    builder.addCase(addNewListing.pending, (state, action) => {
-      state.loading = 'idle';
-    });
+    // builder.addCase(addNewListing.pending, (state, action) => {
+    //   state.loading = 'idle';
+    // });
   }
 });
 
