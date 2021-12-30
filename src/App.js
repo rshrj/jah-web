@@ -19,6 +19,7 @@ import JSnackbar from './components/JSnackbar';
 import MyAccount from './pages/MyAccount';
 import NewListingPage from './pages/NewListingPage';
 import LandingPage from './pages/LandingPage';
+import BuyHomes from './pages/BuyHomes/BuyHomes';
 import NotFoundPage from './pages/NotFoundPage';
 
 const App = () => {
@@ -54,6 +55,7 @@ const App = () => {
             <Route index element={<LandingPage />} />
             <Route path='login' element={<LoginPage />} />
             <Route path='signup' element={<SignupPage />} />
+            <Route path='forbuyers' element={<BuyHomes />} />
             <Route
               path='dashboard'
               element={
