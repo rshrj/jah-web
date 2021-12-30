@@ -2,6 +2,8 @@ const apiUrl = process.env.REACT_APP_APIURL || 'http://localhost:5000';
 
 export const login = async (email, password) => {
   try {
+    console.log(email);
+    console.log(password);
     const res = await fetch(`${apiUrl}/auth/login`, {
       method: 'POST',
       mode: 'cors',
@@ -14,7 +16,7 @@ export const login = async (email, password) => {
         password
       })
     });
-
+    console.log(res);
     if (!res) {
       console.log('boop');
       throw new Error('Server did not respond', {

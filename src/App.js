@@ -20,7 +20,7 @@ import JSnackbar from './components/JSnackbar/JSnackbar';
 import { Box } from '@mui/system';
 import MyAccount from './pages/MyAccount/MyAccount';
 import BuyHomes from './pages/BuyHomes';
-import LandingPage from "./pages/LandingPage";
+import LandingPage from './pages/LandingPage';
 import NewProperty from './pages/NewProperty/NewProperty';
 import NotFoundPage from './pages/NotFoundPage';
 
@@ -40,7 +40,7 @@ const App = () => {
       <Global styles={globalStyles} />
       {/* Toasts */}
       {toasts.ids.length !== 0 && (
-        <Stack spacing={2} sx={{ width: "100%" }}>
+        <Stack spacing={2} sx={{ width: '100%' }}>
           {toasts.ids.map((toastId) => (
             <JSnackbar
               key={toastId}
@@ -53,41 +53,11 @@ const App = () => {
 
       <BrowserRouter>
         <Routes>
-<<<<<<< HEAD
-          <Route path='/forbuyers' element={<BuyHomes />} />
-          <Route path='/home' element={<LandingPage />} />
-          <Route
-            index
-            element={
-              <PrivateRoute>
-                <DashboardPage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path='/'
-            element={
-              <PrivateRoute>
-                <DashboardPage />
-              </PrivateRoute>
-            }
-          />
-          <Route path='/login' element={<LoginPage />} />
-          <Route path='/signup' element={<SignupPage />} />
-          <Route
-            path='/dashboard'
-            element={
-              <PrivateRoute>
-                <DashboardPage />
-              </PrivateRoute>
-            }>
-            <Route path='myaccount' element={<MyAccount />} />
-            <Route path='newproperty' element={<NewProperty />} />
-=======
           <Route path='/'>
             <Route index element={<LandingPage />} />
             <Route path='login' element={<LoginPage />} />
             <Route path='signup' element={<SignupPage />} />
+            <Route path='forbuyers' element={<BuyHomes />} />
             <Route
               path='dashboard'
               element={
@@ -100,7 +70,6 @@ const App = () => {
             </Route>
             {/* Testing */}
             <Route path='/splash' element={<SplashScreen />} />
->>>>>>> f67ce2adee1d02a3b2053ca4f320965e07c8f0ae
           </Route>
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
