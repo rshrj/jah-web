@@ -25,6 +25,8 @@ import { stringAvatar } from '../../utils/avatars';
 
 import Logo from '../Logo';
 
+import { adminPages, customerPages } from '../Sidebar/Sidebar';
+
 const pages = [
   { name: 'For Buyers', link: '/forbuyers' },
   { name: 'For Tenants', link: '/fortenants' },
@@ -53,7 +55,7 @@ const settings = [
 ];
 
 // Get login info from Redux
-const NavBar = ({ loggedIn }) => {
+const NavBar = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
 
@@ -69,6 +71,10 @@ const NavBar = ({ loggedIn }) => {
   };
 
   const handleCloseNavMenu = (action) => () => {
+    if (!action) {
+      setAnchorElNav(null);
+      return;
+    }
     action(dispatch);
     setAnchorElNav(null);
   };
@@ -78,6 +84,14 @@ const NavBar = ({ loggedIn }) => {
   };
 
   const topLoading = useSelector((state) => state.misc.topLoading);
+
+  const loggedIn = useSelector((state) => state.auth.loading === 'loggedIn');
+  const role = useSelector((state) => state.auth.user?.role);
+
+  const sidebarPages = role === 'ADMIN' ? adminPages : customerPages;
+  let sidebarActions = [
+    { id: -1, name: 'New listing', icon: FaPlus, to: '/dashboard/newlisting' }
+  ];
 
   return (
     <>
@@ -133,15 +147,47 @@ const NavBar = ({ loggedIn }) => {
                   horizontal: 'left'
                 }}
                 open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
+                onClose={handleCloseNavMenu(null)}
                 sx={{
                   display: { xs: 'block', md: 'none' }
                 }}>
                 {pages.map((page) => (
-                  <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                  <MenuItem key={page.name} onClick={handleCloseNavMenu(null)}>
                     <Typography
                       component={RouterLink}
                       to={page.link}
+                      variant='body'
+                      sx={{
+                        textDecoration: 'none',
+                        color: 'text.primary'
+                      }}
+                      textAlign='center'>
+                      {page.name}
+                    </Typography>
+                  </MenuItem>
+                ))}
+                <Divider />
+                {sidebarPages.map((page) => (
+                  <MenuItem key={page.id} onClick={handleCloseNavMenu(null)}>
+                    <Typography
+                      component={RouterLink}
+                      to={page.to}
+                      variant='body'
+                      sx={{
+                        textDecoration: 'none',
+                        color: 'text.primary'
+                      }}
+                      textAlign='center'>
+                      {page.name}
+                    </Typography>
+                  </MenuItem>
+                ))}
+                <Divider />
+                {sidebarActions.map((page) => (
+                  <MenuItem key={page.id} onClick={handleCloseNavMenu(null)}>
+                    <Typography
+                      component={RouterLink}
+                      to={page.to}
                       variant='body'
                       sx={{
                         textDecoration: 'none',
@@ -173,7 +219,7 @@ const NavBar = ({ loggedIn }) => {
                   key={page.name}
                   component={RouterLink}
                   to={page.link}
-                  onClick={handleCloseNavMenu}
+                  onClick={handleCloseNavMenu(null)}
                   sx={{
                     mx: 1,
                     my: 0,
@@ -189,10 +235,10 @@ const NavBar = ({ loggedIn }) => {
             {loggedIn ? (
               <Box sx={{ flexGrow: 0 }}>
                 <Box sx={{ display: { xs: 'inline-block', md: 'none' } }}>
-                  <Tooltip title='New property'>
+                  <Tooltip title='New listing'>
                     <IconButton
                       component={RouterLink}
-                      to={'/dashboard/newproperty'}
+                      to={'/dashboard/newlisting'}
                       color='primary'
                       sx={{ mx: 3 }}>
                       <FaPlus />
@@ -200,10 +246,10 @@ const NavBar = ({ loggedIn }) => {
                   </Tooltip>
                 </Box>
                 <Box sx={{ display: { xs: 'none', md: 'inline-block' } }}>
-                  <Tooltip title='New property'>
+                  <Tooltip title='New listing'>
                     <Button
                       component={RouterLink}
-                      to={'/dashboard/newproperty'}
+                      to={'/dashboard/newlisting'}
                       variant='text'
                       startIcon={<FaPlus />}
                       sx={{
@@ -213,7 +259,7 @@ const NavBar = ({ loggedIn }) => {
                           boxShadow: 'none'
                         }
                       }}>
-                      New property
+                      New listing
                     </Button>
                   </Tooltip>
                 </Box>

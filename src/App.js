@@ -17,7 +17,7 @@ import DashboardPage from './pages/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
 import JSnackbar from './components/JSnackbar';
 import MyAccount from './pages/MyAccount';
-import NewProperty from './pages/NewProperty';
+import NewListingPage from './pages/NewListingPage';
 import LandingPage from './pages/LandingPage';
 import NotFoundPage from './pages/NotFoundPage';
 
@@ -62,10 +62,10 @@ const App = () => {
                 </PrivateRoute>
               }>
               <Route path='myaccount' element={<MyAccount />} />
-              <Route path='newproperty' element={<NewProperty />} />
+              <Route path='newlisting' element={<NewListingPage />} />
             </Route>
             {/* Testing */}
-            <Route path='/splash' element={<SplashScreen />} />
+            <Route path='splash' element={<SplashScreen />} />
           </Route>
           <Route path='*' element={<NotFoundPage />} />
         </Routes>

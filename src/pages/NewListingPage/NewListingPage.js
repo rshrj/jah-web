@@ -18,7 +18,7 @@ import RentLeaseForm from './RentLeaseForm';
 import SellApartmentForm from './SellApartmentForm';
 import SellProjectForm from './SellProject';
 
-const NewProperty = () => {
+const NewListingPage = () => {
   const [tab, setTab] = useState('');
 
   const [values, setValues] = useState({
@@ -132,7 +132,7 @@ const NewProperty = () => {
           color: 'primary.main',
           marginBottom: 2
         }}>
-        Add new property
+        Add new listing
       </Typography>
       <FormGroup>
         <FormControl sx={{ marginBottom: 5 }}>
@@ -255,4 +255,4 @@ const NewProperty = () => {
   );
 };
 
-export default NewProperty;
+export default NewListingPage;
