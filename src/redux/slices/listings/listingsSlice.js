@@ -3,9 +3,16 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { addToast, createFormErrors } from '../errors/errorsSlice';
 
 import listingsService from '../../../services/listingsService';
+import { clearTopLoader, setTopLoader } from '../misc/miscSlice';
+import { arrayToObject } from '../../../utils/helpers';
 
 const initialState = {
-  loading: 'idle'
+  loading: 'idle',
+  fetchLoading: 'idle',
+  content: {
+    ids: [],
+    listings: {}
+  }
 };
 
 const addNewListing = createAsyncThunk(
@@ -27,6 +34,25 @@ const addNewListing = createAsyncThunk(
       }
 
       dispatch(createFormErrors(error.cause.errors));
+      return Promise.reject(error);
+    }
+  }
+);
+
+const getListings = createAsyncThunk(
+  'listings/getListings',
+  async (arg, { dispatch }) => {
+    dispatch(setTopLoader());
+    try {
+      const data = await listingsService.getListings();
+
+      dispatch(clearTopLoader());
+      return data.payload;
+    } catch (error) {
+      console.log(error);
+      error.cause?.toasts.forEach((toastMessage) =>
+        dispatch(addToast({ type: 'error', message: toastMessage }))
+      );
       return Promise.reject(error);
     }
   }
@@ -99,9 +125,20 @@ export const listingsSlice = createSlice({
     builder.addCase(addNewListing.rejected, (state, action) => {
       state.loading = 'idle';
     });
+    builder.addCase(getListings.pending, (state, action) => {
+      state.fetchLoading = 'loading';
+    });
+    builder.addCase(getListings.fulfilled, (state, action) => {
+      state.fetchLoading = 'idle';
+      state.content.listings = arrayToObject(action.payload, 'id');
+      state.content.ids = action.payload.map((listing) => listing.id);
+    });
+    builder.addCase(getListings.rejected, (state, action) => {
+      state.fetchLoading = 'idle';
+    });
   }
 });
 
-export { addNewListing };
+export { addNewListing, getListings };
 
 export default listingsSlice.reducer;

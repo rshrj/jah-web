@@ -1,7 +1,16 @@
-import { Container, Typography } from '@mui/material';
+import { Container, Typography, Chip } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
-import { FaBars, FaEdit, FaEllipsisH, FaTrash } from 'react-icons/fa';
+import {
+  FaBars,
+  FaBuilding,
+  FaEdit,
+  FaEllipsisH,
+  FaEye,
+  FaTrash
+} from 'react-icons/fa';
+
+import { listingObject, listingKeys } from '../../constants/listingTypes';
 
 const data = [
   {
@@ -9,7 +18,8 @@ const data = [
     name: 'Hiranandani',
     postedBy: 'Rishi',
     createdAt: new Date(),
-    type: 'rentlease'
+    type: 'rentlease',
+    status: ''
   },
   {
     id: 2,
@@ -39,7 +49,23 @@ const columns = [
     field: 'name',
     headerName: 'Listing name',
     description: 'Name of the property / project',
-    flex: 1
+    flex: 1,
+    headerClassName: {},
+    renderCell: (params) => (
+      <Box
+        sx={{
+          display: 'inline-flex',
+          alignItems: 'center'
+        }}>
+        <FaBuilding color='orange' />
+        <Typography
+          color='text.primary'
+          variant='body1'
+          sx={{ fontWeight: 'bold', marginLeft: 2 }}>
+          {params.value}
+        </Typography>
+      </Box>
+    )
   },
   {
     field: 'postedBy',
@@ -58,15 +84,23 @@ const columns = [
   {
     field: 'type',
     headerName: 'Type',
+    type: 'singleSelect',
     description: 'Type of listing',
-    flex: 1
+    flex: 1,
+    valueOptions: ['rentlease', 'sellapartment', 'sellproject'],
+    renderCell: (params) => (
+      <Typography color={listingObject[params.value].color}>
+        {listingObject[params.value].label}
+      </Typography>
+    )
   },
   {
     field: 'actions',
     type: 'actions',
     flex: 1,
+    headerName: 'Actions',
     getActions: (params) => [
-      <GridActionsCellItem icon={<FaEllipsisH />} />,
+      <GridActionsCellItem icon={<FaEye />} />,
       <GridActionsCellItem icon={<FaEdit />} />,
       <GridActionsCellItem icon={<FaTrash />} />
     ]
@@ -78,7 +112,7 @@ const ListingsPage = () => {
     <Box
       sx={{
         p: { xs: 0, md: 5 },
-        m: 2,
+        m: { xs: 0, md: 2 },
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center'
@@ -94,7 +128,15 @@ const ListingsPage = () => {
       </Typography>
       <Box sx={{ display: 'flex', height: 600, width: '70%' }}>
         <Box sx={{ flexGrow: 1 }}>
-          <DataGrid columns={columns} rows={data} />
+          <DataGrid
+            columns={columns}
+            rows={data}
+            sx={{
+              '& .MuiDataGrid-iconSeparator': {
+                visibility: 'hidden'
+              }
+            }}
+          />
         </Box>
       </Box>
     </Box>

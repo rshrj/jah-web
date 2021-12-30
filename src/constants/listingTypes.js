@@ -12,21 +12,24 @@ const listingTypes = [
     label: 'Rent / Lease',
     labelCaption: undefined,
     schema: null,
-    icon: MdAccountBalance
+    icon: MdAccountBalance,
+    color: 'success.main'
   },
   {
     type: 'sellapartment',
     label: 'Sell Apartment',
     labelCaption: '(resell homes)',
     schema: null,
-    icon: MdMapsHomeWork
+    icon: MdMapsHomeWork,
+    color: 'info.main'
   },
   {
     type: 'sellproject',
     label: 'Sell Project',
     labelCaption: '(several flats)',
     schema: null,
-    icon: MdLocationCity
+    icon: MdLocationCity,
+    color: 'secondary.main'
   }
 ];
 
