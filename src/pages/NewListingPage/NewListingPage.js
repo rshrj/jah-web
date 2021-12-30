@@ -78,18 +78,8 @@ const NewListingPage = () => {
     sellproject: {
       location: '',
       landmark: '',
-      apartmentType: '1rk',
-      price: '',
-      pricePerSqFt: '',
-      allInclusivePrice: false,
-      taxAndGovtChargesExcluded: true,
-      priceNegotiable: false,
-      numBathrooms: '1',
-      numBalconies: '1',
-      builtUpArea: '',
-      superBuiltUpArea: '',
-      otherRooms: [],
-      furnishing: '',
+      apartmentTypes: ['1rk'],
+      units: {},
       coveredParking: 0,
       openParking: 0,
       totalFloors: '',
@@ -100,9 +90,9 @@ const NewListingPage = () => {
       ownershipType: 'freehold',
       usp: 'Spacious rooms, well maintained facilities, sufficient ventilation',
       pictures: [],
-      brochure: undefined,
       featuredPicture: undefined,
-      videoLink: ''
+      videoLink: '',
+      brochureLink: ''
     }
   });
 
