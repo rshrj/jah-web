@@ -7,6 +7,16 @@ import authService from '../../../services/authService';
 const initialState = {
   loading: 'init',
   user: {}
+  // loading: 'loggedIn',
+  // user: {
+  //   name: {
+  //     first: 'Bimalesh',
+  //     last: 'Seth'
+  //   },
+  //   _id: '61bee821f23ff5b78f0e7739',
+  //   email: 'sethbimalesh@gmail.com',
+  //   role: 'CUSTOMER'
+  // }
 };
 
 const loadUserByToken = createAsyncThunk(

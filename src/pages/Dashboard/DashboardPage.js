@@ -99,7 +99,7 @@ function Dashboard(props) {
                   {route.name}
                 </Link>
               ))}
-              <Typography color='text.primary'>{routes.at(-1).name}</Typography>
+              <Typography color='text.primary'>{routes.at(-1)?.name}</Typography>
             </Breadcrumbs>
             <Typography variant='h4'>Active Listings</Typography>
             <TextField
