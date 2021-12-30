@@ -4,7 +4,7 @@ import {
   IconButton,
   LinearProgress,
   Snackbar,
-  Stack
+  Stack,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { Global } from '@emotion/react';
@@ -29,7 +29,7 @@ import JSnackbar from './components/JSnackbar/JSnackbar';
 import { Box } from '@mui/system';
 import MyAccount from './pages/MyAccount/MyAccount';
 import BuyHomes from './pages/BuyHomes';
-import LandingPage from "./pages/LandingPage";
+import LandingPage from './pages/LandingPage';
 import NewProperty from './pages/NewProperty/NewProperty';
 
 const App = () => {
@@ -48,7 +48,7 @@ const App = () => {
       <Global styles={globalStyles} />
       {/* Toasts */}
       {toasts.ids.length !== 0 && (
-        <Stack spacing={2} sx={{ width: "100%" }}>
+        <Stack spacing={2} sx={{ width: '100%' }}>
           {toasts.ids.map((toastId) => (
             <JSnackbar
               key={toastId}
