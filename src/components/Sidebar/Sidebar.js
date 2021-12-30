@@ -1,14 +1,11 @@
 import {
   Avatar,
-  Collapse,
   Divider,
-  Grow,
   IconButton,
   ListItemIcon,
   ListItemText,
   MenuItem,
   MenuList,
-  Slide,
   Typography
 } from '@mui/material';
 import {
@@ -16,27 +13,50 @@ import {
   FaCheck,
   FaChevronCircleLeft,
   FaChevronCircleRight,
+  FaEllipsisV,
   FaList,
+  FaPlus,
   FaUser
 } from 'react-icons/fa';
 import { Box } from '@mui/system';
 import { useTheme, lighten } from '@mui/material/styles';
 import { useState } from 'react';
-import { TransitionGroup } from 'react-transition-group';
+import { useSelector } from 'react-redux';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 import { stringAvatar } from '../../utils/avatars';
+import { MdArrowLeft, MdArrowRight, MdMenu, MdMenuOpen } from 'react-icons/md';
 
-const dashboardPages = [
-  { id: 1, name: 'Listings', icon: FaList },
-  { id: 2, name: 'Testimonials', icon: FaCheck },
-  { id: 3, name: 'Home Ad', icon: FaBell },
-  { id: 4, name: 'User', icon: FaUser }
+export const adminPages = [
+  { id: 1, name: 'Listings', icon: FaList, to: '/dashboard/listings' },
+  { id: 2, name: 'Testimonials', icon: FaCheck, to: '/dashboard/testimonials' },
+  { id: 3, name: 'Home Ad', icon: FaBell, to: '/dashboard/homead' },
+  { id: 4, name: 'Users', icon: FaUser, to: '/dashboard/users' }
+];
+
+export const customerPages = [
+  { id: 1, name: 'Listings', icon: FaList, to: '/dashboard/listings' },
+  { id: 2, name: 'My Account', icon: FaUser, to: '/dashboard/myaccount' }
 ];
 
 const Sidebar = () => {
   const theme = useTheme();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const [selectedTab, setSelectedTab] = useState(1);
+  let currentPath = location.pathname;
+
+  const role = useSelector((state) => state.auth.user.role);
+
+  let pages = role === 'ADMIN' ? adminPages : customerPages;
+  let pagesBottom = [
+    { id: -1, name: 'New listing', icon: FaPlus, to: '/dashboard/newlisting' }
+  ];
+  let selectedTab =
+    pages.find((page) => page.to === currentPath)?.id ||
+    pagesBottom.find((page) => page.to === currentPath)?.id ||
+    1;
+
   const [collapsed, setCollapsed] = useState(false);
 
   const handleSidebarCollapseClick = () => {
@@ -46,7 +66,14 @@ const Sidebar = () => {
   const handleMenuItemClick = (id) => (event) => {
     event.preventDefault();
 
-    setSelectedTab(id);
+    let page = pages.find((p) => p.id === id);
+    navigate(page.to, { state: { from: location } });
+  };
+  const handleMenuBottomItemClick = (id) => (event) => {
+    event.preventDefault();
+
+    let page = pagesBottom.find((p) => p.id === id);
+    navigate(page.to, { state: { from: location } });
   };
 
   const styledMenu = {
@@ -90,19 +117,25 @@ const Sidebar = () => {
   };
 
   return (
-    <TransitionGroup>
+    <Box
+      sx={{
+        display: {
+          xs: 'none',
+          md: 'inline-flex'
+        },
+        width: {
+          md: collapsed ? 100 : 200,
+          lg: collapsed ? 100 : 300
+        },
+        height: 'calc(100vh - 80px)',
+        position: 'sticky',
+        top: 80
+      }}>
       <Box
         sx={{
-          display: {
-            xs: 'none',
-            md: 'inline-flex'
-          },
-          position: 'sticky',
-          top: 80,
-          width: {
-            md: collapsed ? 100 : 200,
-            lg: collapsed ? 100 : 300
-          }
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between'
         }}>
         <Box
           sx={{
@@ -110,7 +143,6 @@ const Sidebar = () => {
               md: collapsed ? 100 : 200,
               lg: collapsed ? 100 : 300
             },
-            height: `calc(100vh - 80px)`,
             paddingTop: 10,
             display: {
               xs: 'none',
@@ -132,11 +164,18 @@ const Sidebar = () => {
               }
             }}
             onClick={handleSidebarCollapseClick}>
-            {collapsed ? (
-              <FaChevronCircleRight fontSize={30} />
-            ) : (
-              <FaChevronCircleLeft fontSize={30} />
-            )}
+            {/* {collapsed ? (
+            <FaChevronCircleRight fontSize={30} />
+          ) : (
+            <FaChevronCircleLeft fontSize={30} />
+          )} */}
+            {/* {collapsed ? (
+            <MdArrowRight fontSize={20} />
+          ) : (
+            <MdArrowLeft fontSize={20} />
+          )} */}
+            {/* <MdArrowLeft fontSize={20} /> */}
+            <MdMenuOpen fontSize={25} />
           </IconButton>
           <Box
             sx={{
@@ -169,8 +208,9 @@ const Sidebar = () => {
             )}
           </Box>
           <MenuList>
-            {dashboardPages.map((page) => (
+            {pages.map((page) => (
               <MenuItem
+                key={page.id}
                 sx={
                   page.id === selectedTab
                     ? styledMenu.selected
@@ -186,9 +226,55 @@ const Sidebar = () => {
           </MenuList>
         </Box>
 
-        <Divider orientation='vertical' flexItem />
+        <Box
+          sx={{
+            width: {
+              md: collapsed ? 100 : 200,
+              lg: collapsed ? 100 : 300
+            },
+            paddingBottom: 2,
+            display: {
+              xs: 'none',
+              md: 'inline-block'
+            },
+            transition: '0.2 ease',
+            transitionProperty: 'width'
+          }}>
+          <Divider variant='middle' />
+          <MenuList>
+            {pagesBottom.map((page) => (
+              <MenuItem
+                key={page.id}
+                sx={
+                  page.id === selectedTab
+                    ? styledMenu.selected
+                    : styledMenu.normal
+                }
+                onClick={handleMenuBottomItemClick(page.id)}>
+                <ListItemIcon sx={{ color: 'inherit' }}>
+                  {<page.icon />}
+                </ListItemIcon>
+                {!collapsed && <ListItemText>{page.name}</ListItemText>}
+              </MenuItem>
+            ))}
+          </MenuList>
+        </Box>
       </Box>
-    </TransitionGroup>
+
+      <Divider orientation='vertical' flexItem />
+    </Box>
+  );
+
+  let blah = (
+    <Box
+      sx={{
+        position: 'sticky',
+        top: 80,
+        height: '100px',
+        backgroundColor: 'pink'
+      }}>
+      abracadabra
+    </Box>
   );
 };
 

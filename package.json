@@ -3,17 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@date-io/date-fns": "^2.11.0",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@mui/lab": "^5.0.0-alpha.62",
     "@mui/material": "^5.2.5",
+    "@reduxjs/toolkit": "^1.7.1",
+    "config": "^3.3.6",
+    "date-fns": "^2.28.0",
     "history": "^5.2.0",
+    "material-ui-dropzone": "^3.5.0",
     "nanoid": "^3.1.30",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
+    "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
     "react-spinners": "^0.11.0",
+    "to-words": "^3.0.2",
     "validator": "^13.7.0"
   },
   "scripts": {
@@ -39,5 +47,7 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "author": "Rishi Raj \"rishiraj.1012exp@gmail.com\"",
+  "license": "SEE LICENSE IN LICENSE.md"
 }

@@ -9,10 +9,12 @@ import {
   Link
 } from '@mui/material';
 import { Box } from '@mui/system';
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 
-import validator from 'validator';
+import { clearFormErrors } from '../../redux/slices/errors/errorsSlice';
+import { login } from '../../redux/slices/auth/authSlice';
 
 import Background from '../../components/AuthBackground/AuthBackground';
 import { JInputField, JPasswordField } from '../../components/JInputField';
@@ -24,47 +26,43 @@ const LoginPage = () => {
     password: '',
     showPassword: false
   });
+  const location = useLocation();
 
-  const [errors, setErrors] = useState({
-    email: '',
-    password: ''
-  });
+  const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
+  const errors = useSelector((store) => store.errors.formErrors);
+
+  const loading = useSelector((store) => store.auth.loading === 'loading');
+
+  const loggedIn = useSelector((store) => store.auth.loading === 'loggedIn');
+
+  const dispatch = useDispatch();
+
+  const from = location.state?.from?.pathname || '/dashboard';
+
+  useEffect(() => {
+    if (loggedIn) {
+      navigate(from, { replace: true });
+    }
+  }, [loggedIn, navigate, from]);
 
   const handleChange = (prop) => (event) => {
-    setErrors({
-      ...errors,
-      email: '',
-      password: ''
-    });
+    if (Object.entries(errors).length !== 0) {
+      dispatch(clearFormErrors());
+    }
+
     setValues({ ...values, [prop]: event.target.value });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (validator.isEmpty(values.email) || !validator.isEmail(values.email)) {
-      setErrors({
-        ...errors,
-        email: 'Please enter a valid email'
-      });
-
-      return;
-    }
-
-    setErrors({
-      ...errors,
-      email: ''
-    });
-
-    setLoading(true);
-
-    setTimeout(() => {
-      setLoading(false);
-
-      alert('Logged in');
-    }, 4000);
+    dispatch(
+      login({
+        email: values.email,
+        password: values.password
+      })
+    );
   };
 
   const handleClickShowPassword = () => {
@@ -89,8 +87,6 @@ const LoginPage = () => {
             }}>
             <Typography
               variant='h3'
-              bold
-              component='h2'
               sx={{
                 marginBottom: 4,
                 fontWeight: 'bold'
@@ -104,7 +100,7 @@ const LoginPage = () => {
                 placeholder='Enter your email'
                 value={values.email}
                 handleChange={handleChange('email')}
-                errors={errors.email}
+                errors={errors['email']}
                 disabled={loading}
               />
 
@@ -113,7 +109,7 @@ const LoginPage = () => {
                 placeholder='Enter your password'
                 value={values.password}
                 handleChange={handleChange('password')}
-                errors={errors.password}
+                errors={errors['password']}
                 handleClickShowPassword={handleClickShowPassword}
                 showPassword={values.showPassword}
                 disabled={loading}
@@ -152,7 +148,11 @@ const LoginPage = () => {
                 sx={{
                   textAlign: 'center'
                 }}>
-                <Link href='#' underline='hover' color='primary'>
+                <Link
+                  component={RouterLink}
+                  to='/forgotpassword'
+                  underline='hover'
+                  color='primary'>
                   Forgot Password
                 </Link>
               </FormControl>

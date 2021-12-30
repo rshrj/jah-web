@@ -1,0 +1,14 @@
+[
+  {
+    "id": -2,
+    "label": "Basement"
+  },
+  {
+    "id": -1,
+    "label": "Lower Ground"
+  },
+  {
+    "id": 0,
+    "label": "Ground"
+  }
+]

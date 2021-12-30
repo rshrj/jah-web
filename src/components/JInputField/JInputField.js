@@ -11,12 +11,14 @@ const JInputField = ({
   value,
   topLabel,
   placeholder,
+  helperText,
+  spacing,
   ...rest
 }) => {
   return (
     <FormControl
       sx={{
-        marginBottom: 2
+        marginBottom: spacing === undefined ? 2 : spacing
       }}>
       <FormLabel
         sx={{
@@ -26,13 +28,19 @@ const JInputField = ({
         {topLabel}
       </FormLabel>
       <TextField
-        error={errors !== ''}
+        error={errors !== undefined}
         value={value}
         onChange={handleChange}
         label={placeholder}
         {...rest}
       />
-      {errors !== '' && <FormHelperText error>{errors}</FormHelperText>}
+      {errors !== undefined ? (
+        <FormHelperText error>{errors}</FormHelperText>
+      ) : (
+        helperText !== undefined && (
+          <FormHelperText>{helperText}</FormHelperText>
+        )
+      )}
     </FormControl>
   );
 };
