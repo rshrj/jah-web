@@ -1,4 +1,4 @@
-import { CssBaseline, Stack } from '@mui/material';
+import { CssBaseline, Stack, useMediaQuery } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { Global } from '@emotion/react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -20,6 +20,7 @@ import MyAccount from './pages/MyAccount';
 import NewListingPage from './pages/NewListingPage';
 import LandingPage from './pages/LandingPage';
 import NotFoundPage from './pages/NotFoundPage';
+import ListingsPage from './pages/ListingsPage/ListingsPage';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -61,6 +62,7 @@ const App = () => {
                   <DashboardPage />
                 </PrivateRoute>
               }>
+              <Route path='listings' element={<ListingsPage />} />
               <Route path='myaccount' element={<MyAccount />} />
               <Route path='newlisting' element={<NewListingPage />} />
             </Route>

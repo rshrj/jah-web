@@ -24,6 +24,7 @@ import { FaArrowCircleRight, FaTimes } from 'react-icons/fa';
 import { ToWords } from 'to-words';
 
 import locationOptions from './locationOptions.json';
+import unitLabels from '../../constants/unitLabels';
 
 import { ChipOption, ChipSelect } from '../../components/ChipSelect';
 import CountInput from '../../components/CountInput/CountInput';
@@ -45,14 +46,6 @@ const toWords = new ToWords({
     currency: true
   }
 });
-
-const unitLabels = {
-  '1rk': '1 RK',
-  '1bhk': '1 BHK',
-  '2bhk': '2 BHK',
-  '3bhk': '3 BHK',
-  '4bhk': '4 BHK'
-};
 
 const UnitForm = ({
   unit,
@@ -479,6 +472,7 @@ const UnitForm = ({
 
 const SellProjectForm = ({
   values = {
+    name: '',
     location: '',
     landmark: '',
     apartmentTypes: ['1rk'],
@@ -578,6 +572,23 @@ const SellProjectForm = ({
 
   return (
     <>
+      <JInputField
+        topLabel={
+          <Typography
+            variant='h6'
+            color='text.secondary'
+            sx={{ fontWeight: 'bold' }}>
+            Name of the project
+            <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
+          </Typography>
+        }
+        placeholder='Enter the name of the project'
+        value={values.name}
+        spacing={5}
+        handleChange={handleChange('name')}
+        disabled={false}
+      />
+
       <JInputSearch
         topLabel={
           <Typography
@@ -589,7 +600,7 @@ const SellProjectForm = ({
         }
         options={locationOptions}
         spacing={5}
-        placeholder='Where is your project located?'
+        placeholder='Where is the project located?'
         value={values.location}
         handleChange={handleChange('location')}
         disabled={false}
@@ -604,7 +615,7 @@ const SellProjectForm = ({
             Landmark<span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
           </Typography>
         }
-        placeholder='Enter the closest landmark to your project'
+        placeholder='Enter the closest landmark to the project'
         value={values.landmark}
         spacing={5}
         handleChange={handleChange('landmark')}
@@ -989,20 +1000,6 @@ const SellProjectForm = ({
         disabled={false}
         spacing={5}
       />
-
-      <FormControl
-        sx={{
-          display: 'flex',
-          justifyContents: 'center',
-          alignItems: 'center'
-        }}>
-        <Button
-          variant='contained'
-          sx={{ width: 'fit-content', textAlign: 'center' }}
-          endIcon={<FaArrowCircleRight />}>
-          Submit
-        </Button>
-      </FormControl>
     </>
   );
 };

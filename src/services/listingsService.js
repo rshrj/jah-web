@@ -6,7 +6,7 @@ import {
 
 import { listingKeys } from '../constants/listingTypes';
 
-export const addNewListing = async ({ type, ...listingData }) => {
+export const addNewListing = async ({ type, ...listingFormData }) => {
   if (!listingKeys.includes(type)) {
     return rejectWithToast('Listing type is incorrect');
   }
@@ -23,7 +23,7 @@ export const addNewListing = async ({ type, ...listingData }) => {
         'Content-Type': 'application/json;charset=UTF-8',
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify(listingData)
+      body: JSON.stringify(listingFormData)
     });
 
     if (!res) {
@@ -31,7 +31,7 @@ export const addNewListing = async ({ type, ...listingData }) => {
     }
 
     const data = await res.json();
-
+    console.log(data);
     if (!res.ok) {
       throw new Error('Request error', { cause: data });
     }

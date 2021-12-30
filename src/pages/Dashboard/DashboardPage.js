@@ -1,6 +1,13 @@
-import { Breadcrumbs, IconButton, Link, Typography } from '@mui/material';
+import {
+  Breadcrumbs,
+  IconButton,
+  Link,
+  Typography,
+  useMediaQuery
+} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/system';
+import { useEffect } from 'react';
 import { FaAngleRight, FaArrowLeft } from 'react-icons/fa';
 import {
   Outlet,

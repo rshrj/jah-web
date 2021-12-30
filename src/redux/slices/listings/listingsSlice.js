@@ -9,7 +9,7 @@ const initialState = {
 };
 
 const addNewListing = createAsyncThunk(
-  'listings/createNewListing',
+  'listings/addNewListing',
   async ({ navigate, listing }, { dispatch }) => {
     try {
       const data = await listingsService.addNewListing(listing);
@@ -18,6 +18,7 @@ const addNewListing = createAsyncThunk(
       navigate(`/dashboard/listing/${data.payload.id}`);
       return data.payload;
     } catch (error) {
+      console.log(error);
       error.cause?.toasts.forEach((toastMessage) =>
         dispatch(addToast({ type: 'error', message: toastMessage }))
       );
@@ -95,7 +96,7 @@ export const listingsSlice = createSlice({
     builder.addCase(addNewListing.fulfilled, (state, action) => {
       state.loading = 'idle';
     });
-    builder.addCase(addNewListing.pending, (state, action) => {
+    builder.addCase(addNewListing.rejected, (state, action) => {
       state.loading = 'idle';
     });
   }

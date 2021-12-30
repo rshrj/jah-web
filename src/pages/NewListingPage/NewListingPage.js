@@ -1,4 +1,5 @@
 import {
+  Button,
   FormControl,
   FormGroup,
   ToggleButton,
@@ -12,17 +13,25 @@ import {
   MdMapsHomeWork,
   MdAccountBalance
 } from 'react-icons/md';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import RentLeaseForm from './RentLeaseForm';
 import SellApartmentForm from './SellApartmentForm';
 import SellProjectForm from './SellProject';
+import { FaArrowCircleRight } from 'react-icons/fa';
+import Loader from '../../components/Loader';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { addNewListing } from '../../redux/slices/listings/listingsSlice';
+import { listingKeys } from '../../constants/listingTypes';
 
 const NewListingPage = () => {
   const [tab, setTab] = useState('');
 
   const [values, setValues] = useState({
     rentlease: {
+      name: '',
+      societyName: '',
       location: '',
       landmark: '',
       apartmentType: '1rk',
@@ -48,6 +57,8 @@ const NewListingPage = () => {
       videoLink: ''
     },
     sellapartment: {
+      name: '',
+      societyName: '',
       location: '',
       landmark: '',
       apartmentType: '1rk',
@@ -76,6 +87,7 @@ const NewListingPage = () => {
       videoLink: ''
     },
     sellproject: {
+      name: '',
       location: '',
       landmark: '',
       apartmentTypes: ['1rk'],
@@ -96,6 +108,10 @@ const NewListingPage = () => {
     }
   });
 
+  useEffect(() => {
+    console.log(values.rentlease.name);
+  }, [values.rentlease.name]);
+
   const handleTabChange = (event, newVal) => {
     setTab(newVal);
   };
@@ -105,6 +121,19 @@ const NewListingPage = () => {
   };
 
   const isPhone = useMediaQuery('(min-width:600px)');
+
+  const loading = useSelector((state) => state.listings.loading === 'loading');
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    dispatch(
+      addNewListing({ navigate, listing: { type: tab, ...values[tab] } })
+    );
+  };
 
   return (
     <Box
@@ -222,6 +251,7 @@ const NewListingPage = () => {
             </ToggleButton>
           </ToggleButtonGroup>
         </FormControl>
+
         {tab === 'rentlease' && (
           <RentLeaseForm
             values={values.rentlease}
@@ -239,6 +269,24 @@ const NewListingPage = () => {
             values={values.sellapartment}
             onChange={handleChange('sellapartment')}
           />
+        )}
+
+        {listingKeys.includes(tab) && (
+          <FormControl
+            sx={{
+              display: 'flex',
+              justifyContents: 'center',
+              alignItems: 'center'
+            }}>
+            <Button
+              disabled={loading}
+              variant='contained'
+              sx={{ width: 200, textAlign: 'center' }}
+              endIcon={<FaArrowCircleRight />}
+              onClick={handleSubmit}>
+              {loading ? <Loader /> : 'Submit'}
+            </Button>
+          </FormControl>
         )}
       </FormGroup>
     </Box>

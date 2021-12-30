@@ -1,5 +1,5 @@
-import React from 'react';
-import { Snackbar } from '@mui/material';
+import React, { useEffect } from 'react';
+import { Snackbar, useMediaQuery } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
 import { useDispatch } from 'react-redux';
 
@@ -16,12 +16,17 @@ const JSnackbar = ({ toastId, toast, autoHideDuration = 6000 }) => {
     dispatch(clearToast(toastId));
   };
 
+  const isPhone = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+
   return (
     <Snackbar
       open={toastId !== undefined}
       autoHideDuration={autoHideDuration}
       onClose={handleClose(toastId)}
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+      anchorOrigin={{
+        vertical: isPhone ? 'top' : 'bottom',
+        horizontal: isPhone ? 'center' : 'right'
+      }}>
       <Alert
         onClose={handleClose(toastId)}
         severity={toast.type}

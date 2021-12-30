@@ -25,6 +25,7 @@ import { ToWords } from 'to-words';
 
 import floorOptions from './floorOptions.json';
 import locationOptions from './locationOptions.json';
+import unitLabels from '../../constants/unitLabels';
 
 import { ChipOption, ChipSelect } from '../../components/ChipSelect';
 import CountInput from '../../components/CountInput/CountInput';
@@ -82,6 +83,8 @@ const genOptions = (initOptions, totalCount) => {
 
 const SellApartmentForm = ({
   values = {
+    name: '',
+    societyName: '',
     location: '',
     landmark: '',
     apartmentType: '1rk',
@@ -123,7 +126,13 @@ const SellApartmentForm = ({
       return;
     }
 
-    onChange({ ...values, [prop]: newVal });
+    onChange({
+      ...values,
+      [prop]: newVal,
+      name: `${
+        values.apartmentType !== '' ? unitLabels[values.apartmentType] : ''
+      } in ${values.location}`
+    });
   };
 
   const handleChange = (prop) => (event) => {
@@ -131,7 +140,13 @@ const SellApartmentForm = ({
       return;
     }
 
-    onChange({ ...values, [prop]: event.target.value });
+    onChange({
+      ...values,
+      [prop]: event.target.value,
+      name: `${
+        values.apartmentType !== '' ? unitLabels[values.apartmentType] : ''
+      } in ${values.location}`
+    });
   };
 
   const handleCheck = (prop) => (event) => {
@@ -190,6 +205,34 @@ const SellApartmentForm = ({
 
   return (
     <>
+      <JInputField
+        topLabel={
+          <>
+            <Typography
+              variant='h6'
+              color='text.secondary'
+              sx={{
+                fontWeight: 'bold',
+                display: 'inline-block',
+                marginRight: 1
+              }}>
+              Name of the society / building
+            </Typography>
+            <Typography
+              variant='body2'
+              color='text.secondary'
+              sx={{ display: 'inline-block' }}>
+              (Optional)
+            </Typography>
+          </>
+        }
+        placeholder='Enter the name of your society / building'
+        value={values.societyName}
+        spacing={5}
+        handleChange={handleChange('societyName')}
+        disabled={false}
+      />
+
       <JInputSearch
         topLabel={
           <Typography
@@ -910,20 +953,6 @@ const SellApartmentForm = ({
         disabled={false}
         spacing={5}
       />
-
-      <FormControl
-        sx={{
-          display: 'flex',
-          justifyContents: 'center',
-          alignItems: 'center'
-        }}>
-        <Button
-          variant='contained'
-          sx={{ width: 'fit-content', textAlign: 'center' }}
-          endIcon={<FaArrowCircleRight />}>
-          Submit
-        </Button>
-      </FormControl>
     </>
   );
 };
