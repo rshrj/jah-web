@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from "react";
 
 import NavBar from "../../components/NavBar";
@@ -40,4 +41,10 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: "center",
   color: theme.palette.text.secondary,
 }));
+=======
+const LandingPage = () => {
+  return <div>Landing Page</div>;
+};
+
+>>>>>>> f67ce2adee1d02a3b2053ca4f320965e07c8f0ae
 export default LandingPage;
