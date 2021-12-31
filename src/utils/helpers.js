@@ -18,3 +18,25 @@ export const arrayToObject = (key, array) => {
 
   return array.reduce(reducer, {});
 };
+
+export const digitsIn = (number) => {
+  return (Math.log(number) * Math.LOG10E + 1) | 0;
+};
+
+export const round = (value, decimals) => {
+  return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
+};
+
+export const shortenedPriceWords = (price) => {
+  let priceNum = parseInt(price, 10);
+  if (digitsIn(priceNum) === 4 || digitsIn(priceNum) === 5) {
+    return `${round(priceNum / 1000, 1)} K`;
+  }
+  if (digitsIn(priceNum) === 6 || digitsIn(priceNum) === 7) {
+    return `${round(priceNum / 100000, 1)} L`;
+  }
+  if (digitsIn(priceNum) >= 8) {
+    return `${round(priceNum / 10000000, 1)} Cr`;
+  }
+  return `${round(priceNum, 1)}`;
+};

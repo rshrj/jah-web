@@ -29,8 +29,6 @@ const DashboardPage = () => {
 
   return (
     <>
-      <NavBar loggedIn={true} />
-
       <Box
         sx={{
           display: 'flex',

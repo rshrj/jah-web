@@ -14,6 +14,7 @@ import LoginPage from './pages/Login';
 import SignupPage from './pages/Signup';
 import SplashScreen from './components/SplashScreen';
 import DashboardPage from './pages/Dashboard';
+import PublicPage from './pages/PublicPage';
 import PrivateRoute from './components/PrivateRoute';
 import JSnackbar from './components/JSnackbar';
 import MyAccount from './pages/MyAccount';
@@ -21,7 +22,8 @@ import NewListingPage from './pages/NewListingPage';
 import LandingPage from './pages/LandingPage';
 import BuyHomes from './pages/BuyHomes/BuyHomes';
 import NotFoundPage from './pages/NotFoundPage';
-import ListingsPage from './pages/ListingsPage/ListingsPage';
+import ListingsPage from './pages/ListingsPage';
+import ListingView from './pages/ListingView';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -52,10 +54,11 @@ const App = () => {
 
       <BrowserRouter>
         <Routes>
-          <Route path='/'>
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/signup' element={<SignupPage />} />
+          <Route path='/' element={<PublicPage />}>
             <Route index element={<LandingPage />} />
-            <Route path='login' element={<LoginPage />} />
-            <Route path='signup' element={<SignupPage />} />
+            <Route path='listing/:listingId' element={<ListingView />} />
             <Route path='forbuyers' element={<BuyHomes />} />
             <Route
               path='dashboard'
@@ -68,9 +71,9 @@ const App = () => {
               <Route path='myaccount' element={<MyAccount />} />
               <Route path='newlisting' element={<NewListingPage />} />
             </Route>
-            {/* Testing */}
-            <Route path='splash' element={<SplashScreen />} />
           </Route>
+          {/* Testing */}
+          <Route path='/splash' element={<SplashScreen />} />
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>

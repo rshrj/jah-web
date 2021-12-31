@@ -86,6 +86,7 @@ const NavBar = () => {
   const topLoading = useSelector((state) => state.misc.topLoading);
 
   const loggedIn = useSelector((state) => state.auth.loading === 'loggedIn');
+  const name = useSelector((state) => state.auth.user?.name);
   const role = useSelector((state) => state.auth.user?.role);
 
   const sidebarPages = role === 'ADMIN' ? adminPages : customerPages;
@@ -267,7 +268,7 @@ const NavBar = () => {
                 <Tooltip title='Open settings'>
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
-                      {...stringAvatar('Rishi Raj')}
+                      {...stringAvatar(`${name.first} ${name.last}`)}
                       src='/static/images/avatar/2.jpg'
                     />
                   </IconButton>
@@ -314,6 +315,22 @@ const NavBar = () => {
                   </Tooltip>
                 </Box>
                 <Box sx={{ display: { xs: 'none', md: 'inline-block' } }}>
+                  <Tooltip title='New listing'>
+                    <Button
+                      component={RouterLink}
+                      to={'/signup'}
+                      variant='text'
+                      startIcon={<FaPlus />}
+                      sx={{
+                        mx: 5,
+                        boxShadow: 'none',
+                        '&:hover': {
+                          boxShadow: 'none'
+                        }
+                      }}>
+                      New listing
+                    </Button>
+                  </Tooltip>
                   <Tooltip title='Login'>
                     <Button
                       variant='text'

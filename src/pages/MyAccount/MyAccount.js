@@ -11,7 +11,7 @@ const MyAccount = () => {
     <Box sx={{ p: { xs: 0, md: 5 }, m: 2 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
         <Avatar
-          {...stringAvatar('Rishi Raj', {
+          {...stringAvatar(`${user.name.first} ${user.name.last}`, {
             height: 100,
             width: 100,
             fontSize: 40,

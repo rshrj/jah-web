@@ -18,16 +18,18 @@ import { signup } from '../../redux/slices/auth/authSlice';
 import Background from '../../components/AuthBackground/AuthBackground';
 import { JInputField, JPasswordField } from '../../components/JInputField';
 import Loader from '../../components/Loader';
+import { clearFormErrors } from '../../redux/slices/errors/errorsSlice';
 
 const SignupPage = () => {
-
   const navigate = useNavigate();
-  
-  const dispatch = useDispatch();
+
+  const errors = useSelector((store) => store.errors.formErrors);
 
   const loading = useSelector((store) => store.auth.loading === 'loading');
 
   const loggedIn = useSelector((store) => store.auth.loading === 'loggedIn');
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (loggedIn) {
@@ -45,44 +47,17 @@ const SignupPage = () => {
     showPassword2: false
   });
 
-  const [errors, setErrors] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    password: '',
-    password2: ''
-  });
-
   // const [loading, setLoading] = useState(false);
 
   const handleChange = (prop) => (event) => {
-    setErrors({
-      ...errors,
-      name: '',
-      phone: '',
-      email: '',
-      password: '',
-      password2: ''
-    });
+    if (Object.entries(errors).length !== 0) {
+      dispatch(clearFormErrors());
+    }
     setValues({ ...values, [prop]: event.target.value });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    if (validator.isEmpty(values.email) || !validator.isEmail(values.email)) {
-      setErrors({
-        ...errors,
-        email: 'Please enter a valid email'
-      });
-
-      return;
-    }
-
-    setErrors({
-      ...errors,
-      email: ''
-    });
 
     const [first, last] = values.name.split(' ');
 
@@ -91,18 +66,10 @@ const SignupPage = () => {
         email: values.email,
         password: values.password,
         password2: values.password2,
-        name: {first, last},
+        name: { first, last },
         phone: values.phone
       })
     );
-
-    // setLoading(true);
-
-    // setTimeout(() => {
-    //   setLoading(false);
-
-    //   alert('Logged in');
-    // }, 4000);
   };
 
   const handleClickShowPassword = (prop) => () => {
@@ -127,7 +94,6 @@ const SignupPage = () => {
             }}>
             <Typography
               variant='h3'
-              bold
               component='h2'
               sx={{
                 marginBottom: 4,

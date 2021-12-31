@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-import { createFormErrors } from '../errors/errorsSlice';
+import { addToast, createFormErrors } from '../errors/errorsSlice';
 
 import authService from '../../../services/authService';
 
@@ -30,15 +30,23 @@ const login = createAsyncThunk(
       const data = await authService.login(email, password);
       localStorage.setItem('token', data.payload);
 
+      dispatch(addToast({ type: 'success', message: data.message }));
       const data2 = await authService.loadUserByToken(data.payload);
       return data2.payload;
-    } catch (e) {
-      dispatch(createFormErrors(e.cause.message));
+    } catch (error) {
+      if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
+        error.cause.toasts.forEach((toastMessage) =>
+          dispatch(addToast({ type: 'error', message: toastMessage }))
+        );
+      }
+      if (error.cause.errors !== undefined || error.cause.errors !== {}) {
+        dispatch(createFormErrors(error.cause.errors));
+      }
 
       if (localStorage.getItem('token') !== null) {
         localStorage.removeItem('token');
       }
-      return Promise.reject(e);
+      return Promise.reject(error);
     }
   }
 );
@@ -48,18 +56,26 @@ const signup = createAsyncThunk(
   async (formData, { dispatch }) => {
     try {
       const data = await authService.signup(formData);
-      
+
       localStorage.setItem('token', data.payload);
+      dispatch(addToast({ type: 'success', message: data.message }));
 
       const data2 = await authService.loadUserByToken(data.payload);
       return data2.payload;
-    } catch (e) {
-      dispatch(createFormErrors(e.cause.message));
+    } catch (error) {
+      if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
+        error.cause.toasts.forEach((toastMessage) =>
+          dispatch(addToast({ type: 'error', message: toastMessage }))
+        );
+      }
+      if (error.cause.errors !== undefined || error.cause.errors !== {}) {
+        dispatch(createFormErrors(error.cause.errors));
+      }
 
       if (localStorage.getItem('token') !== null) {
         localStorage.removeItem('token');
       }
-      return Promise.reject(e);
+      return Promise.reject(error);
     }
   }
 );
@@ -69,6 +85,8 @@ const logout = createAsyncThunk('auth/logout', async (data, { dispatch }) => {
     localStorage.removeItem('token');
     return;
   }
+
+  dispatch(addToast({ type: 'error', message: 'Logged out successfully!' }));
 
   return Promise.reject('Not logged in');
 });
