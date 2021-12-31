@@ -12,13 +12,26 @@ import {
   IconButton,
   ImageList,
   ImageListItem,
+  Link,
   Paper,
   Typography
 } from '@mui/material';
 import { useTheme, css, lighten } from '@mui/material/styles';
 import { HashLoader } from 'react-spinners';
-import { FaTimes } from 'react-icons/fa';
-import { MdGridOff, MdRoofing } from 'react-icons/md';
+import { FaCheck, FaTimes } from 'react-icons/fa';
+import {
+  MdGridOff,
+  MdRoofing,
+  MdLocationOn,
+  MdAccountBalanceWallet,
+  MdCheck,
+  MdWeekend,
+  MdLocalParking,
+  MdCalendarToday,
+  MdStairs,
+  MdOutlineStairs,
+  MdPlayArrow
+} from 'react-icons/md';
 
 import { getListingById } from '../../redux/slices/listings/listingsSlice';
 import {
@@ -240,19 +253,37 @@ const SellApartmentListingView = () => {
                     ))}
                   </ImageList>
                 </Box>
-                <Typography
-                  color='text.secondary'
-                  onClick={handleGalleryClick}
+                <Box
                   sx={{
-                    display: 'inline-block',
-                    m: 1,
-                    '&:hover': {
-                      cursor: 'pointer',
-                      textDecoration: 'underline'
-                    }
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
                   }}>
-                  Click to enlarge
-                </Typography>
+                  <Typography
+                    color='text.secondary'
+                    onClick={handleGalleryClick}
+                    sx={{
+                      display: 'inline-block',
+                      m: 1,
+                      '&:hover': {
+                        cursor: 'pointer',
+                        textDecoration: 'underline'
+                      }
+                    }}>
+                    Click to enlarge
+                  </Typography>
+                  <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                    <MdPlayArrow color={theme.palette.primary.main} />
+                    <Link
+                      href={listing.sellapartment.videoLink}
+                      target='_blank'
+                      rel='noopener noreferer'
+                      underline='hover'
+                      sx={{ marginLeft: 1 }}>
+                      Click here to play the video
+                    </Link>
+                  </Box>
+                </Box>
                 <Backdrop
                   sx={{
                     color: '#fff',
@@ -485,9 +516,9 @@ const SellApartmentListingView = () => {
                     p: 2,
                     m: 1
                   }}>
-                  <MdGridOff
+                  <MdLocationOn
                     fontSize={30}
-                    color={colors[0]}
+                    color={colors[1]}
                     style={{ marginTop: theme.spacing(1) }}
                   />
                   <Box>
@@ -497,68 +528,17 @@ const SellApartmentListingView = () => {
                         marginLeft: 2,
                         color: 'text.secondary'
                       }}>
-                      Area
+                      Location
                     </Typography>
-                    {listing.sellapartment.carpetArea !== '' && (
-                      <Box sx={{ marginBottom: 1 }}>
-                        <Typography
-                          variant='body1'
-                          sx={{
-                            marginLeft: 2,
-                            color: 'text.primary'
-                          }}>
-                          Carpet Area
-                        </Typography>
-                        <Typography
-                          variant='body2'
-                          sx={{
-                            marginLeft: 2,
-                            color: 'text.secondary'
-                          }}>
-                          {`(${listing.sellapartment.carpetArea} sq.ft.)`}
-                        </Typography>
-                      </Box>
-                    )}
-                    {listing.sellapartment.builtUpArea !== '' && (
-                      <Box sx={{ marginBottom: 1 }}>
-                        <Typography
-                          variant='body1'
-                          sx={{
-                            marginLeft: 2,
-                            color: 'text.primary'
-                          }}>
-                          Built-up Area
-                        </Typography>
-                        <Typography
-                          variant='body2'
-                          sx={{
-                            marginLeft: 2,
-                            color: 'text.secondary'
-                          }}>
-                          {`(${listing.sellapartment.builtUpArea} sq.ft.)`}
-                        </Typography>
-                      </Box>
-                    )}
-                    {listing.sellapartment.superBuiltUpArea !== '' && (
-                      <Box sx={{ marginBottom: 1 }}>
-                        <Typography
-                          variant='body1'
-                          sx={{
-                            marginLeft: 2,
-                            color: 'text.primary'
-                          }}>
-                          Super Built-up Area
-                        </Typography>
-                        <Typography
-                          variant='body2'
-                          sx={{
-                            marginLeft: 2,
-                            color: 'text.secondary'
-                          }}>
-                          {`(${listing.sellapartment.superBuiltUpArea} sq.ft.)`}
-                        </Typography>
-                      </Box>
-                    )}
+
+                    <Typography
+                      variant='body1'
+                      sx={{
+                        marginLeft: 2,
+                        color: 'text.primary'
+                      }}>
+                      {`${listing.sellapartment.landmark}, ${listing.sellapartment.location}`}
+                    </Typography>
                   </Box>
                 </Box>
               </Grid>
@@ -570,10 +550,10 @@ const SellApartmentListingView = () => {
                     p: 2,
                     m: 1
                   }}>
-                  <MdGridOff
+                  <MdAccountBalanceWallet
                     style={{ marginTop: theme.spacing(1) }}
                     fontSize={30}
-                    color={colors[0]}
+                    color={colors[4]}
                   />
                   <Box>
                     <Typography
@@ -582,68 +562,307 @@ const SellApartmentListingView = () => {
                         marginLeft: 2,
                         color: 'text.secondary'
                       }}>
-                      Area
+                      Price Details
                     </Typography>
-                    {listing.sellapartment.carpetArea !== '' && (
-                      <Box sx={{ marginBottom: 1 }}>
-                        <Typography
-                          variant='body1'
-                          sx={{
-                            marginLeft: 2,
-                            color: 'text.primary'
-                          }}>
-                          Carpet Area
-                        </Typography>
-                        <Typography
-                          variant='body2'
-                          sx={{
-                            marginLeft: 2,
-                            color: 'text.secondary'
-                          }}>
-                          {`(${listing.sellapartment.carpetArea} sq.ft.)`}
-                        </Typography>
-                      </Box>
-                    )}
-                    {listing.sellapartment.builtUpArea !== '' && (
-                      <Box sx={{ marginBottom: 1 }}>
-                        <Typography
-                          variant='body1'
-                          sx={{
-                            marginLeft: 2,
-                            color: 'text.primary'
-                          }}>
-                          Built-up Area
-                        </Typography>
+                    <Box sx={{ marginBottom: 1 }}>
+                      <Typography
+                        variant='body1'
+                        sx={{
+                          marginLeft: 2,
+                          color: 'text.primary'
+                        }}>
+                        {`Rs. ${shortenedPriceWords(
+                          listing.sellapartment.price
+                        )}`}
+                      </Typography>
+                      <Typography
+                        variant='body2'
+                        sx={{
+                          marginLeft: 2,
+                          color: 'text.secondary'
+                        }}>
+                        {`at Rs. ${listing.sellapartment.pricePerSqFt} per sq.ft.`}
+                      </Typography>
+                      {listing.sellapartment.taxAndGovtChargesExcluded && (
                         <Typography
                           variant='body2'
                           sx={{
                             marginLeft: 2,
                             color: 'text.secondary'
                           }}>
-                          {`(${listing.sellapartment.builtUpArea} sq.ft.)`}
+                          + Tax &amp; Govt. charges extra
                         </Typography>
-                      </Box>
-                    )}
-                    {listing.sellapartment.superBuiltUpArea !== '' && (
-                      <Box sx={{ marginBottom: 1 }}>
-                        <Typography
-                          variant='body1'
-                          sx={{
-                            marginLeft: 2,
-                            color: 'text.primary'
-                          }}>
-                          Super Built-up Area
-                        </Typography>
+                      )}
+                      {listing.sellapartment.allInclusivePrice && (
                         <Typography
                           variant='body2'
                           sx={{
                             marginLeft: 2,
                             color: 'text.secondary'
                           }}>
-                          {`(${listing.sellapartment.superBuiltUpArea} sq.ft.)`}
+                          - All Inclusive Price
                         </Typography>
-                      </Box>
-                    )}
+                      )}
+                      <Typography
+                        variant='body2'
+                        sx={{
+                          marginLeft: 2,
+                          color: 'text.secondary'
+                        }}>
+                        {listing.sellapartment.priceNegotiable
+                          ? '(Negotiable)'
+                          : '(Non-negotiable)'}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              </Grid>
+              <Grid item sm={3}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    p: 2,
+                    m: 1
+                  }}>
+                  <MdWeekend
+                    style={{ marginTop: theme.spacing(1) }}
+                    fontSize={30}
+                    color={colors[8]}
+                  />
+                  <Box>
+                    <Typography
+                      variant='subtitle1'
+                      sx={{
+                        marginLeft: 2,
+                        color: 'text.secondary'
+                      }}>
+                      Furnishing Details
+                    </Typography>
+                    <Box sx={{ marginBottom: 1 }}>
+                      <Typography
+                        variant='body1'
+                        sx={{
+                          marginLeft: 2,
+                          color: 'text.primary'
+                        }}>
+                        {listing.sellapartment.furnishing === 'furnished'
+                          ? 'Furnished'
+                          : listing.sellapartment.furnishing === 'semiFurnished'
+                          ? 'Semi-Furnished'
+                          : 'Unfurnished'}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              </Grid>
+              <Grid item sm={3}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    p: 2,
+                    m: 1
+                  }}>
+                  <MdLocalParking
+                    style={{ marginTop: theme.spacing(1) }}
+                    fontSize={30}
+                    color={colors[6]}
+                  />
+                  <Box>
+                    <Typography
+                      variant='subtitle1'
+                      sx={{
+                        marginLeft: 2,
+                        color: 'text.secondary'
+                      }}>
+                      Reserved Parking
+                    </Typography>
+                    <Box sx={{ marginBottom: 1 }}>
+                      {listing.sellapartment.coveredParking <= 0 &&
+                        listing.sellapartment.openParking <= 0 && (
+                          <Typography
+                            variant='body1'
+                            sx={{
+                              marginLeft: 2,
+                              color: 'text.primary'
+                            }}>
+                            None
+                          </Typography>
+                        )}
+                      {listing.sellapartment.coveredParking > 0 && (
+                        <Typography
+                          variant='body1'
+                          sx={{
+                            marginLeft: 2,
+                            color: 'text.primary'
+                          }}>
+                          {`${
+                            listing.sellapartment.coveredParking
+                          } Covered space${
+                            listing.sellapartment.coveredParking > 1 ? 's' : ''
+                          }`}
+                        </Typography>
+                      )}
+                      {listing.sellapartment.openParking > 0 && (
+                        <Typography
+                          variant='body1'
+                          sx={{
+                            marginLeft: 2,
+                            color: 'text.primary'
+                          }}>
+                          {`${listing.sellapartment.openParking} Open space${
+                            listing.sellapartment.openParking > 1 ? 's' : ''
+                          }`}
+                        </Typography>
+                      )}
+                    </Box>
+                  </Box>
+                </Box>
+              </Grid>
+              <Grid item sm={3}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    p: 2,
+                    m: 1
+                  }}>
+                  <MdCalendarToday
+                    style={{ marginTop: theme.spacing(1) }}
+                    fontSize={30}
+                    color={colors[7]}
+                  />
+                  <Box>
+                    <Typography
+                      variant='subtitle1'
+                      sx={{
+                        marginLeft: 2,
+                        color: 'text.secondary'
+                      }}>
+                      Property Age
+                    </Typography>
+                    <Box sx={{ marginBottom: 1 }}>
+                      <Typography
+                        variant='body1'
+                        sx={{
+                          marginLeft: 2,
+                          color: 'text.primary'
+                        }}>
+                        {listing.sellapartment.ageOfProperty === '0-1yrs'
+                          ? '0 - 1 years'
+                          : listing.sellapartment.ageOfProperty === '1-5yrs'
+                          ? '1 - 5 years'
+                          : listing.sellapartment.ageOfProperty === '5-10yrs'
+                          ? '5 - 10 years'
+                          : '10+ years'}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              </Grid>
+              <Grid item sm={3}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    p: 2,
+                    m: 1
+                  }}>
+                  <MdOutlineStairs
+                    style={{ marginTop: theme.spacing(1) }}
+                    fontSize={30}
+                    color={colors[9]}
+                  />
+                  <Box>
+                    <Typography
+                      variant='subtitle1'
+                      sx={{
+                        marginLeft: 2,
+                        color: 'text.secondary'
+                      }}>
+                      Floor Number
+                    </Typography>
+                    <Box sx={{ marginBottom: 1 }}>
+                      <Typography
+                        variant='body1'
+                        sx={{
+                          marginLeft: 2,
+                          color: 'text.primary'
+                        }}>
+                        {`${listing.sellapartment.propertyOnFloor} of ${listing.sellapartment.totalFloors} floors`}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              </Grid>
+              <Grid item sm={3}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    p: 2,
+                    m: 1
+                  }}>
+                  <MdOutlineStairs
+                    style={{ marginTop: theme.spacing(1) }}
+                    fontSize={30}
+                    color={colors[9]}
+                  />
+                  <Box>
+                    <Typography
+                      variant='subtitle1'
+                      sx={{
+                        marginLeft: 2,
+                        color: 'text.secondary'
+                      }}>
+                      Floor Number
+                    </Typography>
+                    <Box sx={{ marginBottom: 1 }}>
+                      <Typography
+                        variant='body1'
+                        sx={{
+                          marginLeft: 2,
+                          color: 'text.primary'
+                        }}>
+                        {`${listing.sellapartment.propertyOnFloor} of ${listing.sellapartment.totalFloors} floors`}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              </Grid>
+              <Grid item sm={3}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    p: 2,
+                    m: 1
+                  }}>
+                  <MdOutlineStairs
+                    style={{ marginTop: theme.spacing(1) }}
+                    fontSize={30}
+                    color={colors[9]}
+                  />
+                  <Box>
+                    <Typography
+                      variant='subtitle1'
+                      sx={{
+                        marginLeft: 2,
+                        color: 'text.secondary'
+                      }}>
+                      Floor Number
+                    </Typography>
+                    <Box sx={{ marginBottom: 1 }}>
+                      <Typography
+                        variant='body1'
+                        sx={{
+                          marginLeft: 2,
+                          color: 'text.primary'
+                        }}>
+                        {`${listing.sellapartment.propertyOnFloor} of ${listing.sellapartment.totalFloors} floors`}
+                      </Typography>
+                    </Box>
                   </Box>
                 </Box>
               </Grid>
