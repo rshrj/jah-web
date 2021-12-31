@@ -13,8 +13,8 @@ import { BiRupee } from 'react-icons/bi';
 import { MdLocationOn } from 'react-icons/md';
 
 const MyCard = styled(Card)(({ theme }) => ({
-  margin: '10px 10px',
-  minWidth: '290px',
+  margin: '20px 10px',
+  maxWidth: '290px',
   height: '280px',
   // boxShadow: '1px 1px 57px -16px rgba(0,0,0,0.43)'
   boxShadow: '0px 0px 38px -20px rgba(0,0,0,0.40)',

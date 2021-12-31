@@ -71,6 +71,28 @@ const getListingById = createAsyncThunk(
       dispatch(clearTopLoader());
       return data.payload;
     } catch (error) {
+      dispatch(clearTopLoader());
+      if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
+        error.cause.toasts.forEach((toastMessage) =>
+          dispatch(addToast({ type: 'error', message: toastMessage }))
+        );
+      }
+
+      return Promise.reject(error);
+    }
+  }
+);
+
+const getListingsFuzzy = createAsyncThunk(
+  'lisings/getListingsFuzzy',
+  async ({ query, type }, { dispatch }) => {
+    dispatch(setTopLoader());
+    try {
+      const data = await listingsService.getListingsFuzzy(query, type);
+      dispatch(clearTopLoader());
+      return data.payload;
+    } catch (error) {
+      dispatch(clearTopLoader());
       if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
         error.cause.toasts.forEach((toastMessage) =>
           dispatch(addToast({ type: 'error', message: toastMessage }))
@@ -172,9 +194,21 @@ export const listingsSlice = createSlice({
     builder.addCase(getListingById.rejected, (state, action) => {
       state.fetchLoading = 'idle';
     });
+
+    builder.addCase(getListingsFuzzy.pending, (state, action) => {
+      state.fetchLoading = 'loading';
+    });
+    builder.addCase(getListingsFuzzy.fulfilled, (state, action) => {
+      state.fetchLoading = 'idle';
+      state.content.listings = arrayToObject('_id', action.payload);
+      state.content.ids = action.payload.map((listing) => listing._id);
+    });
+    builder.addCase(getListingsFuzzy.rejected, (state, action) => {
+      state.fetchLoading = 'idle';
+    });
   }
 });
 
-export { addNewListing, getListings, getListingById };
+export { addNewListing, getListings, getListingById, getListingsFuzzy };
 
 export default listingsSlice.reducer;

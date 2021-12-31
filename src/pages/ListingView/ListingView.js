@@ -361,7 +361,7 @@ const SellApartmentListingView = () => {
               container
               sm={12}
               sx={{
-                backgroundColor: lighten(theme.palette.primary.light, 0.95)
+                backgroundColor: lighten(theme.palette.primary.light, 0.9)
               }}>
               <Grid item sm={3}>
                 <Box

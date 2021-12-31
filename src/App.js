@@ -1,4 +1,4 @@
-import { CssBaseline, Stack, useMediaQuery } from '@mui/material';
+import { CssBaseline, Stack } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { Global } from '@emotion/react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -21,7 +21,7 @@ import MyAccount from './pages/MyAccount';
 import NewListingPage from './pages/NewListingPage';
 import ListingView from './pages/ListingView';
 import LandingPage from './pages/LandingPage';
-import BuyHomes from './pages/BuyHomes/BuyHomes';
+import GalleryView from './pages/GalleryView';
 import NotFoundPage from './pages/NotFoundPage';
 import ListingsPage from './pages/ListingsPage/ListingsPage';
 import Users from './pages/Users/Users';
@@ -62,7 +62,8 @@ const App = () => {
           <Route path='/' element={<PublicPage />}>
             <Route index element={<LandingPage />} />
             <Route path='listing/:listingId' element={<ListingView />} />
-            <Route path='forbuyers' element={<BuyHomes />} />
+            <Route path='forbuyers' element={<GalleryView mode='buy' />} />
+            <Route path='fortenants' element={<GalleryView mode='rent' />} />
             <Route
               path='dashboard'
               element={

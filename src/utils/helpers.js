@@ -1,6 +1,11 @@
 export const arrayToObject = (key, array) => {
+  console.log(array);
   if (!Array.isArray(array)) {
     throw new TypeError('Object provided is not an array');
+  }
+
+  if (array.length === 0) {
+    return {};
   }
 
   if (!array.every((arrayObj) => arrayObj.hasOwnProperty(key))) {
