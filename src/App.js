@@ -24,6 +24,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import ListingsPage from './pages/ListingsPage/ListingsPage';
 import Users from './pages/Users/Users';
 import Testimonials from './pages/Testimonials/Testimonials';
+import CallbackRequests from './pages/CallbackRequests/CallbackRequests';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -71,6 +72,7 @@ const App = () => {
               <Route path='myaccount' element={<MyAccount />} />
               <Route path='newlisting' element={<NewListingPage />} />
               <Route path='testimonials' element={<Testimonials />} />
+              <Route path='callbackrequests' element={<CallbackRequests />} />
             </Route>
             {/* Testing */}
             <Route path='splash' element={<SplashScreen />} />

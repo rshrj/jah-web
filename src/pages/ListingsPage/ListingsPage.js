@@ -79,6 +79,28 @@ const columns = [
     flex: 1,
   },
   {
+    field: 'state',
+    headerName: 'Status',
+    description: 'status of listing',
+    flex: 1,
+    renderCell: (params) => (
+      <Typography
+        color={
+          params.value === 'Approved'
+            ? '#28a745'
+            : params.value === 'Deactivated'
+            ? '#dc3545'
+            : '#ffc107'
+        }>
+        {params.value === 'Approved'
+          ? 'Approved'
+          : params.value === 'Deactivated'
+          ? 'Deactivated'
+          : 'Pending'}
+      </Typography>
+    ),
+  },
+  {
     field: 'createdAt',
     headerName: 'Created At',
     type: 'dateTime',
