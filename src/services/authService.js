@@ -1,9 +1,13 @@
-const apiUrl = process.env.REACT_APP_APIURL || 'http://localhost:5000';
+import {
+  rejectWithToast,
+  apiUrl,
+  errorWithToast
+} from '../utils/serviceHelpers';
+
+import { listingKeys } from '../constants/listingTypes';
 
 export const login = async (email, password) => {
   try {
-    console.log(email);
-    console.log(password);
     const res = await fetch(`${apiUrl}/auth/login`, {
       method: 'POST',
       mode: 'cors',
@@ -16,15 +20,8 @@ export const login = async (email, password) => {
         password
       })
     });
-    console.log(res);
     if (!res) {
-      console.log('boop');
-      throw new Error('Server did not respond', {
-        cause: {
-          success: false,
-          message: { email: 'Server did not respond' }
-        }
-      });
+      throw errorWithToast('Server did not respond');
     }
 
     const data = await res.json();
@@ -36,55 +33,46 @@ export const login = async (email, password) => {
     return data;
   } catch (e) {
     if (e instanceof TypeError && e.message === 'Failed to fetch') {
-      return Promise.reject(
-        new Error('Server is offline', {
-          cause: {
-            message: {
-              email: 'Server is offline'
-            }
-          }
-        })
-      );
+      return rejectWithToast('Server is offline');
     }
     return Promise.reject(e);
   }
 };
 
-export const signup = async ({email, name, password, password2, phone}) => {
+export const signup = async ({ email, name, password, password2, phone }) => {
   try {
     const res = await fetch(`${apiUrl}/users/signup`, {
       method: 'POST',
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8',
+        'Content-Type': 'application/json;charset=UTF-8'
       },
       body: JSON.stringify({
         email,
         name,
         password,
         password2,
-        phone,
-      }),
+        phone
+      })
     });
 
-    
     if (!res) {
-      throw new Error({
-        success: false,
-        message: 'Server did not respond'
-      });
+      throw errorWithToast('Server did not respond');
     }
-    
+
     const data = await res.json();
     console.log(data);
-    
+
     if (!res.ok) {
-      throw new Error(data);
+      throw new Error('Request error', { cause: data });
     }
 
     return data;
   } catch (e) {
+    if (e instanceof TypeError && e.message === 'Failed to fetch') {
+      return rejectWithToast('Server is offline');
+    }
     return Promise.reject(e);
   }
 };

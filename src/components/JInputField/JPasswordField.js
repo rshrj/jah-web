@@ -18,6 +18,7 @@ const JPasswordField = ({
   topLabel,
   placeholder,
   showPassword,
+  defaultHelperText = 'Must be 8 charaters or more',
   ...rest
 }) => {
   const handleMouseDownPassword = (event) => {
@@ -62,11 +63,7 @@ const JPasswordField = ({
           {...rest}
         />
         <FormHelperText error={errors !== undefined}>
-          {errors !== undefined
-            ? errors
-            : 'defaultHelperText' in rest
-            ? rest.defaultHelperText
-            : 'Must be 8 charaters or more'}
+          {errors !== undefined ? errors : defaultHelperText}
         </FormHelperText>
       </FormControl>
     </>

@@ -1,13 +1,6 @@
-import {
-  Breadcrumbs,
-  IconButton,
-  Link,
-  Typography,
-  useMediaQuery
-} from '@mui/material';
+import { Breadcrumbs, IconButton, Link, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/system';
-import { useEffect } from 'react';
 import { FaAngleRight, FaArrowLeft } from 'react-icons/fa';
 import {
   Outlet,
@@ -36,8 +29,6 @@ const DashboardPage = () => {
 
   return (
     <>
-      <NavBar loggedIn={true} />
-
       <Box
         sx={{
           display: 'flex',
@@ -74,7 +65,9 @@ const DashboardPage = () => {
                   {route.name}
                 </Link>
               ))}
-              <Typography color='text.primary'>{routes.at(-1)?.name}</Typography>
+              <Typography color='text.primary'>
+                {routes.at(-1)?.name}
+              </Typography>
             </Breadcrumbs>
           </Box>
           <Outlet />

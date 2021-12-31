@@ -53,7 +53,8 @@ const Sidebar = () => {
 
   let currentPath = location.pathname;
 
-  const role = useSelector((state) => state.auth.user.role);
+  const role = useSelector((state) => state.auth.user?.role);
+  const name = useSelector((state) => state.auth.user?.name);
 
   let pages = role === 'ADMIN' ? adminPages : customerPages;
   let pagesBottom = [
@@ -202,15 +203,15 @@ const Sidebar = () => {
               borderRadius: 10
             }}>
             <Avatar
-              {...stringAvatar('Rishi Raj')}
+              {...stringAvatar(`${name.first} ${name.last}`)}
               src='/static/images/avatar/2.jpg'
             />
             {!collapsed && (
               <Typography
                 variant='subtitle1'
                 color='grey.600'
-                sx={{ marginTop: 1 }}>
-                Welcome back, Rishi
+                sx={{ marginTop: 1, textAlign: 'center' }}>
+                Welcome back, {name.first}
               </Typography>
             )}
           </Box>

@@ -12,7 +12,8 @@ const initialState = {
   content: {
     ids: [],
     listings: {}
-  }
+  },
+  single: {}
 };
 
 const addNewListing = createAsyncThunk(
@@ -25,15 +26,15 @@ const addNewListing = createAsyncThunk(
       navigate(`/dashboard/listing/${data.payload.id}`);
       return data.payload;
     } catch (error) {
-      console.log(error);
-      error.cause?.toasts.forEach((toastMessage) =>
-        dispatch(addToast({ type: 'error', message: toastMessage }))
-      );
-      if (error.cause.errors === undefined || error.cause.errors === {}) {
-        return Promise.reject(error);
+      if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
+        error.cause.toasts.forEach((toastMessage) =>
+          dispatch(addToast({ type: 'error', message: toastMessage }))
+        );
+      }
+      if (error.cause.errors !== undefined || error.cause.errors !== {}) {
+        dispatch(createFormErrors(error.cause.errors));
       }
 
-      dispatch(createFormErrors(error.cause.errors));
       return Promise.reject(error);
     }
   }
@@ -49,10 +50,33 @@ const getListings = createAsyncThunk(
       console.log(data.payload);
       return data.payload;
     } catch (error) {
-      console.log(error);
-      error.cause?.toasts.forEach((toastMessage) =>
-        dispatch(addToast({ type: 'error', message: toastMessage }))
-      );
+      if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
+        error.cause.toasts.forEach((toastMessage) =>
+          dispatch(addToast({ type: 'error', message: toastMessage }))
+        );
+      }
+
+      return Promise.reject(error);
+    }
+  }
+);
+
+const getListingById = createAsyncThunk(
+  'listings/getListingById',
+  async (listingId, { dispatch }) => {
+    dispatch(setTopLoader());
+    try {
+      const data = await listingsService.getListingById(listingId);
+
+      dispatch(clearTopLoader());
+      return data.payload;
+    } catch (error) {
+      if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
+        error.cause.toasts.forEach((toastMessage) =>
+          dispatch(addToast({ type: 'error', message: toastMessage }))
+        );
+      }
+
       return Promise.reject(error);
     }
   }
@@ -138,9 +162,19 @@ export const listingsSlice = createSlice({
     builder.addCase(getListings.rejected, (state, action) => {
       state.fetchLoading = 'idle';
     });
+    builder.addCase(getListingById.pending, (state, action) => {
+      state.fetchLoading = 'loading';
+    });
+    builder.addCase(getListingById.fulfilled, (state, action) => {
+      state.fetchLoading = 'idle';
+      state.single = action.payload;
+    });
+    builder.addCase(getListingById.rejected, (state, action) => {
+      state.fetchLoading = 'idle';
+    });
   }
 });
 
-export { addNewListing, getListings };
+export { addNewListing, getListings, getListingById };
 
 export default listingsSlice.reducer;

@@ -24,7 +24,7 @@ const SearchCard = styled(Card)({
   maxWidth: '650px',
   borderRadius: '10px',
   height: '150px',
-  margin: '40px auto 0',
+  margin: '40px auto 0'
 });
 
 const Input = styled('input')({
@@ -38,8 +38,8 @@ const Input = styled('input')({
     fontStyle: 'normal',
     fontWeight: 'normal',
     fontSize: '15px',
-    letterSpacing: '0.15px',
-  },
+    letterSpacing: '0.15px'
+  }
 });
 
 const BuyHomes = () => {
@@ -62,8 +62,6 @@ const BuyHomes = () => {
 
   return (
     <>
-      <NavBar loggedIn={false} />
-
       <Box sx={{ pt: '30px' }}>
         <Typography variant='h3' color='grey.700' align='center'>
           Buy Homes
@@ -96,8 +94,8 @@ const BuyHomes = () => {
                 height: '35px',
                 boxShadow: 'none',
                 '&:hover': {
-                  boxShadow: 'none',
-                },
+                  boxShadow: 'none'
+                }
               }}>
               SEARCH
             </Button>
@@ -117,7 +115,7 @@ const BuyHomes = () => {
             maxWidth: '1360px',
             margin: '20px auto 0',
             display: 'flex',
-            flexWrap: 'wrap',
+            flexWrap: 'wrap'
           }}>
           {[1, 2, 3, 4, 5, 6, 7, 8].map((m, i) => (
             <PropertyCard

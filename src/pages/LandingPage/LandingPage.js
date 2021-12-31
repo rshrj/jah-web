@@ -6,13 +6,12 @@ const Poster = styled(Grid)({
   background: `url("https://github.com/manikmmalhotra/slack-clone/blob/master/Rectangle%202.png?raw=true")
     no-repeat top center fixed`,
   backgroundSize: '100% 68%',
-  height: '220px',
+  height: '220px'
 });
 
 const LandingPage = () => {
   return (
     <>
-      <NavBar loggedIn={false} />
       <Poster
         container
         direction='row'

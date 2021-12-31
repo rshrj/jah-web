@@ -14,6 +14,7 @@ import LoginPage from './pages/Login';
 import SignupPage from './pages/Signup';
 import SplashScreen from './components/SplashScreen';
 import DashboardPage from './pages/Dashboard';
+import PublicPage from './pages/PublicPage';
 import PrivateRoute from './components/PrivateRoute';
 import JSnackbar from './components/JSnackbar';
 import MyAccount from './pages/MyAccount';
@@ -55,10 +56,11 @@ const App = () => {
 
       <BrowserRouter>
         <Routes>
-          <Route path='/'>
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/signup' element={<SignupPage />} />
+          <Route path='/' element={<PublicPage />}>
             <Route index element={<LandingPage />} />
-            <Route path='login' element={<LoginPage />} />
-            <Route path='signup' element={<SignupPage />} />
+            <Route path='listing/:listingId' element={<ListingView />} />
             <Route path='forbuyers' element={<BuyHomes />} />
             <Route
               path='dashboard'
@@ -74,9 +76,9 @@ const App = () => {
               <Route path='testimonials' element={<Testimonials />} />
               <Route path='callbackrequests' element={<CallbackRequests />} />
             </Route>
-            {/* Testing */}
-            <Route path='splash' element={<SplashScreen />} />
           </Route>
+          {/* Testing */}
+          <Route path='/splash' element={<SplashScreen />} />
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
