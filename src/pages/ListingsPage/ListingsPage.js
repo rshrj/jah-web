@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
-import { Container, Typography, Chip } from '@mui/material';
+import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { useState } from 'react';
 import { FaBuilding, FaEdit, FaEye, FaTrash } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useDispatch, useSelector } from 'react-redux';
 import { getListings } from '../../redux/slices/listings/listingsSlice';
 
 import { listingObject, listingKeys } from '../../constants/listingTypes';
@@ -197,7 +196,7 @@ const ListingsPage = () => {
 
   useEffect(() => {
     dispatch(getListings());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Box

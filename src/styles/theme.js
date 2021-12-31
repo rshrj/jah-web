@@ -9,6 +9,9 @@ const theme = createTheme({
     secondary: {
       main: '#9c27b0',
       contrastText: 'rgba(255,255,255,0.9)'
+    },
+    background: {
+      default: '#fafafa'
     }
   },
   typography: {

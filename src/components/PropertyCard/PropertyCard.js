@@ -6,18 +6,27 @@ import {
   styled,
   CardMedia,
   CardContent,
-  Grid,
+  Grid
 } from '@mui/material';
 
 import { BiRupee } from 'react-icons/bi';
 import { MdLocationOn } from 'react-icons/md';
 
-const MyCard = styled(Card)({
-  margin: '10px 30px',
-  width: '280px',
+const MyCard = styled(Card)(({ theme }) => ({
+  margin: '10px 10px',
+  minWidth: '290px',
   height: '280px',
-  boxShadow: '0px 4px 8px -2px rgba(0, 0, 0, 0.35)',
-});
+  // boxShadow: '1px 1px 57px -16px rgba(0,0,0,0.43)'
+  boxShadow: '0px 0px 38px -20px rgba(0,0,0,0.40)',
+  borderRadius: '0px',
+  transition: '0.2s ease',
+  borderBottom: `0px solid ${theme.palette.primary.main}`,
+  '&:hover': {
+    transform: 'scale(1.01)',
+    borderBottomWidth: '5px',
+    cursor: 'pointer'
+  }
+}));
 
 const PropertyCard = ({ image, title, location, price }) => {
   return (
@@ -25,7 +34,7 @@ const PropertyCard = ({ image, title, location, price }) => {
       <MyCard>
         <CardMedia
           height='190px'
-          sx={{ width: '260px', m: '10px auto 0' }}
+          sx={{ minWidth: '290px' }}
           component='img'
           image={image}
         />
@@ -37,14 +46,14 @@ const PropertyCard = ({ image, title, location, price }) => {
                 style={{
                   fontSize: '15px',
                   marginRight: '5px',
-                  color: '#6c757d',
+                  color: '#6c757d'
                 }}
               />
               <Typography
                 sx={{
                   fontSize: '13px',
                   letterSpacing: '0.1px',
-                  color: '#6c757d',
+                  color: '#6c757d'
                 }}>
                 {location}
               </Typography>
@@ -57,7 +66,7 @@ const PropertyCard = ({ image, title, location, price }) => {
                 sx={{
                   fontSize: '13px',
                   letterSpacing: '0.15px',
-                  color: '#6c757d',
+                  color: '#6c757d'
                 }}>
                 {price}
               </Typography>

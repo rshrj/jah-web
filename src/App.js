@@ -19,6 +19,7 @@ import PrivateRoute from './components/PrivateRoute';
 import JSnackbar from './components/JSnackbar';
 import MyAccount from './pages/MyAccount';
 import NewListingPage from './pages/NewListingPage';
+import ListingView from './pages/ListingView';
 import LandingPage from './pages/LandingPage';
 import BuyHomes from './pages/BuyHomes/BuyHomes';
 import NotFoundPage from './pages/NotFoundPage';
