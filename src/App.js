@@ -22,9 +22,10 @@ import NewListingPage from './pages/NewListingPage';
 import LandingPage from './pages/LandingPage';
 import BuyHomes from './pages/BuyHomes/BuyHomes';
 import NotFoundPage from './pages/NotFoundPage';
-import ListingsPage from './pages/ListingsPage';
-import AdminListingsPage from './pages/AdminListingsPage';
-import ListingView from './pages/ListingView';
+import ListingsPage from './pages/ListingsPage/ListingsPage';
+import Users from './pages/Users/Users';
+import Testimonials from './pages/Testimonials/Testimonials';
+import CallbackRequests from './pages/CallbackRequests/CallbackRequests';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -68,9 +69,12 @@ const App = () => {
                   <DashboardPage />
                 </PrivateRoute>
               }>
-              <Route path='listings' element={<AdminListingsPage />} />
+              <Route path='listings' element={<ListingsPage />} />
+              <Route path='users' element={<Users />} />
               <Route path='myaccount' element={<MyAccount />} />
               <Route path='newlisting' element={<NewListingPage />} />
+              <Route path='testimonials' element={<Testimonials />} />
+              <Route path='callbackrequests' element={<CallbackRequests />} />
             </Route>
           </Route>
           {/* Testing */}

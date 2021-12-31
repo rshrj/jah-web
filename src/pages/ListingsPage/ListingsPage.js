@@ -1,43 +1,47 @@
-import { Typography } from '@mui/material';
+import { useEffect } from 'react';
+import { Container, Typography, Chip } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { useState } from 'react';
 import { FaBuilding, FaEdit, FaEye, FaTrash } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { listingObject } from '../../constants/listingTypes';
+import { useDispatch, useSelector } from 'react-redux';
+import { getListings } from '../../redux/slices/listings/listingsSlice';
 
-const data = [
-  {
-    id: 1,
-    name: 'Hiranandani',
-    postedBy: 'Rishi',
-    createdAt: new Date(),
-    type: 'rentlease',
-    status: ''
-  },
-  {
-    id: 2,
-    name: 'Abc',
-    postedBy: 'Rishiga',
-    createdAt: new Date(),
-    type: 'sellapartment'
-  },
-  {
-    id: 3,
-    name: 'Zyx',
-    postedBy: 'Rigfshisa',
-    createdAt: new Date(),
-    type: 'sellproject'
-  },
-  {
-    id: 4,
-    name: 'Gasf',
-    postedBy: 'gasRishi',
-    createdAt: new Date(),
-    type: 'rentlease'
-  }
-];
+import { listingObject, listingKeys } from '../../constants/listingTypes';
+
+// const data = [
+//   {
+//     id: 1,
+//     name: 'Hiranandani',
+//     postedBy: 'Rishi',
+//     createdAt: new Date(),
+//     type: 'rentlease',
+//     status: ''
+//   },
+//   {
+//     id: 2,
+//     name: 'Abc',
+//     postedBy: 'Rishiga',
+//     createdAt: new Date(),
+//     type: 'sellapartment'
+//   },
+//   {
+//     id: 3,
+//     name: 'Zyx',
+//     postedBy: 'Rigfshisa',
+//     createdAt: new Date(),
+//     type: 'sellproject'
+//   },
+//   {
+//     id: 4,
+//     name: 'Gasf',
+//     postedBy: 'gasRishi',
+//     createdAt: new Date(),
+//     type: 'rentlease'
+//   }
+// ];
 
 const listings = [
   {
@@ -115,14 +119,42 @@ const columns = [
     )
   },
   {
-    field: 'createdAt',
-    headerName: 'Created At',
-    description: 'Time of listing creation',
-    type: 'dateTime',
+    field: 'postedBy',
+    headerName: 'Posted By',
+    description:
+      'Customer who posted the property (click to open their profile)',
     flex: 1
   },
   {
-    field: 'type',
+    field: 'state',
+    headerName: 'Status',
+    description: 'status of listing',
+    flex: 1,
+    renderCell: (params) => (
+      <Typography
+        color={
+          params.value === 'Approved'
+            ? '#28a745'
+            : params.value === 'Deactivated'
+            ? '#dc3545'
+            : '#ffc107'
+        }>
+        {params.value === 'Approved'
+          ? 'Approved'
+          : params.value === 'Deactivated'
+          ? 'Deactivated'
+          : 'Pending'}
+      </Typography>
+    )
+  },
+  {
+    field: 'createdAt',
+    headerName: 'Created At',
+    description: 'Time of listing creation',
+    flex: 1
+  },
+  {
+    field: 'listingType',
     headerName: 'Type',
     description: 'Type of listing',
     type: 'singleSelect',
@@ -141,14 +173,32 @@ const columns = [
     headerName: 'Actions',
     description: 'View, Edit, Delete buttons',
     getActions: (params) => [
-      <GridActionsCellItem icon={<FaEye />} label='View' />,
-      <GridActionsCellItem icon={<FaEdit />} label='Edit' />,
-      <GridActionsCellItem icon={<FaTrash />} label='Delete' />
+      <GridActionsCellItem icon={<FaEye />} />,
+      <GridActionsCellItem icon={<FaEdit />} />,
+      <GridActionsCellItem icon={<FaTrash />} />
     ]
   }
 ];
 
 const ListingsPage = () => {
+  const dispatch = useDispatch();
+
+  const { ids, listings } = useSelector((store) => store.listings.content);
+
+  let data = [];
+  if (ids.length !== 0) {
+    data = ids.map((id) => {
+      const { first, last } = listings[id].createdBy.name;
+      return { id, ...listings[id], postedBy: first + ' ' + last };
+    });
+  }
+
+  console.log(listings);
+
+  useEffect(() => {
+    dispatch(getListings());
+  }, []);
+
   return (
     <Box
       sx={{

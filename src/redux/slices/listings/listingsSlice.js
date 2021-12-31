@@ -46,8 +46,8 @@ const getListings = createAsyncThunk(
     dispatch(setTopLoader());
     try {
       const data = await listingsService.getListings();
-
       dispatch(clearTopLoader());
+      console.log(data.payload);
       return data.payload;
     } catch (error) {
       if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
@@ -153,9 +153,11 @@ export const listingsSlice = createSlice({
       state.fetchLoading = 'loading';
     });
     builder.addCase(getListings.fulfilled, (state, action) => {
+      console.log('Done');
+      console.log(action.payload);
       state.fetchLoading = 'idle';
-      state.content.listings = arrayToObject(action.payload, 'id');
-      state.content.ids = action.payload.map((listing) => listing.id);
+      state.content.listings = arrayToObject('_id', action.payload);
+      state.content.ids = action.payload.map((listing) => listing._id);
     });
     builder.addCase(getListings.rejected, (state, action) => {
       state.fetchLoading = 'idle';

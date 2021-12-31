@@ -16,7 +16,8 @@ import {
   FaEllipsisV,
   FaList,
   FaPlus,
-  FaUser
+  FaUser,
+  FaPhoneAlt,
 } from 'react-icons/fa';
 import { Box } from '@mui/system';
 import { useTheme, lighten } from '@mui/material/styles';
@@ -31,7 +32,13 @@ export const adminPages = [
   { id: 1, name: 'Listings', icon: FaList, to: '/dashboard/listings' },
   { id: 2, name: 'Testimonials', icon: FaCheck, to: '/dashboard/testimonials' },
   { id: 3, name: 'Home Ad', icon: FaBell, to: '/dashboard/homead' },
-  { id: 4, name: 'Users', icon: FaUser, to: '/dashboard/users' }
+  { id: 4, name: 'Users', icon: FaUser, to: '/dashboard/users' },
+  {
+    id: 5,
+    name: 'Callback Requests',
+    icon: FaPhoneAlt,
+    to: '/dashboard/callbackrequests',
+  },
 ];
 
 export const customerPages = [
