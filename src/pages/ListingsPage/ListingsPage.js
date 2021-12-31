@@ -116,6 +116,7 @@ const ListingsPage = () => {
   const dispatch = useDispatch();
 
   const {ids, listings} = useSelector((store) => store.listings.content);
+  
   let data = [];
   if(ids.length !== 0){
     data = ids.map(id => {
@@ -123,6 +124,8 @@ const ListingsPage = () => {
       return { id, ...listings[id], postedBy: first + ' ' + last };
     });
   }
+
+  console.log(listings);
 
   useEffect(()=>{
     dispatch(getListings());

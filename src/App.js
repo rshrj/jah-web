@@ -22,6 +22,8 @@ import LandingPage from './pages/LandingPage';
 import BuyHomes from './pages/BuyHomes/BuyHomes';
 import NotFoundPage from './pages/NotFoundPage';
 import ListingsPage from './pages/ListingsPage/ListingsPage';
+import Users from './pages/Users/Users';
+import Testimonials from './pages/Testimonials/Testimonials';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -65,8 +67,10 @@ const App = () => {
                 </PrivateRoute>
               }>
               <Route path='listings' element={<ListingsPage />} />
+              <Route path='users' element={<Users />} />
               <Route path='myaccount' element={<MyAccount />} />
               <Route path='newlisting' element={<NewListingPage />} />
+              <Route path='testimonials' element={<Testimonials />} />
             </Route>
             {/* Testing */}
             <Route path='splash' element={<SplashScreen />} />
