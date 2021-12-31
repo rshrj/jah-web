@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Container, Typography, Chip } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
@@ -10,39 +11,42 @@ import {
   FaTrash
 } from 'react-icons/fa';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { getListings } from '../../redux/slices/listings/listingsSlice';
+
 import { listingObject, listingKeys } from '../../constants/listingTypes';
 
-const data = [
-  {
-    id: 1,
-    name: 'Hiranandani',
-    postedBy: 'Rishi',
-    createdAt: new Date(),
-    type: 'rentlease',
-    status: ''
-  },
-  {
-    id: 2,
-    name: 'Abc',
-    postedBy: 'Rishiga',
-    createdAt: new Date(),
-    type: 'sellapartment'
-  },
-  {
-    id: 3,
-    name: 'Zyx',
-    postedBy: 'Rigfshisa',
-    createdAt: new Date(),
-    type: 'sellproject'
-  },
-  {
-    id: 4,
-    name: 'Gasf',
-    postedBy: 'gasRishi',
-    createdAt: new Date(),
-    type: 'rentlease'
-  }
-];
+// const data = [
+//   {
+//     id: 1,
+//     name: 'Hiranandani',
+//     postedBy: 'Rishi',
+//     createdAt: new Date(),
+//     type: 'rentlease',
+//     status: ''
+//   },
+//   {
+//     id: 2,
+//     name: 'Abc',
+//     postedBy: 'Rishiga',
+//     createdAt: new Date(),
+//     type: 'sellapartment'
+//   },
+//   {
+//     id: 3,
+//     name: 'Zyx',
+//     postedBy: 'Rigfshisa',
+//     createdAt: new Date(),
+//     type: 'sellproject'
+//   },
+//   {
+//     id: 4,
+//     name: 'Gasf',
+//     postedBy: 'gasRishi',
+//     createdAt: new Date(),
+//     type: 'rentlease'
+//   }
+// ];
 
 const columns = [
   {
@@ -55,7 +59,7 @@ const columns = [
       <Box
         sx={{
           display: 'inline-flex',
-          alignItems: 'center'
+          alignItems: 'center',
         }}>
         <FaBuilding color='orange' />
         <Typography
@@ -65,24 +69,24 @@ const columns = [
           {params.value}
         </Typography>
       </Box>
-    )
+    ),
   },
   {
     field: 'postedBy',
     headerName: 'Posted By',
     description:
       'Customer who posted the property (click to open their profile)',
-    flex: 1
+    flex: 1,
   },
   {
     field: 'createdAt',
     headerName: 'Created At',
     type: 'dateTime',
     description: 'Time of listing creation',
-    flex: 1
+    flex: 1,
   },
   {
-    field: 'type',
+    field: 'listingType',
     headerName: 'Type',
     type: 'singleSelect',
     description: 'Type of listing',
@@ -92,7 +96,7 @@ const columns = [
       <Typography color={listingObject[params.value].color}>
         {listingObject[params.value].label}
       </Typography>
-    )
+    ),
   },
   {
     field: 'actions',
@@ -102,12 +106,29 @@ const columns = [
     getActions: (params) => [
       <GridActionsCellItem icon={<FaEye />} />,
       <GridActionsCellItem icon={<FaEdit />} />,
-      <GridActionsCellItem icon={<FaTrash />} />
-    ]
-  }
+      <GridActionsCellItem icon={<FaTrash />} />,
+    ],
+  },
 ];
 
 const ListingsPage = () => {
+
+  const dispatch = useDispatch();
+
+  const {ids, listings} = useSelector((store) => store.listings.content);
+  let data = [];
+  if(ids.length !== 0){
+    data = ids.map(id => {
+      const { first, last } = listings[id].createdBy.name;
+      return { id, ...listings[id], postedBy: first + ' ' + last };
+    });
+  }
+
+  useEffect(()=>{
+    dispatch(getListings());
+  },[]);
+
+
   return (
     <Box
       sx={{

@@ -130,8 +130,9 @@ export const listingsSlice = createSlice({
     });
     builder.addCase(getListings.fulfilled, (state, action) => {
       state.fetchLoading = 'idle';
-      state.content.listings = arrayToObject(action.payload, 'id');
-      state.content.ids = action.payload.map((listing) => listing.id);
+      console.log(action.payload);
+      state.content.listings = arrayToObject('_id', action.payload);
+      state.content.ids = action.payload.map((listing) => listing._id);
     });
     builder.addCase(getListings.rejected, (state, action) => {
       state.fetchLoading = 'idle';
