@@ -23,6 +23,7 @@ import LandingPage from './pages/LandingPage';
 import BuyHomes from './pages/BuyHomes/BuyHomes';
 import NotFoundPage from './pages/NotFoundPage';
 import ListingsPage from './pages/ListingsPage';
+import AdminListingsPage from './pages/AdminListingsPage';
 import ListingView from './pages/ListingView';
 
 const App = () => {
@@ -67,7 +68,7 @@ const App = () => {
                   <DashboardPage />
                 </PrivateRoute>
               }>
-              <Route path='listings' element={<ListingsPage />} />
+              <Route path='listings' element={<AdminListingsPage />} />
               <Route path='myaccount' element={<MyAccount />} />
               <Route path='newlisting' element={<NewListingPage />} />
             </Route>

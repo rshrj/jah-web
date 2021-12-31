@@ -2,7 +2,15 @@ import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { useState } from 'react';
-import { FaBuilding, FaEdit, FaEye, FaTrash } from 'react-icons/fa';
+import {
+  FaBuilding,
+  FaCheck,
+  FaCheckCircle,
+  FaEdit,
+  FaEye,
+  FaTimes,
+  FaTrash
+} from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { listingObject } from '../../constants/listingTypes';
@@ -91,6 +99,20 @@ const listings = [
   }
 ];
 
+const UserName = ({ id }) => {
+  const dispatch = useDispatch();
+
+  // useState(() => {
+  //   dispatch(getUserById(id));
+  // }, []);
+
+  // let user = useSelector((state) => state.users?.single);
+
+  // let a = <Typography>{user.name.first}</Typography>;
+
+  return <div>boo</div>;
+};
+
 const columns = [
   {
     field: 'name',
@@ -122,6 +144,14 @@ const columns = [
     flex: 1
   },
   {
+    field: 'createdBy',
+    headerName: 'Posted By',
+    description: 'User who posted the property',
+    type: 'string',
+    flex: 1,
+    renderCell: (params) => <UserName id={params.value} />
+  },
+  {
     field: 'type',
     headerName: 'Type',
     description: 'Type of listing',
@@ -141,6 +171,8 @@ const columns = [
     headerName: 'Actions',
     description: 'View, Edit, Delete buttons',
     getActions: (params) => [
+      <GridActionsCellItem icon={<FaCheck />} label='Approve' />,
+      <GridActionsCellItem icon={<FaTimes />} label='Reject' />,
       <GridActionsCellItem icon={<FaEye />} label='View' />,
       <GridActionsCellItem icon={<FaEdit />} label='Edit' />,
       <GridActionsCellItem icon={<FaTrash />} label='Delete' />
