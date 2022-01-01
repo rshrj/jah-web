@@ -37,7 +37,7 @@ const SearchCard = styled(Card)({
   alignItems: 'center'
 });
 
-const GalleryView = ({ mode = 'buy' }) => {
+const GalleryView = ({ mode = 'buy', initTab = 0 }) => {
   const dispatch = useDispatch();
   const theme = useTheme();
 
@@ -64,10 +64,12 @@ const GalleryView = ({ mode = 'buy' }) => {
       return;
     }
     if (type === 'sellproject') {
+      setTab(0);
       dispatch(getListingsFuzzy({ query, type }));
       return;
     }
     if (type === 'sellapartment') {
+      setTab(1);
       dispatch(getListingsFuzzy({ query, type }));
       return;
     }

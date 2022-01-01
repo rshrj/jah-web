@@ -1,3 +1,5 @@
+@import url('https://themes.googleusercontent.com/fonts/css?kit=Lx1xfUTR4qFjwg0Z_pb902yWOW57Glq29V3__n4AGA7eUTbR4W0XOgE2iH4kL8Gh');
+
 .lst-kix_list_4-1 > li {
   counter-increment: lst-ctn-kix_list_4-1;
 }
@@ -1306,18 +1308,22 @@ table th {
 }
 
 .c6 {
+  color: #808080;
   font-weight: 400;
   text-decoration: none;
   vertical-align: baseline;
   font-size: 10pt;
+  font-family: 'Helvetica Neue';
   font-style: italic;
 }
 
 .c3 {
+  color: #000000;
   font-weight: 400;
   text-decoration: none;
   vertical-align: baseline;
   font-size: 11pt;
+  font-family: 'Helvetica Neue';
   font-style: normal;
 }
 
@@ -1349,11 +1355,12 @@ table th {
 }
 
 .c11 {
-  max-width: 870.3pt;
-  padding: 20pt 0;
+  padding: 0;
+  margin: 20pt 0;
 }
 
 .c2 {
+  color: #000000;
   font-size: 12pt;
 }
 
@@ -1379,9 +1386,11 @@ table th {
 
 .title {
   padding-top: 24pt;
+  color: #000000;
   font-weight: 700;
   font-size: 36pt;
   padding-bottom: 6pt;
+  font-family: 'Helvetica Neue';
   line-height: 1.1500000000000001;
   page-break-after: avoid;
   orphans: 2;
@@ -1391,8 +1400,10 @@ table th {
 
 .subtitle {
   padding-top: 18pt;
+  color: #666666;
   font-size: 24pt;
   padding-bottom: 4pt;
+  font-family: 'Georgia';
   line-height: 1.1500000000000001;
   page-break-after: avoid;
   font-style: italic;
@@ -1402,19 +1413,25 @@ table th {
 }
 
 li {
+  color: #000000;
   font-size: 11pt;
+  font-family: 'Helvetica Neue';
 }
 
 p {
   margin: 0;
+  color: #000000;
   font-size: 11pt;
+  font-family: 'Helvetica Neue';
 }
 
 h1 {
   padding-top: 24pt;
+  color: #000000;
   font-weight: 700;
   font-size: 24pt;
   padding-bottom: 6pt;
+  font-family: 'Helvetica Neue';
   line-height: 1.1500000000000001;
   page-break-after: avoid;
   orphans: 2;
@@ -1424,9 +1441,11 @@ h1 {
 
 h2 {
   padding-top: 18pt;
+  color: #000000;
   font-weight: 700;
   font-size: 18pt;
   padding-bottom: 4pt;
+  font-family: 'Helvetica Neue';
   line-height: 1.1500000000000001;
   page-break-after: avoid;
   orphans: 2;
@@ -1436,9 +1455,11 @@ h2 {
 
 h3 {
   padding-top: 14pt;
+  color: #000000;
   font-weight: 700;
   font-size: 14pt;
   padding-bottom: 4pt;
+  font-family: 'Helvetica Neue';
   line-height: 1.1500000000000001;
   page-break-after: avoid;
   orphans: 2;
@@ -1448,9 +1469,11 @@ h3 {
 
 h4 {
   padding-top: 12pt;
+  color: #000000;
   font-weight: 700;
   font-size: 12pt;
   padding-bottom: 2pt;
+  font-family: 'Helvetica Neue';
   line-height: 1.1500000000000001;
   page-break-after: avoid;
   orphans: 2;
@@ -1460,9 +1483,11 @@ h4 {
 
 h5 {
   padding-top: 11pt;
+  color: #000000;
   font-weight: 700;
   font-size: 11pt;
   padding-bottom: 2pt;
+  font-family: 'Helvetica Neue';
   line-height: 1.1500000000000001;
   page-break-after: avoid;
   orphans: 2;
@@ -1472,9 +1497,11 @@ h5 {
 
 h6 {
   padding-top: 10pt;
+  color: #000000;
   font-weight: 700;
   font-size: 10pt;
   padding-bottom: 2pt;
+  font-family: 'Helvetica Neue';
   line-height: 1.1500000000000001;
   page-break-after: avoid;
   orphans: 2;

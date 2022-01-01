@@ -10,7 +10,7 @@ const TermsAndConditions = () => {
       <Container maxWidth='lg'>
         <Box sx={{ pt: 4 }}>
           <Typography variant='h3' color='primary.main' align='center'>
-            Terms of Use
+            Terms &amp; Conditions
           </Typography>
         </Box>
         <Box>

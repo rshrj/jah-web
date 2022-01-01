@@ -25,14 +25,17 @@ import { MdLocationOn } from 'react-icons/md';
 import { FaArrowRight, FaQuoteLeft } from 'react-icons/fa';
 import { alpha, useTheme } from '@mui/material/styles';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
 
 import locations from '../../constants/locations.json';
-import landing1 from '../../assets/vectors/landing-1.svg';
-import landing2 from '../../assets/vectors/landing-2.svg';
-import landing3 from '../../assets/vectors/landing-3.svg';
-import landing4 from '../../assets/vectors/landing-4.svg';
-import homeAdPlaceholder0 from '../../assets/images/homead-placeholder.jpg';
+// import landing1 from '../../assets/vectors/landing-1.svg';
+import landing1 from '../../assets/images/marketing.png';
+// import landing2 from '../../assets/vectors/landing-2.svg';
+import landing2 from '../../assets/images/trust.png';
+// import landing3 from '../../assets/vectors/landing-3.svg';
+import landing3 from '../../assets/images/best-deals.png';
+// import landing4 from '../../assets/vectors/landing-4.svg';
+import landing4 from '../../assets/images/stellar-performance.png';
 import homeAdPlaceholder from '../../assets/images/homead-placeholder-2.png';
 import { stringAvatar } from '../../utils/avatars';
 import { shortenedPriceWords } from '../../utils/helpers';
@@ -282,7 +285,10 @@ const LandingPage = () => {
                 <Typography
                   variant='h5'
                   sx={{
-                    marginRight: 2
+                    marginRight: 2,
+                    paddingTop: 0,
+                    block: 'block',
+                    color: 'primary.main'
                   }}>
                   Buy your Dream Home
                 </Typography>
@@ -297,7 +303,11 @@ const LandingPage = () => {
                 textAlign: { xs: 'center', sm: 'right' },
                 display: { xs: 'none', sm: 'block' }
               }}>
-              <Button variant='outlined' size='small'>
+              <Button
+                variant='outlined'
+                size='small'
+                component={RouterLink}
+                to='/forbuyers'>
                 View More
               </Button>
             </Grid>
@@ -334,7 +344,11 @@ const LandingPage = () => {
               justifyContent: 'center',
               alignItems: 'center'
             }}>
-            <Button variant='outlined' size='small'>
+            <Button
+              variant='outlined'
+              size='small'
+              component={RouterLink}
+              to='/forbuyers'>
               View More
             </Button>
           </Box>
@@ -354,7 +368,10 @@ const LandingPage = () => {
                 <Typography
                   variant='h5'
                   sx={{
-                    marginRight: 2
+                    marginRight: 2,
+                    paddingTop: 0,
+                    block: 'block',
+                    color: 'primary.main'
                   }}>
                   Rent / Lease property
                 </Typography>
@@ -369,7 +386,11 @@ const LandingPage = () => {
                 textAlign: { xs: 'center', sm: 'right' },
                 display: { xs: 'none', sm: 'block' }
               }}>
-              <Button variant='outlined' size='small'>
+              <Button
+                variant='outlined'
+                size='small'
+                component={RouterLink}
+                to='/fortenants'>
                 View More
               </Button>
             </Grid>
@@ -406,7 +427,11 @@ const LandingPage = () => {
               justifyContent: 'center',
               alignItems: 'center'
             }}>
-            <Button variant='outlined' size='small'>
+            <Button
+              variant='outlined'
+              size='small'
+              component={RouterLink}
+              to='/fortenants'>
               View More
             </Button>
           </Box>
@@ -455,6 +480,7 @@ const LandingPage = () => {
                 textAlign: 'center',
                 minWidth: { xs: 300, sm: 280 },
                 backgroundColor: alpha('#c100c5', 0.08),
+                boxShadow: '0px 0px 20px -15px rgba(0,0,0,0.40)',
                 height: 280,
                 px: 4,
                 py: 5,
@@ -483,6 +509,7 @@ const LandingPage = () => {
                 textAlign: 'center',
                 minWidth: { xs: 300, sm: 280 },
                 backgroundColor: alpha('#4b732c', 0.08),
+                boxShadow: '0px 0px 20px -15px rgba(0,0,0,0.40)',
                 height: 280,
                 px: 4,
                 py: 5,
@@ -511,6 +538,7 @@ const LandingPage = () => {
                 textAlign: 'center',
                 minWidth: { xs: 300, sm: 280 },
                 backgroundColor: alpha('#007fff', 0.08),
+                boxShadow: '0px 0px 20px -15px rgba(0,0,0,0.40)',
                 height: 280,
                 px: 4,
                 py: 5,
@@ -539,6 +567,7 @@ const LandingPage = () => {
                 textAlign: 'center',
                 minWidth: { xs: 300, sm: 280 },
                 backgroundColor: alpha('#431ad3', 0.08),
+                boxShadow: '0px 0px 20px -15px rgba(0,0,0,0.40)',
                 height: 280,
                 px: 4,
                 py: 5,
@@ -567,6 +596,7 @@ const LandingPage = () => {
                 textAlign: 'center',
                 minWidth: { xs: 300, sm: 280 },
                 backgroundColor: alpha(theme.palette.primary.main, 0.08),
+                boxShadow: '0px 0px 20px -15px rgba(0,0,0,0.40)',
                 height: 280,
                 px: 4,
                 py: 5,
@@ -592,6 +622,7 @@ const LandingPage = () => {
                 textAlign: 'center',
                 minWidth: { xs: 300, sm: 280 },
                 backgroundColor: alpha(theme.palette.primary.main, 0.08),
+                boxShadow: '0px 0px 20px -15px rgba(0,0,0,0.40)',
                 height: 280,
                 px: 4,
                 py: 5,
@@ -652,7 +683,9 @@ const LandingPage = () => {
               size='small'
               sx={{
                 marginTop: { xs: 2, sm: 0 }
-              }}>
+              }}
+              component={RouterLink}
+              to='/submittestimonial'>
               Submit Testimonial
             </Button>
           </Box>
@@ -682,12 +715,12 @@ const LandingPage = () => {
               </Box>
               <Typography variant='body1' sx={{ marginTop: 1 }}>
                 They provided stellar service and left me spell bound. Will
-                definitely choose again
+                definitely choose again.
               </Typography>
               <Box
                 sx={{
                   display: 'flex',
-                  justifyContent: 'align',
+                  justifyContent: 'center',
                   alignItems: 'flex-start',
                   marginTop: 2
                 }}>

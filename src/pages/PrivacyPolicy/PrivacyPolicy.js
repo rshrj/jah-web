@@ -15,9 +15,6 @@ const PrivacyPolicy = () => {
         <Box>
           <div class='c9'>
             <p class='c8'>
-              <span class='c2'>Privacy Policy For Website</span>
-            </p>
-            <p class='c8'>
               <span class='c3'>Effective Date: </span>
               <span class='c6'>January 1st, 2022</span>
             </p>

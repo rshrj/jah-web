@@ -2,10 +2,13 @@ import { Button, Container, FormGroup, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { JInputField } from '../../components/JInputField';
 
-import illustration from '../../assets/vectors/illustration.svg';
+import illustration from '../../assets/vectors/submit-testimonial.svg';
 import Footer from '../../components/Footer';
+import { useTheme } from '@emotion/react';
 
-const ContactPage = () => {
+const SubmitTestimonial = () => {
+  const theme = useTheme();
+
   return (
     <>
       <Container maxWidth='lg'>
@@ -15,16 +18,7 @@ const ContactPage = () => {
             color='primary.main'
             align='center'
             sx={{ marginBottom: 3 }}>
-            Let’s Talk
-          </Typography>
-          <Typography
-            variant='body1'
-            color='text.secondary'
-            align='center'
-            sx={{ px: { xs: 0, sm: 15 } }}>
-            If you need more details about any property, want to buy or rent
-            with us, or just want to meet up with us for coffee, fill the form
-            and we will call you in 4 working hours.
+            Submit Testimonial
           </Typography>
         </Box>
 
@@ -48,8 +42,20 @@ const ContactPage = () => {
             <Grid item xs={12} sm={6}>
               <FormGroup>
                 <JInputField
-                  topLabel='Phone'
-                  placeholder='Enter your phone number'
+                  topLabel={
+                    <Typography>
+                      Company Name{' '}
+                      <span
+                        style={{
+                          color: theme.palette.text.secondary,
+                          fontSize: 13,
+                          marginLeft: 1
+                        }}>
+                        (Optional)
+                      </span>
+                    </Typography>
+                  }
+                  placeholder='Enter your company name'
                   spacing={0}
                 />
               </FormGroup>
@@ -57,8 +63,8 @@ const ContactPage = () => {
             <Grid item xs={12} sm={12}>
               <FormGroup>
                 <JInputField
-                  topLabel='Message'
-                  placeholder='"Please call me back"'
+                  topLabel='Testomonial'
+                  placeholder='Enter your testimonial'
                   spacing={0}
                 />
               </FormGroup>
@@ -67,7 +73,7 @@ const ContactPage = () => {
               <Button
                 variant='contained'
                 sx={{ marginTop: 2, marginBottom: 5 }}>
-                Call Me
+                Submit
               </Button>
             </Grid>
           </Grid>
@@ -90,4 +96,4 @@ const ContactPage = () => {
   );
 };
 
-export default ContactPage;
+export default SubmitTestimonial;

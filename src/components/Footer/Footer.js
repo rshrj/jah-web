@@ -129,7 +129,9 @@ const Footer = () => {
                     textDecoration: 'none',
                     color: '#828282',
                     fontSize: '15px'
-                  }}>
+                  }}
+                  to='/forbuyers?type=projects'
+                  component={RouterLink}>
                   Projects
                 </Link>
               </Grid>
@@ -140,7 +142,9 @@ const Footer = () => {
                     textDecoration: 'none',
                     color: '#828282',
                     fontSize: '15px'
-                  }}>
+                  }}
+                  to='/forbuyers?type=apartments'
+                  component={RouterLink}>
                   Resale Homes
                 </Link>
               </Grid>
@@ -151,7 +155,9 @@ const Footer = () => {
                     textDecoration: 'none',
                     color: '#828282',
                     fontSize: '15px'
-                  }}>
+                  }}
+                  to='/fortenants'
+                  component={RouterLink}>
                   Rent/Lease
                 </Link>
               </Grid>
@@ -199,7 +205,9 @@ const Footer = () => {
                     textDecoration: 'none',
                     color: '#828282',
                     fontSize: '15px'
-                  }}>
+                  }}
+                  to='/about'
+                  component={RouterLink}>
                   About
                 </Link>
               </Grid>
