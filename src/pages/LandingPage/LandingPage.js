@@ -32,6 +32,8 @@ import landing1 from '../../assets/vectors/landing-1.svg';
 import landing2 from '../../assets/vectors/landing-2.svg';
 import landing3 from '../../assets/vectors/landing-3.svg';
 import landing4 from '../../assets/vectors/landing-4.svg';
+import homeAdPlaceholder0 from '../../assets/images/homead-placeholder.jpg';
+import homeAdPlaceholder from '../../assets/images/homead-placeholder-2.png';
 import { stringAvatar } from '../../utils/avatars';
 import { shortenedPriceWords } from '../../utils/helpers';
 
@@ -39,12 +41,27 @@ import PropertyCard from '../../components/PropertyCard';
 import { JInputField } from '../../components/JInputField';
 import Footer from '../../components/Footer';
 
-const Poster = styled(Grid)({
-  background: `url("https://github.com/manikmmalhotra/slack-clone/blob/master/Rectangle%202.png?raw=true")
-    no-repeat top center fixed`,
-  backgroundSize: '100% 68%',
-  padding: '30px'
-});
+const Poster = styled(Grid)(({ theme }) => ({
+  backgroundImage: `url("${homeAdPlaceholder}")`,
+  backgroundSize: 'cover',
+  backdropFilter: `blur(1.5rem)`,
+  WebkitBackdropFilter: `blur(1.5rem)`,
+  minHeight: '250px',
+  position: 'relative',
+  '&:after': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundImage: `linear-gradient(120deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+    opacity: 0.8
+  },
+  '& > *': {
+    zIndex: 100
+  }
+}));
 
 const SearchCard = styled(Card)({
   maxWidth: '700px',
@@ -52,7 +69,8 @@ const SearchCard = styled(Card)({
   margin: '-20px auto 0',
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center'
+  alignItems: 'center',
+  position: 'relative'
 });
 
 const LandingPage = () => {
@@ -91,36 +109,81 @@ const LandingPage = () => {
 
   return (
     <>
-      <Poster
-        container
-        direction='row'
-        justifyContent='center'
-        alignItems='center'
-        columns={{ xs: 1, sm: 1, md: 2 }}
-        spacing={3}>
-        <Grid item>
+      <Poster container>
+        {/* <Grid item sx={{ p: 0, m: 0 }}>
           <CardMedia
             component='img'
-            image='https://github.com/manikmmalhotra/slack-clone/blob/master/apartment%20(1)%201.png?raw=true'
-            sx={{ width: '240px', height: '160px' }}
+            image={homeAdPlaceholder0}
+            sx={{ width: '320px', height: '250px', p: 0, m: 0 }}
           />
-        </Grid>
-        <Grid item sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
-          <Typography variant='h4' color='text.secondary'>
-            Arihant Skylines
-          </Typography>
-          <Typography sx={{ marginBottom: 1 }}>
-            1, 2 BHKs starting at Rs. 20L+
-          </Typography>
-          <Button variant='contained' disableElevation>
-            Learn More
-          </Button>
-        </Grid>
+        </Grid> */}
+        <Container
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            justifyContent: { xs: 'center', sm: 'space-between' },
+            alignItems: { xs: 'center', sm: 'stretch' }
+          }}>
+          <Grid
+            item
+            sx={{
+              textAlign: { xs: 'center', sm: 'left' },
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'stretch'
+            }}>
+            <Typography
+              variant='h4'
+              color='common.white'
+              sx={{ maxWidth: 400 }}>
+              Helping Mumbaikars find their perfect places
+            </Typography>
+            <Typography
+              sx={{ marginBottom: 1, display: { xs: 'none', sm: 'block' } }}
+              color='common.white'>
+              Check our latest project offering &#8594;
+            </Typography>
+          </Grid>
+          <Box
+            sx={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: { xs: 'column', sm: 'row' },
+              display: { xs: 'none', sm: 'flex' }
+            }}>
+            <Grid item>
+              <CardMedia
+                component='img'
+                image='https://github.com/manikmmalhotra/slack-clone/blob/master/apartment%20(1)%201.png?raw=true'
+                sx={{ width: '260px', p: 3 }}
+              />
+            </Grid>
+            <Grid
+              item
+              sx={{
+                textAlign: { xs: 'center', sm: 'left' },
+                position: 'relative'
+              }}>
+              <Typography variant='h4' color='common.white'>
+                Arihant Skylines
+              </Typography>
+              <Typography sx={{ marginBottom: 1 }} color='common.white'>
+                1, 2 BHKs starting at Rs. 20L+
+              </Typography>
+              <Button variant='contained' disableElevation>
+                Learn More
+              </Button>
+            </Grid>
+          </Box>
+        </Container>
       </Poster>
-      <Container maxWidth='xl'>
+      <Container maxWidth='xl' sx={{}}>
         <SearchCard
           sx={{
             py: 3,
+            pt: 1,
             boxShadow: '1px 1px 57px -16px rgba(0,0,0,0.43)'
           }}>
           <Box sx={{ width: '100%', bgcolor: 'inherit' }}>
@@ -264,6 +327,17 @@ const LandingPage = () => {
               );
             })}
           </Box>
+
+          <Box
+            sx={{
+              display: { xs: 'flex', sm: 'none' },
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+            <Button variant='outlined' size='small'>
+              View More
+            </Button>
+          </Box>
         </Box>
 
         <Box>
@@ -325,6 +399,17 @@ const LandingPage = () => {
               );
             })}
           </Box>
+
+          <Box
+            sx={{
+              display: { xs: 'flex', sm: 'none' },
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+            <Button variant='outlined' size='small'>
+              View More
+            </Button>
+          </Box>
         </Box>
       </Container>
       <Box
@@ -368,9 +453,9 @@ const LandingPage = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 textAlign: 'center',
-                width: 280,
+                minWidth: { xs: 300, sm: 280 },
+                backgroundColor: alpha('#c100c5', 0.08),
                 height: 280,
-                backgroundColor: alpha('#FF5722', 0.02),
                 px: 4,
                 py: 5,
                 m: 2
@@ -396,9 +481,9 @@ const LandingPage = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 textAlign: 'center',
-                width: 280,
+                minWidth: { xs: 300, sm: 280 },
+                backgroundColor: alpha('#4b732c', 0.08),
                 height: 280,
-                backgroundColor: alpha('#FF5722', 0.02),
                 px: 4,
                 py: 5,
                 m: 2
@@ -424,9 +509,9 @@ const LandingPage = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 textAlign: 'center',
-                width: 280,
+                minWidth: { xs: 300, sm: 280 },
+                backgroundColor: alpha('#007fff', 0.08),
                 height: 280,
-                backgroundColor: alpha('#FF5722', 0.02),
                 px: 4,
                 py: 5,
                 m: 2
@@ -452,9 +537,9 @@ const LandingPage = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 textAlign: 'center',
-                width: 280,
+                minWidth: { xs: 300, sm: 280 },
+                backgroundColor: alpha('#431ad3', 0.08),
                 height: 280,
-                backgroundColor: alpha('#FF5722', 0.02),
                 px: 4,
                 py: 5,
                 m: 2
@@ -480,9 +565,9 @@ const LandingPage = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 textAlign: 'center',
-                width: 280,
+                minWidth: { xs: 300, sm: 280 },
+                backgroundColor: alpha(theme.palette.primary.main, 0.08),
                 height: 280,
-                backgroundColor: alpha('#FF5722', 0.02),
                 px: 4,
                 py: 5,
                 m: 2
@@ -505,9 +590,9 @@ const LandingPage = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 textAlign: 'center',
-                width: 280,
+                minWidth: { xs: 300, sm: 280 },
+                backgroundColor: alpha(theme.palette.primary.main, 0.08),
                 height: 280,
-                backgroundColor: alpha('#FF5722', 0.02),
                 px: 4,
                 py: 5,
                 m: 2
@@ -530,16 +615,20 @@ const LandingPage = () => {
           <Box
             sx={{
               display: 'flex',
+              flexDirection: { xs: 'column', sm: 'row' },
               justifyContent: 'space-between',
               alignItems: 'center',
               paddingTop: 5,
-              px: 15,
+              px: { xs: 0, sm: 15 },
               marginBottom: 3
             }}>
             <Button
               variant='outlined'
               size='small'
-              sx={{ visibility: 'hidden' }}>
+              sx={{
+                visibility: 'hidden',
+                display: { xs: 'none', sm: 'block' }
+              }}>
               Submit Testimonial
             </Button>
             <Box sx={{}}>
@@ -558,7 +647,12 @@ const LandingPage = () => {
                 clients.
               </Typography>
             </Box>
-            <Button variant='outlined' size='small' sx={{}}>
+            <Button
+              variant='outlined'
+              size='small'
+              sx={{
+                marginTop: { xs: 2, sm: 0 }
+              }}>
               Submit Testimonial
             </Button>
           </Box>
@@ -569,7 +663,7 @@ const LandingPage = () => {
               display: 'flex',
               justifyContent: 'center',
               flexWrap: 'wrap',
-              px: 15
+              px: { xs: 0, sm: 15 }
             }}>
             <Paper
               sx={{
@@ -725,8 +819,7 @@ const LandingPage = () => {
               flexDirection: 'column',
               width: '100%',
               paddingTop: 5,
-              px: 15,
-              marginBottom: 3
+              px: { xs: 0, sm: 15 }
             }}>
             <Box sx={{}}>
               <Typography
@@ -745,7 +838,7 @@ const LandingPage = () => {
             </Box>
 
             <Grid container spacing={2} sx={{ marginTop: 3, maxWidth: 600 }}>
-              <Grid item sm={6}>
+              <Grid item xs={12} sm={6}>
                 <FormGroup>
                   <JInputField
                     topLabel='Name'
@@ -754,7 +847,7 @@ const LandingPage = () => {
                   />
                 </FormGroup>
               </Grid>
-              <Grid item sm={6}>
+              <Grid item xs={12} sm={6}>
                 <FormGroup>
                   <JInputField
                     topLabel='Phone'
@@ -763,7 +856,7 @@ const LandingPage = () => {
                   />
                 </FormGroup>
               </Grid>
-              <Grid item sm={12}>
+              <Grid item xs={12} sm={12}>
                 <FormGroup>
                   <JInputField
                     topLabel='Message'
@@ -772,7 +865,7 @@ const LandingPage = () => {
                   />
                 </FormGroup>
               </Grid>
-              <Grid item sm={12} textAlign='center'>
+              <Grid item xs={12} sm={12} textAlign='center'>
                 <Button
                   variant='contained'
                   sx={{ marginTop: 2, marginBottom: 5 }}>
@@ -783,6 +876,7 @@ const LandingPage = () => {
           </Box>
         </Container>
       </Box>
+      <Divider />
       <Footer />
     </>
   );

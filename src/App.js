@@ -27,6 +27,10 @@ import ListingsPage from './pages/ListingsPage/ListingsPage';
 import Users from './pages/Users/Users';
 import Testimonials from './pages/Testimonials/Testimonials';
 import CallbackRequests from './pages/CallbackRequests/CallbackRequests';
+import TermsAndConditions from './pages/TermsAndConditions';
+import ContactPage from './pages/ContactPage';
+import AboutPage from './pages/AboutPage';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -64,6 +68,10 @@ const App = () => {
             <Route path='listing/:listingId' element={<ListingView />} />
             <Route path='forbuyers' element={<GalleryView mode='buy' />} />
             <Route path='fortenants' element={<GalleryView mode='rent' />} />
+            <Route path='contact' element={<ContactPage />} />
+            <Route path='tnc' element={<TermsAndConditions />} />
+            <Route path='privacy' element={<PrivacyPolicy />} />
+            <Route path='about' element={<AboutPage />} />
             <Route
               path='dashboard'
               element={

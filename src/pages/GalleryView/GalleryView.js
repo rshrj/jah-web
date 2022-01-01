@@ -239,7 +239,13 @@ const GalleryView = ({ mode = 'buy' }) => {
             {!loading && content.ids.length === 0 && (
               <Typography
                 variant='h3'
-                sx={{ fontWeight: 'bold', color: 'grey.500', pt: 20, pb: 30 }}>
+                sx={{
+                  fontWeight: 'bold',
+                  color: 'grey.500',
+                  pt: 20,
+                  pb: 30,
+                  textAlign: 'center'
+                }}>
                 Sorry! Not Found
               </Typography>
             )}

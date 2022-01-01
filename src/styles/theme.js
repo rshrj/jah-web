@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme, lighten } from '@mui/material/styles';
 
 const theme = createTheme({
   palette: {
