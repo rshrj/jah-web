@@ -45,6 +45,39 @@ export const addNewListing = async ({ type, ...listingFormData }) => {
   }
 };
 
+export const getParticularListing = async (type, page = 1, size = 10) => {
+ 
+ 
+  try {
+    const res = await fetch(`${apiUrl}/listings/particular`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      body: JSON.stringify({type, page, size})
+    });
+
+    if (!res) {
+      throw errorWithToast('Server did not respond');
+    }
+
+    const data = await res.json();
+    console.log(data);
+    if (!res.ok) {
+      throw new Error('Request error', { cause: data });
+    }
+
+    return data;
+  } catch (e) {
+    if (e instanceof TypeError && e.message === 'Failed to fetch') {
+      return rejectWithToast('Server is offline');
+    }
+    return Promise.reject(e);
+  }
+};
+
 export const getListings = async () => {
   let token = localStorage.getItem('token');
   if (!token) {
@@ -96,12 +129,12 @@ export const getListingsFuzzy = async (query, type) => {
       })
     });
 
-    const g = await (() =>
-      new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve('Good');
-        }, 5000);
-      }))();
+    // const g = await (() =>
+    //   new Promise((resolve, reject) => {
+    //     setTimeout(() => {
+    //       resolve('Good');
+    //     }, 5000);
+    //   }))();
 
     if (!res) {
       throw errorWithToast('Server did not respond');
@@ -121,6 +154,11 @@ export const getListingsFuzzy = async (query, type) => {
   }
 };
 
-const listingsService = { addNewListing, getListings, getListingsFuzzy };
+const listingsService = {
+  addNewListing,
+  getListings,
+  getListingsFuzzy,
+  getParticularListing,
+};
 
 export default listingsService;

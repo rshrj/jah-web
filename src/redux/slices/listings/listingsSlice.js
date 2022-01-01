@@ -11,9 +11,17 @@ const initialState = {
   fetchLoading: 'idle',
   content: {
     ids: [],
-    listings: {}
+    listings: {},
   },
-  single: {}
+  single: {},
+  buyproperties: {
+    ids: [],
+    listings: {},
+  },
+  rentproperties: {
+    ids: [],
+    listings: {},
+  },
 };
 
 const addNewListing = createAsyncThunk(
@@ -61,6 +69,56 @@ const getListings = createAsyncThunk(
   }
 );
 
+const getBuyProperties = createAsyncThunk(
+  'listings/getBuyProperties',
+  async ({ size, page }, { dispatch }) => {
+    dispatch(setTopLoader());
+    try {
+      const data = await listingsService.getParticularListing(
+        ['sellapartment', 'sellproject'],
+        page,
+        size
+      );
+      dispatch(clearTopLoader());
+
+      return data.payload;
+    } catch (error) {
+      if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
+        error.cause.toasts.forEach((toastMessage) =>
+          dispatch(addToast({ type: 'error', message: toastMessage }))
+        );
+      }
+
+      return Promise.reject(error);
+    }
+  }
+);
+
+const getRentBuyProperties = createAsyncThunk(
+  'listings/getRentBuyProperties',
+  async ({ size, page }, { dispatch }) => {
+    dispatch(setTopLoader());
+    try {
+      const data = await listingsService.getParticularListing(
+        ['rentlease'],
+        page,
+        size
+      );
+      dispatch(clearTopLoader());
+
+      return data.payload;
+    } catch (error) {
+      if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
+        error.cause.toasts.forEach((toastMessage) =>
+          dispatch(addToast({ type: 'error', message: toastMessage }))
+        );
+      }
+
+      return Promise.reject(error);
+    }
+  }
+);
+
 const getListingById = createAsyncThunk(
   'listings/getListingById',
   async (listingId, { dispatch }) => {
@@ -84,7 +142,7 @@ const getListingById = createAsyncThunk(
 );
 
 const getListingsFuzzy = createAsyncThunk(
-  'lisings/getListingsFuzzy',
+  'listings/getListingsFuzzy',
   async ({ query, type }, { dispatch }) => {
     dispatch(setTopLoader());
     try {
@@ -206,9 +264,38 @@ export const listingsSlice = createSlice({
     builder.addCase(getListingsFuzzy.rejected, (state, action) => {
       state.fetchLoading = 'idle';
     });
-  }
+    builder.addCase(getBuyProperties.pending, (state, action) => {
+      state.fetchLoading = 'loading';
+    });
+    builder.addCase(getBuyProperties.fulfilled, (state, action) => {
+      state.fetchLoading = 'idle';
+      state.buyproperties.listings = arrayToObject('_id', action.payload);
+      state.buyproperties.ids = action.payload.map((listing) => listing._id);
+    });
+    builder.addCase(getBuyProperties.rejected, (state, action) => {
+      state.fetchLoading = 'idle';
+    });
+    builder.addCase(getRentBuyProperties.pending, (state, action) => {
+      state.fetchLoading = 'loading';
+    });
+    builder.addCase(getRentBuyProperties.fulfilled, (state, action) => {
+      state.fetchLoading = 'idle';
+      state.rentproperties.listings = arrayToObject('_id', action.payload);
+      state.rentproperties.ids = action.payload.map((listing) => listing._id);
+    });
+    builder.addCase(getRentBuyProperties.rejected, (state, action) => {
+      state.fetchLoading = 'idle';
+    });
+  },
 });
 
-export { addNewListing, getListings, getListingById, getListingsFuzzy };
+export {
+  addNewListing,
+  getListings,
+  getListingById,
+  getListingsFuzzy,
+  getBuyProperties,
+  getRentBuyProperties,
+};
 
 export default listingsSlice.reducer;

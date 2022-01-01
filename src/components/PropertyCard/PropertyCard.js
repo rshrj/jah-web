@@ -58,7 +58,7 @@ const PropertyCard = ({ image, title, location, price }) => {
                 {location}
               </Typography>
             </Grid>
-            <Grid item sx={{ pl: '65px' }} display='flex' alignItems='center'>
+            <Grid item sx={{ width: '50%' }} display='flex' alignItems='center' justifyContent="flex-end">
               <BiRupee
                 style={{ height: '15px', width: '15px', color: '#6c757d' }}
               />

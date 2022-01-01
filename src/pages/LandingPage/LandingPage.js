@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
   styled,
@@ -19,12 +20,11 @@ import {
   Paper,
   Avatar,
   Pagination,
-  FormGroup
+  FormGroup,
 } from '@mui/material';
 import { MdLocationOn } from 'react-icons/md';
 import { FaArrowRight, FaQuoteLeft } from 'react-icons/fa';
 import { alpha, useTheme } from '@mui/material/styles';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import locations from '../../constants/locations.json';
@@ -33,7 +33,12 @@ import landing2 from '../../assets/vectors/landing-2.svg';
 import landing3 from '../../assets/vectors/landing-3.svg';
 import landing4 from '../../assets/vectors/landing-4.svg';
 import { stringAvatar } from '../../utils/avatars';
-import { shortenedPriceWords } from '../../utils/helpers';
+import {  shortenedPrice } from '../../utils/helpers';
+import {
+ 
+  getBuyProperties,
+  getRentBuyProperties,
+} from '../../redux/slices/listings/listingsSlice';
 
 import PropertyCard from '../../components/PropertyCard';
 import { JInputField } from '../../components/JInputField';
@@ -43,7 +48,7 @@ const Poster = styled(Grid)({
   background: `url("https://github.com/manikmmalhotra/slack-clone/blob/master/Rectangle%202.png?raw=true")
     no-repeat top center fixed`,
   backgroundSize: '100% 68%',
-  padding: '30px'
+  padding: '30px',
 });
 
 const SearchCard = styled(Card)({
@@ -52,12 +57,22 @@ const SearchCard = styled(Card)({
   margin: '-20px auto 0',
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center'
+  alignItems: 'center',
 });
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const theme = useTheme();
+
+  useEffect(() => {
+    dispatch(getRentBuyProperties({ page: 1, size: 4 }));
+
+    dispatch(getBuyProperties({ page: 1, size: 9 }));
+  }, []);
+
+  const buyproperties = useSelector((state) => state.listings.buyproperties);
+  const rentproperties = useSelector((state) => state.listings.rentproperties);
 
   let [tab, setTab] = useState(0);
   const [searchInput, setSearchInput] = useState('');
@@ -121,7 +136,7 @@ const LandingPage = () => {
         <SearchCard
           sx={{
             py: 3,
-            boxShadow: '1px 1px 57px -16px rgba(0,0,0,0.43)'
+            boxShadow: '1px 1px 57px -16px rgba(0,0,0,0.43)',
           }}>
           <Box sx={{ width: '100%', bgcolor: 'inherit' }}>
             <Tabs value={tab} onChange={handleTabChange} centered>
@@ -155,7 +170,7 @@ const LandingPage = () => {
                     ref={params.InputLabelProps.ref}
                     sx={{
                       display: 'flex',
-                      alignItems: 'center'
+                      alignItems: 'center',
                     }}>
                     <MdLocationOn fontSize={20} style={{ marginRight: 10 }} />
                     Search for a location
@@ -214,12 +229,12 @@ const LandingPage = () => {
                 display='flex'
                 alignItems='center'
                 sx={{
-                  color: 'primary.main'
+                  color: 'primary.main',
                 }}>
                 <Typography
                   variant='h5'
                   sx={{
-                    marginRight: 2
+                    marginRight: 2,
                   }}>
                   Buy your Dream Home
                 </Typography>
@@ -232,7 +247,7 @@ const LandingPage = () => {
               sm={6}
               sx={{
                 textAlign: { xs: 'center', sm: 'right' },
-                display: { xs: 'none', sm: 'block' }
+                display: { xs: 'none', sm: 'block' },
               }}>
               <Button variant='outlined' size='small'>
                 View More
@@ -245,9 +260,9 @@ const LandingPage = () => {
               marginTop: 1,
               display: 'flex',
               justifyContent: 'center',
-              flexWrap: 'wrap'
+              flexWrap: 'wrap',
             }}>
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((listingId) => {
+            {/* {[1, 2, 3, 4, 5, 6, 7, 8].map((listingId) => {
               // let type = content.listings[listingId].type;
               // let image = content.listings[listingId][type].featuredPicture;
               // let name = content.listings[listingId].name;
@@ -262,7 +277,36 @@ const LandingPage = () => {
                   price={shortenedPriceWords(1343020)}
                 />
               );
-            })}
+            })} */}
+            {!loading &&
+              buyproperties.ids.map((listingId) => {
+                let type = buyproperties.listings[listingId].listingType;
+                let image =
+                  buyproperties.listings[listingId][type].featuredPicture;
+                let name = buyproperties.listings[listingId].name;
+                let location = buyproperties.listings[listingId][type].location;
+                let price = [];
+
+                if (type === 'rentlease') {
+                  price[0] = buyproperties.listings[listingId][type].rent;
+                } else if (type === 'sellapartment') {
+                  price[0] = buyproperties.listings[listingId][type].price;
+                } else {
+                  price = buyproperties.listings[listingId][type].units.map(
+                    (u) => u.price
+                  );
+                }
+
+                return (
+                  <PropertyCard
+                    key={listingId}
+                    image={image}
+                    title={name}
+                    location={location}
+                    price={shortenedPrice(price)}
+                  />
+                );
+              })}
           </Box>
         </Box>
 
@@ -275,12 +319,12 @@ const LandingPage = () => {
                 display='flex'
                 alignItems='center'
                 sx={{
-                  color: 'primary.main'
+                  color: 'primary.main',
                 }}>
                 <Typography
                   variant='h5'
                   sx={{
-                    marginRight: 2
+                    marginRight: 2,
                   }}>
                   Rent / Lease property
                 </Typography>
@@ -293,7 +337,7 @@ const LandingPage = () => {
               sm={6}
               sx={{
                 textAlign: { xs: 'center', sm: 'right' },
-                display: { xs: 'none', sm: 'block' }
+                display: { xs: 'none', sm: 'block' },
               }}>
               <Button variant='outlined' size='small'>
                 View More
@@ -306,9 +350,9 @@ const LandingPage = () => {
               marginTop: 1,
               display: 'flex',
               justifyContent: 'center',
-              flexWrap: 'wrap'
+              flexWrap: 'wrap',
             }}>
-            {[1, 2, 3, 4].map((listingId) => {
+            {/* {[1, 2, 3, 4].map((listingId) => {
               // let type = content.listings[listingId].type;
               // let image = content.listings[listingId][type].featuredPicture;
               // let name = content.listings[listingId].name;
@@ -323,18 +367,47 @@ const LandingPage = () => {
                   price={shortenedPriceWords(1343020)}
                 />
               );
-            })}
+            })} */}
+            {!loading &&
+              rentproperties.ids.map((listingId) => {
+                let type = rentproperties.listings[listingId].listingType;
+                let image =
+                  rentproperties.listings[listingId][type].featuredPicture;
+                let name = rentproperties.listings[listingId].name;
+                let location = rentproperties.listings[listingId][type].location;
+                let price = [];
+
+                if (type === 'rentlease') {
+                  price[0] = rentproperties.listings[listingId][type].rent;
+                } else if (type === 'sellapartment') {
+                  price[0] = rentproperties.listings[listingId][type].price;
+                } else {
+                  price = rentproperties.listings[listingId][type].units.map(
+                    (u) => u.price
+                  );
+                }
+
+                return (
+                  <PropertyCard
+                    key={listingId}
+                    image={image}
+                    title={name}
+                    location={location}
+                    price={shortenedPrice(price)}
+                  />
+                );
+              })}
           </Box>
         </Box>
       </Container>
       <Box
         sx={{
-          backgroundColor: 'common.white'
+          backgroundColor: 'common.white',
         }}>
         <Container maxWidth='xl'>
           <Box
             sx={{
-              marginBottom: 3
+              marginBottom: 3,
             }}>
             <Typography
               textAlign='center'
@@ -359,7 +432,7 @@ const LandingPage = () => {
               justifyContent: 'center',
               flexWrap: 'wrap',
               px: 15,
-              paddingBottom: 5
+              paddingBottom: 5,
             }}>
             <Paper
               sx={{
@@ -373,7 +446,7 @@ const LandingPage = () => {
                 backgroundColor: alpha('#FF5722', 0.02),
                 px: 4,
                 py: 5,
-                m: 2
+                m: 2,
               }}>
               <img
                 src={landing1}
@@ -401,7 +474,7 @@ const LandingPage = () => {
                 backgroundColor: alpha('#FF5722', 0.02),
                 px: 4,
                 py: 5,
-                m: 2
+                m: 2,
               }}>
               <img
                 src={landing2}
@@ -429,7 +502,7 @@ const LandingPage = () => {
                 backgroundColor: alpha('#FF5722', 0.02),
                 px: 4,
                 py: 5,
-                m: 2
+                m: 2,
               }}>
               <img
                 src={landing3}
@@ -457,7 +530,7 @@ const LandingPage = () => {
                 backgroundColor: alpha('#FF5722', 0.02),
                 px: 4,
                 py: 5,
-                m: 2
+                m: 2,
               }}>
               <img
                 src={landing4}
@@ -485,7 +558,7 @@ const LandingPage = () => {
                 backgroundColor: alpha('#FF5722', 0.02),
                 px: 4,
                 py: 5,
-                m: 2
+                m: 2,
               }}>
               <Typography variant='h2' color='primary.main'>
                 10,000+
@@ -510,7 +583,7 @@ const LandingPage = () => {
                 backgroundColor: alpha('#FF5722', 0.02),
                 px: 4,
                 py: 5,
-                m: 2
+                m: 2,
               }}>
               <Typography variant='h2' color='primary.main'>
                 21+
@@ -534,7 +607,7 @@ const LandingPage = () => {
               alignItems: 'center',
               paddingTop: 5,
               px: 15,
-              marginBottom: 3
+              marginBottom: 3,
             }}>
             <Button
               variant='outlined'
@@ -569,7 +642,7 @@ const LandingPage = () => {
               display: 'flex',
               justifyContent: 'center',
               flexWrap: 'wrap',
-              px: 15
+              px: 15,
             }}>
             <Paper
               sx={{
@@ -581,7 +654,7 @@ const LandingPage = () => {
                 py: 2,
                 maxWidth: 350,
                 m: 2,
-                borderLeft: `10px solid ${theme.palette.primary.main}`
+                borderLeft: `10px solid ${theme.palette.primary.main}`,
               }}>
               <Box sx={{ textAlign: 'left' }}>
                 <FaQuoteLeft fontSize={30} color={theme.palette.primary.main} />
@@ -595,14 +668,14 @@ const LandingPage = () => {
                   display: 'flex',
                   justifyContent: 'align',
                   alignItems: 'flex-start',
-                  marginTop: 2
+                  marginTop: 2,
                 }}>
                 <Avatar
                   {...stringAvatar(`John Doe}`, {
                     height: 60,
                     width: 60,
                     fontSize: 30,
-                    marginRight: 2
+                    marginRight: 2,
                   })}
                 />
                 <Box>
@@ -624,7 +697,7 @@ const LandingPage = () => {
                 py: 2,
                 maxWidth: 350,
                 m: 2,
-                borderLeft: `10px solid ${theme.palette.primary.main}`
+                borderLeft: `10px solid ${theme.palette.primary.main}`,
               }}>
               <Box sx={{ textAlign: 'left' }}>
                 <FaQuoteLeft fontSize={30} color={theme.palette.primary.main} />
@@ -638,14 +711,14 @@ const LandingPage = () => {
                   display: 'flex',
                   justifyContent: 'align',
                   alignItems: 'center',
-                  marginTop: 2
+                  marginTop: 2,
                 }}>
                 <Avatar
                   {...stringAvatar(`John Doe}`, {
                     height: 60,
                     width: 60,
                     fontSize: 30,
-                    marginRight: 2
+                    marginRight: 2,
                   })}
                 />
                 <Box>
@@ -667,7 +740,7 @@ const LandingPage = () => {
                 py: 2,
                 maxWidth: 350,
                 m: 2,
-                borderLeft: `10px solid ${theme.palette.primary.main}`
+                borderLeft: `10px solid ${theme.palette.primary.main}`,
               }}>
               <Box sx={{ textAlign: 'left' }}>
                 <FaQuoteLeft fontSize={30} color={theme.palette.primary.main} />
@@ -681,14 +754,14 @@ const LandingPage = () => {
                   display: 'flex',
                   justifyContent: 'align',
                   alignItems: 'center',
-                  marginTop: 2
+                  marginTop: 2,
                 }}>
                 <Avatar
                   {...stringAvatar(`John Doe}`, {
                     height: 60,
                     width: 60,
                     fontSize: 30,
-                    marginRight: 2
+                    marginRight: 2,
                   })}
                 />
                 <Box>
@@ -706,7 +779,7 @@ const LandingPage = () => {
               justifyContent: 'center',
               alignItems: 'center',
               mt: 2,
-              mb: 5
+              mb: 5,
             }}>
             <Pagination count={10} color='primary' />
           </Box>
@@ -714,7 +787,7 @@ const LandingPage = () => {
       </Box>
       <Box
         sx={{
-          backgroundColor: 'common.white'
+          backgroundColor: 'common.white',
         }}>
         <Container maxWidth='xl'>
           <Box
@@ -726,7 +799,7 @@ const LandingPage = () => {
               width: '100%',
               paddingTop: 5,
               px: 15,
-              marginBottom: 3
+              marginBottom: 3,
             }}>
             <Box sx={{}}>
               <Typography
