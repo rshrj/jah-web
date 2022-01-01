@@ -45,3 +45,13 @@ export const shortenedPriceWords = (price) => {
   }
   return `${round(priceNum, 1)}`;
 };
+
+export const shortenedPrice = (prices) =>{
+  if(prices.length === 1){
+    return shortenedPriceWords(prices[0]);
+  } else {
+    let min = Math.min(...prices);
+    let max = Math.max(...prices);
+    return shortenedPriceWords(min) + '-' + shortenedPriceWords(max);
+  }
+}

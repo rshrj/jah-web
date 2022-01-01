@@ -25,7 +25,7 @@ import Footer from '../../components/Footer';
 import { MdLocationOn } from 'react-icons/md';
 import { useSearchParams } from 'react-router-dom';
 import { getListingsFuzzy } from '../../redux/slices/listings/listingsSlice';
-import { shortenedPriceWords } from '../../utils/helpers';
+import { shortenedPriceWords, shortenedPrice } from '../../utils/helpers';
 import { HashLoader } from 'react-spinners';
 
 const SearchCard = styled(Card)({
@@ -253,18 +253,29 @@ const GalleryView = ({ mode = 'buy', initTab = 0 }) => {
             )}
             {!loading &&
               content.ids.map((listingId) => {
-                let type = content.listings[listingId].type;
+                let type = content.listings[listingId].listingType;
                 let image = content.listings[listingId][type].featuredPicture;
                 let name = content.listings[listingId].name;
-                let location = content.listings[listingId].location;
-                let price = content.listings[listingId].price;
+                let location = content.listings[listingId][type].location;
+                let price = [];
+
+                if (type === 'rentlease') {
+                  price[0] = content.listings[listingId][type].rent;
+                } else if (type === 'sellapartment') {
+                  price[0] = content.listings[listingId][type].price;
+                } else {
+                  price = content.listings[listingId][type].units.map(
+                    (u) => u.price
+                  );
+                }
+
                 return (
                   <PropertyCard
                     key={listingId}
                     image={image}
                     title={name}
                     location={location}
-                    price={shortenedPriceWords(price)}
+                    price={shortenedPrice(price)}
                   />
                 );
               })}
