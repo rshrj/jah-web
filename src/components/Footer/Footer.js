@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Box, Link, Grid } from '@mui/material';
+import { Box, Link, Grid, Divider } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 
 import Logo from '../Logo';
 import styled from '@emotion/styled';
@@ -8,9 +9,8 @@ import {
   FaFacebook,
   FaInstagram,
   FaTwitter,
-  FaLinkedinIn,
+  FaLinkedinIn
 } from 'react-icons/fa';
-
 
 const Icon = styled.div`
   width: 30px;
@@ -36,7 +36,7 @@ const Content = styled.div`
 const icons = [
   {
     icon: <FaFacebook size={30} />,
-    link: '',
+    link: ''
   },
   {
     icon: (
@@ -44,7 +44,7 @@ const icons = [
         <FaInstagram />
       </Icon>
     ),
-    link: '',
+    link: ''
   },
   {
     icon: (
@@ -52,7 +52,7 @@ const icons = [
         <FaTwitter />
       </Icon>
     ),
-    link: '',
+    link: ''
   },
   {
     icon: (
@@ -60,15 +60,13 @@ const icons = [
         <FaLinkedinIn />
       </Icon>
     ),
-    link: '',
-  },
+    link: ''
+  }
 ];
 
-
 const Footer = () => {
- 
   const Icons = icons.map((m, i) => (
-    <Link href={m.link} sx={{color:'black'}} underline='none' key={i}>
+    <Link href={m.link} sx={{ color: 'black' }} underline='none' key={i}>
       {m.icon}
     </Link>
   ));
@@ -77,7 +75,8 @@ const Footer = () => {
     <>
       <Box
         sx={{
-          mt: '50px',
+          pt: '50px',
+          backgroundColor: 'white'
         }}>
         <Grid container spacing={2} sx={{ mb: '30px' }}>
           <Grid container item sx={{ width: { xs: '100%', md: '40%' } }}>
@@ -88,7 +87,7 @@ const Footer = () => {
                 width: '100%',
                 margin: 'auto',
                 display: 'flex',
-                justifyContent: { xs: 'center', md: 'flex-start' },
+                justifyContent: { xs: 'center', md: 'flex-start' }
               }}>
               <Logo size={60} />
             </Grid>
@@ -98,7 +97,7 @@ const Footer = () => {
                 mt: '20px',
                 width: '100%',
                 display: 'flex',
-                justifyContent: 'center',
+                justifyContent: 'center'
               }}>
               <Content>
                 We build relationships that last a lifetime and help you get the
@@ -111,14 +110,14 @@ const Footer = () => {
             item
             sx={{
               width: { xs: '100%', md: '60%' },
-              textAlign: { xs: 'center', md: 'left' },
+              textAlign: { xs: 'center', md: 'left' }
             }}>
             <Grid
               container
               item
               sx={{
                 width: { xs: '100%', md: '33.33%' },
-                mt: { xs: '20px', md: '0' },
+                mt: { xs: '20px', md: '0' }
               }}>
               <Grid item xs={12} sx={{ fontSize: '20px', mb: '10px' }}>
                 Links
@@ -129,8 +128,10 @@ const Footer = () => {
                     cursor: 'pointer',
                     textDecoration: 'none',
                     color: '#828282',
-                    fontSize: '15px',
-                  }}>
+                    fontSize: '15px'
+                  }}
+                  to='/forbuyers?type=projects'
+                  component={RouterLink}>
                   Projects
                 </Link>
               </Grid>
@@ -140,8 +141,10 @@ const Footer = () => {
                     cursor: 'pointer',
                     textDecoration: 'none',
                     color: '#828282',
-                    fontSize: '15px',
-                  }}>
+                    fontSize: '15px'
+                  }}
+                  to='/forbuyers?type=apartments'
+                  component={RouterLink}>
                   Resale Homes
                 </Link>
               </Grid>
@@ -151,8 +154,10 @@ const Footer = () => {
                     cursor: 'pointer',
                     textDecoration: 'none',
                     color: '#828282',
-                    fontSize: '15px',
-                  }}>
+                    fontSize: '15px'
+                  }}
+                  to='/fortenants'
+                  component={RouterLink}>
                   Rent/Lease
                 </Link>
               </Grid>
@@ -162,7 +167,7 @@ const Footer = () => {
               item
               sx={{
                 width: { xs: '100%', md: '33.33%' },
-                mt: { xs: '20px', md: '0' },
+                mt: { xs: '20px', md: '0' }
               }}>
               <Grid item xs={12} sx={{ fontSize: '20px', mb: '10px' }}>
                 Legal
@@ -173,9 +178,11 @@ const Footer = () => {
                     cursor: 'pointer',
                     textDecoration: 'none',
                     color: '#828282',
-                    fontSize: '15px',
-                  }}>
-                  Terms of Use
+                    fontSize: '15px'
+                  }}
+                  to='/tnc'
+                  component={RouterLink}>
+                  Terms &amp; Conditions
                 </Link>
               </Grid>
               <Grid item xs={12} sx={{ mt: '15px' }}>
@@ -184,8 +191,10 @@ const Footer = () => {
                     cursor: 'pointer',
                     textDecoration: 'none',
                     color: '#828282',
-                    fontSize: '15px',
-                  }}>
+                    fontSize: '15px'
+                  }}
+                  to='/privacy'
+                  component={RouterLink}>
                   Privacy Policy
                 </Link>
               </Grid>
@@ -195,8 +204,10 @@ const Footer = () => {
                     cursor: 'pointer',
                     textDecoration: 'none',
                     color: '#828282',
-                    fontSize: '15px',
-                  }}>
+                    fontSize: '15px'
+                  }}
+                  to='/about'
+                  component={RouterLink}>
                   About
                 </Link>
               </Grid>
@@ -206,7 +217,7 @@ const Footer = () => {
               item
               sx={{
                 width: { xs: '100%', md: '33.33%' },
-                mt: { xs: '20px', md: '0' },
+                mt: { xs: '20px', md: '0' }
               }}>
               <Grid item xs={12} sx={{ fontSize: '20px', mb: '10px' }}>
                 Contact
@@ -217,7 +228,7 @@ const Footer = () => {
                     cursor: 'pointer',
                     textDecoration: 'none',
                     color: '#828282',
-                    fontSize: '15px',
+                    fontSize: '15px'
                   }}>
                   +91-1234567890
                 </Link>
@@ -228,7 +239,7 @@ const Footer = () => {
                     cursor: 'pointer',
                     textDecoration: 'none',
                     color: '#828282',
-                    fontSize: '15px',
+                    fontSize: '15px'
                   }}>
                   email@jaiambe.com
                 </Link>
@@ -239,7 +250,7 @@ const Footer = () => {
                 sx={{
                   mt: '15px',
                   display: 'flex',
-                  justifyContent: { xs: 'center', md: 'flex-start' },
+                  justifyContent: { xs: 'center', md: 'flex-start' }
                 }}>
                 <IconsWrapper>
                   {Icons}
@@ -268,7 +279,7 @@ const Footer = () => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            fontSize: '12px',
+            fontSize: '12px'
           }}>
           Created with love &nbsp;<span style={{ color: 'red' }}>♥</span> &nbsp;
           by Zenoholics. © 2021 All Rights Reserved

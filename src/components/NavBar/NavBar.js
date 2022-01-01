@@ -31,7 +31,7 @@ const pages = [
   { name: 'For Buyers', link: '/forbuyers' },
   { name: 'For Tenants', link: '/fortenants' },
   { name: 'About', link: '/about' },
-  { name: 'Contact Us', link: '/contactus' }
+  { name: 'Contact Us', link: '/contact' }
 ];
 
 // TODO: Change settings pages

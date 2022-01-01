@@ -19,6 +19,7 @@ import { login } from '../../redux/slices/auth/authSlice';
 import Background from '../../components/AuthBackground/AuthBackground';
 import { JInputField, JPasswordField } from '../../components/JInputField';
 import Loader from '../../components/Loader';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const LoginPage = () => {
   const [values, setValues] = useState({
@@ -73,7 +74,7 @@ const LoginPage = () => {
   };
 
   return (
-    <Grid container>
+    <Grid container sx={{ backgroundColor: 'white' }}>
       <Grid item container xs={12} sm={8} lg={6}>
         <Grid item xs={2} sm={2} lg={3} xl={4} />
         <Grid item xs={8} sm={8} lg={6} xl={4}>
@@ -85,6 +86,20 @@ const LoginPage = () => {
               height: '100%',
               justifyContent: 'center'
             }}>
+            <Link
+              underline='hover'
+              component={RouterLink}
+              variant='body2'
+              to='/'
+              sx={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                marginBottom: 2
+              }}>
+              <FaArrowLeft />
+              <Typography sx={{ marginLeft: 1 }}>Back to Home</Typography>
+            </Link>
+
             <Typography
               variant='h3'
               sx={{
