@@ -14,7 +14,7 @@ export const errorsSlice = createSlice({
   initialState,
   reducers: {
     createFormErrors: (state, action) => {
-      state.formErrors = action.payload;
+      state.formErrors = { ...action.payload };
     },
     clearFormErrors: (state) => {
       state.formErrors = {};

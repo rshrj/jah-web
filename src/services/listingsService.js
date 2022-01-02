@@ -46,17 +46,15 @@ export const addNewListing = async ({ type, ...listingFormData }) => {
 };
 
 export const getParticularListing = async (type, page = 1, size = 10) => {
- 
- 
   try {
     const res = await fetch(`${apiUrl}/listings/particular`, {
       method: 'POST',
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8',
+        'Content-Type': 'application/json;charset=UTF-8'
       },
-      body: JSON.stringify({type, page, size})
+      body: JSON.stringify({ type, page, size })
     });
 
     if (!res) {
@@ -154,11 +152,42 @@ export const getListingsFuzzy = async (query, type) => {
   }
 };
 
+export const getFeaturedListings = async () => {
+  try {
+    const res = await fetch(`${apiUrl}/listings/featured`, {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      }
+    });
+
+    if (!res) {
+      throw errorWithToast('Server did not respond');
+    }
+
+    const data = await res.json();
+    console.log(data);
+    if (!res.ok) {
+      throw new Error('Request error', { cause: data });
+    }
+
+    return data;
+  } catch (e) {
+    if (e instanceof TypeError && e.message === 'Failed to fetch') {
+      return rejectWithToast('Server is offline');
+    }
+    return Promise.reject(e);
+  }
+};
+
 const listingsService = {
   addNewListing,
   getListings,
   getListingsFuzzy,
   getParticularListing,
+  getFeaturedListings
 };
 
 export default listingsService;

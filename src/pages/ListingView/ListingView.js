@@ -38,9 +38,11 @@ import {
   setTopLoader,
   clearTopLoader
 } from '../../redux/slices/misc/miscSlice';
-import { shortenedPriceWords } from '../../utils/helpers';
+import { shortenedPrice, shortenedPriceWords } from '../../utils/helpers';
 import unitLabels from '../../constants/unitLabels';
 import otherRoomLabels from '../../constants/otherRoomLabels';
+import PropertyCard from '../../components/PropertyCard';
+import Footer from '../../components/Footer';
 
 const colors = [
   '#264653',
@@ -119,8 +121,12 @@ const SellApartmentListingView = () => {
 
   let listingA = useSelector((state) => state.listings.single);
 
-  let [loading, setLoading] = useState(false);
   let [backdropShown, setBackdropShown] = useState(false);
+
+  let loading = useSelector(
+    (state) => state.listings.fetchLoading === 'loading'
+  );
+  let content = useSelector((state) => state.listings.content);
 
   const handleGalleryClick = (e) => {
     e.preventDefault();
@@ -131,15 +137,6 @@ const SellApartmentListingView = () => {
   const handleCloseBackdrop = (e) => {
     setBackdropShown(false);
   };
-
-  useEffect(() => {
-    setLoading(true);
-    dispatch(setTopLoader());
-    setTimeout(() => {
-      setLoading(false);
-      dispatch(clearTopLoader());
-    }, 100);
-  }, [dispatch]);
 
   return (
     <>
@@ -497,6 +494,7 @@ const SellApartmentListingView = () => {
                     {listing.sellapartment.otherRooms.length > 0 &&
                       listing.sellapartment.otherRooms.map((room) => (
                         <Typography
+                          key={room}
                           variant='body1'
                           sx={{
                             marginLeft: 2,
@@ -796,80 +794,141 @@ const SellApartmentListingView = () => {
                   </Box>
                 </Box>
               </Grid>
-              <Grid item sm={3}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    p: 2,
-                    m: 1
-                  }}>
-                  <MdOutlineStairs
-                    style={{ marginTop: theme.spacing(1) }}
-                    fontSize={30}
-                    color={colors[9]}
-                  />
-                  <Box>
-                    <Typography
-                      variant='subtitle1'
-                      sx={{
-                        marginLeft: 2,
-                        color: 'text.secondary'
-                      }}>
-                      Floor Number
-                    </Typography>
-                    <Box sx={{ marginBottom: 1 }}>
-                      <Typography
-                        variant='body1'
-                        sx={{
-                          marginLeft: 2,
-                          color: 'text.primary'
-                        }}>
-                        {`${listing.sellapartment.propertyOnFloor} of ${listing.sellapartment.totalFloors} floors`}
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              </Grid>
-              <Grid item sm={3}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    p: 2,
-                    m: 1
-                  }}>
-                  <MdOutlineStairs
-                    style={{ marginTop: theme.spacing(1) }}
-                    fontSize={30}
-                    color={colors[9]}
-                  />
-                  <Box>
-                    <Typography
-                      variant='subtitle1'
-                      sx={{
-                        marginLeft: 2,
-                        color: 'text.secondary'
-                      }}>
-                      Floor Number
-                    </Typography>
-                    <Box sx={{ marginBottom: 1 }}>
-                      <Typography
-                        variant='body1'
-                        sx={{
-                          marginLeft: 2,
-                          color: 'text.primary'
-                        }}>
-                        {`${listing.sellapartment.propertyOnFloor} of ${listing.sellapartment.totalFloors} floors`}
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              </Grid>
             </Grid>
           </Grid>
+          <Grid container sx={{ mt: 2 }}>
+            <Grid item sm={6}>
+              <Typography
+                variant='subtitle1'
+                sx={{
+                  display: 'inline-block',
+                  color: 'text.secondary',
+                  marginRight: 2
+                }}>
+                Availability Status:
+              </Typography>
+              <Typography
+                variant='body1'
+                sx={{ display: 'inline-block', color: 'text.primary' }}>
+                Ready to Move
+              </Typography>
+            </Grid>
+            <Grid item sm={6}>
+              <Typography
+                variant='subtitle1'
+                sx={{
+                  display: 'inline-block',
+                  color: 'text.secondary',
+                  marginRight: 2
+                }}>
+                Ownership Type:
+              </Typography>
+              <Typography
+                variant='body1'
+                sx={{ display: 'inline-block', color: 'text.primary' }}>
+                Freehold
+              </Typography>
+            </Grid>
+          </Grid>
+
+          <Box sx={{ mt: 2 }}>
+            <Typography variant='h5' color='primary.main'>
+              Why should you buy this property?
+            </Typography>
+            <Typography variant='body1' color='text.secondary' sx={{ mt: 1 }}>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati
+              ipsum cumque ex exercitationem eos culpa vero, saepe nostrum ipsa
+              quae doloribus vel adipisci, est facilis, quasi alias ducimus
+              libero. Doloribus repudiandae adipisci sit deserunt voluptas
+              dolorum fuga magnam nesciunt odit excepturi at, aspernatur vitae
+              alias quidem delectus illo quibusdam dolorem odio dolore repellat
+              officiis et! Impedit odit recusandae labore quibusdam, assumenda
+              aliquam, harum debitis nihil sit autem delectus optio aspernatur
+              provident corrupti reiciendis cumque consectetur consequuntur
+              dolor sunt error? Ab nobis deserunt accusamus tempora odio tenetur
+              provident, nihil similique aut aspernatur impedit totam.
+              Consectetur, omnis quisquam repudiandae accusamus corrupti ipsam?
+            </Typography>
+          </Box>
+
+          <Box sx={{ mt: 2 }}>
+            <Typography variant='h3' color='primary.main' fontWeight='bold'>
+              Related Properties
+            </Typography>
+
+            <Box
+              sx={{
+                marginTop: 5,
+                display: 'flex',
+                justifyContent: 'center',
+                flexWrap: 'wrap'
+              }}>
+              {loading && (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    height: '100%',
+                    pt: 20,
+                    pb: 30,
+                    backgroundColor: theme.palette.grey[0]
+                  }}>
+                  <HashLoader
+                    color={theme.palette.primary.main}
+                    style={{ display: 'block', margin: '100px' }}
+                    size={150}
+                  />
+                </Box>
+              )}
+              {!loading && content.ids.length === 0 && (
+                <Typography
+                  variant='h3'
+                  sx={{
+                    fontWeight: 'bold',
+                    color: 'grey.500',
+                    pt: 20,
+                    pb: 30,
+                    textAlign: 'center'
+                  }}>
+                  Sorry! Not Found
+                </Typography>
+              )}
+              {!loading &&
+                content.ids.map((listingId) => {
+                  let type = content.listings[listingId].listingType;
+                  let image = content.listings[listingId][type].featuredPicture;
+                  let name = content.listings[listingId].name;
+                  let location = content.listings[listingId][type].location;
+                  let prices = [];
+
+                  if (type === 'rentlease') {
+                    prices[0] = content.listings[listingId][type].rent;
+                  } else if (type === 'sellapartment') {
+                    prices[0] = content.listings[listingId][type].price;
+                  } else {
+                    prices = content.listings[listingId][type].units.map(
+                      (u) => u.price
+                    );
+                  }
+
+                  return (
+                    <PropertyCard
+                      key={listingId}
+                      image={image}
+                      title={name}
+                      location={location}
+                      price={shortenedPrice(prices)}
+                    />
+                  );
+                })}
+            </Box>
+          </Box>
         </Container>
       )}
+      <Footer />
     </>
   );
 };

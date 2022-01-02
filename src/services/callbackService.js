@@ -4,15 +4,20 @@ import {
   errorWithToast
 } from '../utils/serviceHelpers';
 
-export const getTestimonials = async () => {
+export const submitCallBackRequest = async ({ name, phone, message }) => {
   try {
-    const res = await fetch(`${apiUrl}/testimonials/all`, {
-      method: 'GET',
+    const res = await fetch(`${apiUrl}/callbackrequests/new`, {
+      method: 'POST',
       mode: 'cors',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json;charset=UTF-8'
-      }
+      },
+      body: JSON.stringify({
+        name,
+        phone,
+        message
+      })
     });
 
     if (!res) {
@@ -21,6 +26,7 @@ export const getTestimonials = async () => {
 
     const data = await res.json();
     console.log(data);
+
     if (!res.ok) {
       throw new Error('Request error', { cause: data });
     }
@@ -34,6 +40,6 @@ export const getTestimonials = async () => {
   }
 };
 
-const testimonialsService = { getTestimonials };
+const callbackService = { submitCallBackRequest };
 
-export default testimonialsService;
+export default callbackService;

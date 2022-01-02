@@ -32,26 +32,45 @@ export const round = (value, decimals) => {
   return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
 };
 
-export const shortenedPriceWords = (price) => {
+export const shortenedPriceWords = (price, decimalDigits = 1, end = true) => {
   let priceNum = parseInt(price, 10);
   if (digitsIn(priceNum) === 4 || digitsIn(priceNum) === 5) {
-    return `${round(priceNum / 1000, 1)} K`;
+    let priceWords = `${round(priceNum / 1000, decimalDigits)}${
+      end ? ' K' : ''
+    }`;
+    return end ? priceWords : { price: priceWords, end: 'K' };
   }
   if (digitsIn(priceNum) === 6 || digitsIn(priceNum) === 7) {
-    return `${round(priceNum / 100000, 1)} L`;
+    let priceWords = `${round(priceNum / 100000, decimalDigits)}${
+      end ? ' L' : ''
+    }`;
+    return end ? priceWords : { price: priceWords, end: 'L' };
   }
   if (digitsIn(priceNum) >= 8) {
-    return `${round(priceNum / 10000000, 1)} Cr`;
+    let priceWords = `${round(priceNum / 10000000, decimalDigits)}${
+      end ? ' Cr' : ''
+    }`;
+    return end ? priceWords : { price: priceWords, end: 'Cr' };
   }
-  return `${round(priceNum, 1)}`;
+  let priceWords = `${round(priceNum, decimalDigits)}`;
+  return end ? priceWords : { price: priceWords, end: '' };
 };
 
-export const shortenedPrice = (prices) =>{
-  if(prices.length === 1){
+export const shortenedPrice = (prices) => {
+  if (prices.length === 1) {
     return shortenedPriceWords(prices[0]);
   } else {
     let min = Math.min(...prices);
     let max = Math.max(...prices);
-    return shortenedPriceWords(min) + '-' + shortenedPriceWords(max);
+    let typeMatch =
+      shortenedPriceWords(min, 0, false).end ===
+      shortenedPriceWords(max, 0, false).end;
+    return typeMatch
+      ? shortenedPriceWords(min, 0, false).price +
+          '-' +
+          shortenedPriceWords(max, 0, true)
+      : shortenedPriceWords(min, 0, true) +
+          '-' +
+          shortenedPriceWords(max, 0, true);
   }
-}
+};

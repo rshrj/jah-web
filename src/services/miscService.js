@@ -4,9 +4,9 @@ import {
   errorWithToast
 } from '../utils/serviceHelpers';
 
-export const getTestimonials = async () => {
+export const getHomeAd = async () => {
   try {
-    const res = await fetch(`${apiUrl}/testimonials/all`, {
+    const res = await fetch(`${apiUrl}/misc/homead`, {
       method: 'GET',
       mode: 'cors',
       headers: {
@@ -34,6 +34,6 @@ export const getTestimonials = async () => {
   }
 };
 
-const testimonialsService = { getTestimonials };
+const miscService = { getHomeAd };
 
-export default testimonialsService;
+export default miscService;

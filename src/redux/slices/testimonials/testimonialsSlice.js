@@ -11,8 +11,8 @@ const initialState = {
   fetchLoading: 'idle',
   content: {
     ids: [],
-    testimonials: {},
-  },
+    testimonials: {}
+  }
 };
 
 const getTestimonials = createAsyncThunk(
@@ -25,6 +25,7 @@ const getTestimonials = createAsyncThunk(
       dispatch(clearTopLoader());
       return data.payload;
     } catch (error) {
+      dispatch(clearTopLoader());
       console.log(error);
       error.cause?.toasts.forEach((toastMessage) =>
         dispatch(addToast({ type: 'error', message: toastMessage }))
@@ -39,20 +40,18 @@ export const testimonialsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-   
     builder.addCase(getTestimonials.pending, (state, action) => {
       state.fetchLoading = 'loading';
     });
     builder.addCase(getTestimonials.fulfilled, (state, action) => {
       state.fetchLoading = 'idle';
-      console.log(action.payload);
       state.content.testimonials = arrayToObject('_id', action.payload);
       state.content.ids = action.payload.map((listing) => listing._id);
     });
     builder.addCase(getTestimonials.rejected, (state, action) => {
       state.fetchLoading = 'idle';
     });
-  },
+  }
 });
 
 export { getTestimonials };

@@ -11,17 +11,28 @@ const initialState = {
   fetchLoading: 'idle',
   content: {
     ids: [],
-    listings: {},
+    listings: {}
   },
   single: {},
   buyproperties: {
     ids: [],
-    listings: {},
+    listings: {}
   },
   rentproperties: {
     ids: [],
-    listings: {},
+    listings: {}
   },
+
+  featured: {
+    buy: {
+      ids: [],
+      listings: {}
+    },
+    rent: {
+      ids: [],
+      listings: {}
+    }
+  }
 };
 
 const addNewListing = createAsyncThunk(
@@ -58,6 +69,29 @@ const getListings = createAsyncThunk(
       console.log(data.payload);
       return data.payload;
     } catch (error) {
+      if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
+        error.cause.toasts.forEach((toastMessage) =>
+          dispatch(addToast({ type: 'error', message: toastMessage }))
+        );
+      }
+
+      return Promise.reject(error);
+    }
+  }
+);
+
+const getFeaturedListings = createAsyncThunk(
+  'listings/getFeaturedListings',
+  async (arg, { dispatch }) => {
+    dispatch(setTopLoader());
+    try {
+      const data = await listingsService.getFeaturedListings();
+      dispatch(clearTopLoader());
+
+      return data.payload;
+    } catch (error) {
+      dispatch(clearTopLoader());
+      console.log(error.cause);
       if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
         error.cause.toasts.forEach((toastMessage) =>
           dispatch(addToast({ type: 'error', message: toastMessage }))
@@ -286,7 +320,23 @@ export const listingsSlice = createSlice({
     builder.addCase(getRentBuyProperties.rejected, (state, action) => {
       state.fetchLoading = 'idle';
     });
-  },
+
+    builder.addCase(getFeaturedListings.pending, (state, action) => {
+      state.fetchLoading = 'loading';
+    });
+    builder.addCase(getFeaturedListings.fulfilled, (state, action) => {
+      state.featured.buy.listings = arrayToObject('_id', action.payload.buy);
+      state.featured.buy.ids = action.payload.buy.map((listing) => listing._id);
+      state.featured.rent.listings = arrayToObject('_id', action.payload.rent);
+      state.featured.rent.ids = action.payload.rent.map(
+        (listing) => listing._id
+      );
+      state.fetchLoading = 'idle';
+    });
+    builder.addCase(getFeaturedListings.rejected, (state, action) => {
+      state.fetchLoading = 'idle';
+    });
+  }
 });
 
 export {
@@ -296,6 +346,7 @@ export {
   getListingsFuzzy,
   getBuyProperties,
   getRentBuyProperties,
+  getFeaturedListings
 };
 
 export default listingsSlice.reducer;
