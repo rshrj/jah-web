@@ -25,12 +25,7 @@ import {
 import { MdLocationOn } from 'react-icons/md';
 import { FaArrowRight, FaQuoteLeft } from 'react-icons/fa';
 import { alpha, useTheme } from '@mui/material/styles';
-<<<<<<< HEAD
-import { useNavigate } from 'react-router-dom';
-=======
-import { useSelector } from 'react-redux';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
->>>>>>> main
 
 import locations from '../../constants/locations.json';
 // import landing1 from '../../assets/vectors/landing-1.svg';

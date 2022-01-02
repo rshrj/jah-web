@@ -34,6 +34,7 @@ import ContactPage from './pages/ContactPage';
 import AboutPage from './pages/AboutPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import SubmitTestimonial from './pages/SubmitTestimonial/SubmitTestimonial';
+import HomeAd from './pages/HomeAd/HomeAd';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -90,6 +91,7 @@ const App = () => {
                 <Route path='newlisting' element={<NewListingPage />} />
                 <Route path='testimonials' element={<Testimonials />} />
                 <Route path='callbackrequests' element={<CallbackRequests />} />
+                <Route path='homead' element={<HomeAd />} />
               </Route>
             </Route>
             {/* Testing */}
