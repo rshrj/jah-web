@@ -25,7 +25,7 @@ import Footer from '../../components/Footer';
 import { MdLocationOn } from 'react-icons/md';
 import { useSearchParams } from 'react-router-dom';
 import { getListingsFuzzy } from '../../redux/slices/listings/listingsSlice';
-import { shortenedPriceWords, shortenedPrice } from '../../utils/helpers';
+import { shortenedPrice } from '../../utils/helpers';
 import { HashLoader } from 'react-spinners';
 
 const SearchCard = styled(Card)({
@@ -271,6 +271,8 @@ const GalleryView = ({ mode = 'buy', initTab = 0 }) => {
                 let prices =
                   type === 'sellapartment'
                     ? [content.listings[listingId][type].price]
+                    : type === 'rentlease'
+                    ? [content.listings[listingId][type].rent]
                     : content.listings[listingId][type].apartmentTypes.map(
                         (u) => content.listings[listingId][type].units[u].price
                       );

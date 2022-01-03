@@ -265,7 +265,7 @@ const FeaturedProperties = () => {
                 rentproperties.listings[listingId][type].featuredPicture;
               let name = rentproperties.listings[listingId].name;
               let location = rentproperties.listings[listingId][type].location;
-              let prices = [rentproperties.listings[listingId][type].price];
+              let prices = [rentproperties.listings[listingId][type].rent];
 
               return (
                 <PropertyCard
