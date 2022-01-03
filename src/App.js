@@ -34,6 +34,7 @@ import ContactPage from './pages/ContactPage';
 import AboutPage from './pages/AboutPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import SubmitTestimonial from './pages/SubmitTestimonial/SubmitTestimonial';
+import HomeAd from './pages/HomeAd/HomeAd';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -69,6 +70,7 @@ const App = () => {
           <Route path='/signup' element={<SignupPage />} />
           <Route path='/' element={<PublicPage />}>
             <Route index element={<LandingPage />} />
+            <Route path='home' element={<LandingPage />} />
             <Route path='listing/:listingId' element={<ListingView />} />
             <Route path='forbuyers' element={<GalleryView mode='buy' />} />
             <Route path='fortenants' element={<GalleryView mode='rent' />} />
@@ -84,9 +86,11 @@ const App = () => {
                   <DashboardPage />
                 </PrivateRoute>
               }>
+              <Route index element={<ListingsPage />} />
               <Route path='listings' element={<ListingsPage />} />
               <Route path='users' element={<Users />} />
               <Route path='myaccount' element={<MyAccount />} />
+              <Route path='homead' element={<HomeAd />} />
               <Route path='newlisting' element={<NewListingPage />} />
               <Route path='testimonials' element={<Testimonials />} />
               <Route path='callbackrequests' element={<CallbackRequests />} />

@@ -8,6 +8,7 @@ import listingsReducer from './slices/listings/listingsSlice';
 import usersReducer from './slices/users/usersSlice';
 import testimonialsReducer from './slices/testimonials/testimonialsSlice';
 import callbackReducer from './slices/callback/callbackSlice';
+import settingsReducer from './slices/settings/settingsSlice';
 
 const store = configureStore({
   reducer: {
@@ -18,7 +19,8 @@ const store = configureStore({
     listings: listingsReducer,
     users: usersReducer,
     testimonials: testimonialsReducer,
-    callback: callbackReducer
+    callback: callbackReducer,
+    settings: settingsReducer
   }
 });
 

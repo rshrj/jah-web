@@ -60,17 +60,17 @@ const GalleryView = ({ mode = 'buy', initTab = 0 }) => {
       return;
     }
     if (type === 'rentlease') {
-      dispatch(getListingsFuzzy({ query, type }));
+      dispatch(getListingsFuzzy({ query, type: [type] }));
       return;
     }
     if (type === 'sellproject') {
       setTab(0);
-      dispatch(getListingsFuzzy({ query, type }));
+      dispatch(getListingsFuzzy({ query, type: [type] }));
       return;
     }
     if (type === 'sellapartment') {
       setTab(1);
-      dispatch(getListingsFuzzy({ query, type }));
+      dispatch(getListingsFuzzy({ query, type: [type] }));
       return;
     }
   }, [dispatch, query, type]);
@@ -238,36 +238,42 @@ const GalleryView = ({ mode = 'buy', initTab = 0 }) => {
                 />
               </Box>
             )}
+
             {!loading && content.ids.length === 0 && (
-              <Typography
-                variant='h3'
+              <Box
                 sx={{
-                  fontWeight: 'bold',
-                  color: 'grey.500',
-                  pt: 20,
-                  pb: 30,
-                  textAlign: 'center'
+                  marginTop: 1,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  flexWrap: 'wrap',
+                  px: { xs: 0, sm: 15 }
                 }}>
-                Sorry! Not Found
-              </Typography>
+                <Typography
+                  variant='h3'
+                  sx={{
+                    fontWeight: 'bold',
+                    color: 'grey.500',
+                    textAlign: 'center',
+                    mb: 3
+                  }}>
+                  No properties at the moment :&#40;
+                </Typography>
+              </Box>
             )}
+
             {!loading &&
+              content.ids.length > 0 &&
               content.ids.map((listingId) => {
-                let type = content.listings[listingId].listingType;
+                let type = content.listings[listingId].type;
                 let image = content.listings[listingId][type].featuredPicture;
                 let name = content.listings[listingId].name;
                 let location = content.listings[listingId][type].location;
-                let price = [];
-
-                if (type === 'rentlease') {
-                  price[0] = content.listings[listingId][type].rent;
-                } else if (type === 'sellapartment') {
-                  price[0] = content.listings[listingId][type].price;
-                } else {
-                  price = content.listings[listingId][type].units.map(
-                    (u) => u.price
-                  );
-                }
+                let prices =
+                  type === 'sellapartment'
+                    ? [content.listings[listingId][type].price]
+                    : content.listings[listingId][type].units.map(
+                        (u) => u.price
+                      );
 
                 return (
                   <PropertyCard
@@ -275,7 +281,8 @@ const GalleryView = ({ mode = 'buy', initTab = 0 }) => {
                     image={image}
                     title={name}
                     location={location}
-                    price={shortenedPrice(price)}
+                    price={shortenedPrice(prices)}
+                    link={`/listing/${listingId}`}
                   />
                 );
               })}

@@ -10,18 +10,20 @@ import {
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { submitCallBackRequest } from '../../redux/slices/callback/callbackSlice';
+import { submitHomeAdChange } from '../../redux/slices/settings/settingsSlice';
 import { clearFormErrors } from '../../redux/slices/errors/errorsSlice';
 
 import { JInputField } from '../../components/JInputField';
 
-const CallBackRequest = () => {
+const HomeAd = () => {
   const dispatch = useDispatch();
 
   const [values, setValues] = useState({
-    name: '',
-    phone: '',
-    message: ''
+    title: '',
+    tagline: '',
+    image: '',
+    buttonTitle: '',
+    buttonLink: ''
   });
 
   const handleChange = (prop) => (event) => {
@@ -36,16 +38,18 @@ const CallBackRequest = () => {
     event.preventDefault();
 
     dispatch(
-      submitCallBackRequest({
-        name: values.name,
-        phone: values.phone,
-        message: values.message
+      submitHomeAdChange({
+        title: values.title,
+        tagline: values.tagline,
+        image: values.image,
+        buttonTitle: values.buttonTitle,
+        buttonLink: values.buttonLink
       })
     );
   };
 
   const errors = useSelector((state) => state.errors.formErrors);
-  const loading = useSelector((state) => state.callback.loading === 'loading');
+  const loading = useSelector((state) => state.settings.loading === 'loading');
 
   const isPhone = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
@@ -71,13 +75,13 @@ const CallBackRequest = () => {
               variant={isPhone ? 'h4' : 'h3'}
               color='primary.main'
               sx={{ marginBottom: 1 }}>
-              Request a Call Back
+              Home Ad
             </Typography>
             <Typography
               textAlign='center'
               variant={isPhone ? 'subtitle1' : 'h6'}
               color='text.secondary'>
-              Enter your details and query here. We will get back to you soon.
+              Enter the details below to update the ad on home page.
             </Typography>
           </Box>
 
@@ -85,12 +89,12 @@ const CallBackRequest = () => {
             <Grid item xs={12} sm={6}>
               <FormGroup>
                 <JInputField
-                  topLabel='Name'
-                  placeholder='Enter your name'
+                  topLabel='Title'
+                  placeholder='Enter the title'
                   spacing={0}
-                  value={values.name}
-                  handleChange={handleChange('name')}
-                  errors={errors['name']}
+                  value={values.title}
+                  handleChange={handleChange('title')}
+                  errors={errors['title']}
                   disabled={loading}
                 />
               </FormGroup>
@@ -98,12 +102,12 @@ const CallBackRequest = () => {
             <Grid item xs={12} sm={6}>
               <FormGroup>
                 <JInputField
-                  topLabel='Phone'
-                  placeholder='Enter your phone number'
+                  topLabel='Tagline'
+                  placeholder='Enter a tagline'
                   spacing={0}
-                  value={values.phone}
-                  handleChange={handleChange('phone')}
-                  errors={errors['phone']}
+                  value={values.tagline}
+                  handleChange={handleChange('tagline')}
+                  errors={errors['tagline']}
                   disabled={loading}
                 />
               </FormGroup>
@@ -111,12 +115,38 @@ const CallBackRequest = () => {
             <Grid item xs={12} sm={12}>
               <FormGroup>
                 <JInputField
-                  topLabel='Message'
-                  placeholder='"Please call me back"'
+                  topLabel='Image Link'
+                  placeholder='Please enter a link to the image'
                   spacing={0}
-                  value={values.message}
-                  handleChange={handleChange('message')}
-                  errors={errors['message']}
+                  value={values.image}
+                  handleChange={handleChange('image')}
+                  errors={errors['image']}
+                  disabled={loading}
+                />
+              </FormGroup>
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <FormGroup>
+                <JInputField
+                  topLabel='Button text'
+                  placeholder='Please enter the text to appear on the button'
+                  spacing={0}
+                  value={values.buttonTitle}
+                  handleChange={handleChange('buttonTitle')}
+                  errors={errors['buttonTitle']}
+                  disabled={loading}
+                />
+              </FormGroup>
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <FormGroup>
+                <JInputField
+                  topLabel='Button link'
+                  placeholder='Please enter the link that opens on button click'
+                  spacing={0}
+                  value={values.buttonLink}
+                  handleChange={handleChange('buttonLink')}
+                  errors={errors['buttonLink']}
                   disabled={loading}
                 />
               </FormGroup>
@@ -127,7 +157,7 @@ const CallBackRequest = () => {
                 sx={{ marginTop: 2, marginBottom: 5 }}
                 disabled={loading}
                 onClick={handleSubmit}>
-                Call Me
+                Submit
               </Button>
             </Grid>
           </Grid>
@@ -137,4 +167,4 @@ const CallBackRequest = () => {
   );
 };
 
-export default CallBackRequest;
+export default HomeAd;

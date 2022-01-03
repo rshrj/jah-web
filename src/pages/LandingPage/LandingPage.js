@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
   Box,
   styled,
-  CardMedia,
-  Grid,
   Typography,
   Button,
   Card,
@@ -17,37 +15,20 @@ import {
   OutlinedInput,
   Container,
   useMediaQuery,
-  Paper,
-  Avatar,
-  Pagination,
-  FormGroup
+  Paper
 } from '@mui/material';
 import { MdLocationOn } from 'react-icons/md';
-import { FaArrowRight, FaQuoteLeft } from 'react-icons/fa';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { alpha, useTheme } from '@mui/material/styles';
 
 import locations from '../../constants/locations.json';
 
 import landing1 from '../../assets/images/marketing.png';
-// import landing2 from '../../assets/vectors/landing-2.svg';
 import landing2 from '../../assets/images/trust.png';
-// import landing3 from '../../assets/vectors/landing-3.svg';
 import landing3 from '../../assets/images/best-deals.png';
-// import landing4 from '../../assets/vectors/landing-4.svg';
 import landing4 from '../../assets/images/stellar-performance.png';
 
-import { stringAvatar } from '../../utils/avatars';
-import { shortenedPrice } from '../../utils/helpers';
-import {
-  getBuyProperties,
-  getRentBuyProperties
-} from '../../redux/slices/listings/listingsSlice';
-
-import PropertyCard from '../../components/PropertyCard';
-import { JInputField } from '../../components/JInputField';
 import Footer from '../../components/Footer';
-import { getTestimonials } from '../../redux/slices/testimonials/testimonialsSlice';
 import Testimonials from './Testimonials';
 import CallBackRequest from './CallBackRequest';
 import FeaturedProperties from './FeaturedProperties';
@@ -65,24 +46,7 @@ const SearchCard = styled(Card)({
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const theme = useTheme();
-
-  useEffect(() => {
-    dispatch(getTestimonials());
-
-    dispatch(getRentBuyProperties({ page: 1, size: 4 }));
-
-    dispatch(getBuyProperties({ page: 1, size: 9 }));
-  }, [dispatch]);
-
-  const buyproperties = useSelector((state) => state.listings.buyproperties);
-  const rentproperties = useSelector((state) => state.listings.rentproperties);
-
-  let testimonials = useSelector((state) => state.testimonials.content);
-  let testimonialsLoading = useSelector(
-    (state) => state.testimonials.fetchLoading === 'loading'
-  );
 
   let [tab, setTab] = useState(0);
   const [searchInput, setSearchInput] = useState('');

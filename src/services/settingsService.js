@@ -4,20 +4,21 @@ import {
   errorWithToast
 } from '../utils/serviceHelpers';
 
-export const submitCallBackRequest = async (name, phone, message) => {
+export const submitHomeAdChange = async (formData) => {
+  let token = localStorage.getItem('token');
+  if (!token) {
+    return rejectWithToast('Not authorized to perform this action');
+  }
   try {
-    const res = await fetch(`${apiUrl}/callbackrequests/new`, {
+    const res = await fetch(`${apiUrl}/settings/homead`, {
       method: 'POST',
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({
-        name,
-        phone,
-        message
-      })
+      body: JSON.stringify(formData)
     });
 
     if (!res) {
@@ -40,6 +41,6 @@ export const submitCallBackRequest = async (name, phone, message) => {
   }
 };
 
-const callbackService = { submitCallBackRequest };
+const settingsService = { submitHomeAdChange };
 
-export default callbackService;
+export default settingsService;

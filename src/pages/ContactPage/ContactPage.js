@@ -1,11 +1,47 @@
+import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 import { Button, Container, FormGroup, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { JInputField } from '../../components/JInputField';
 
 import illustration from '../../assets/vectors/illustration.svg';
+import { clearFormErrors } from '../../redux/slices/errors/errorsSlice';
+import { submitCallBackRequest } from '../../redux/slices/callback/callbackSlice';
+
+import { JInputField } from '../../components/JInputField';
 import Footer from '../../components/Footer';
 
 const ContactPage = () => {
+  const dispatch = useDispatch();
+
+  const [values, setValues] = useState({
+    name: '',
+    phone: '',
+    message: ''
+  });
+
+  const handleChange = (prop) => (event) => {
+    if (Object.entries(errors).length !== 0) {
+      dispatch(clearFormErrors());
+    }
+
+    setValues({ ...values, [prop]: event.target.value });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    dispatch(
+      submitCallBackRequest({
+        name: values.name,
+        phone: values.phone,
+        message: values.message
+      })
+    );
+  };
+
+  const errors = useSelector((state) => state.errors.formErrors);
+  const loading = useSelector((state) => state.callback.loading === 'loading');
+
   return (
     <>
       <Container maxWidth='lg'>
@@ -42,6 +78,10 @@ const ContactPage = () => {
                   topLabel='Name'
                   placeholder='Enter your name'
                   spacing={0}
+                  value={values.name}
+                  handleChange={handleChange('name')}
+                  errors={errors['name']}
+                  disabled={loading}
                 />
               </FormGroup>
             </Grid>
@@ -51,6 +91,10 @@ const ContactPage = () => {
                   topLabel='Phone'
                   placeholder='Enter your phone number'
                   spacing={0}
+                  value={values.phone}
+                  handleChange={handleChange('phone')}
+                  errors={errors['phone']}
+                  disabled={loading}
                 />
               </FormGroup>
             </Grid>
@@ -60,13 +104,18 @@ const ContactPage = () => {
                   topLabel='Message'
                   placeholder='"Please call me back"'
                   spacing={0}
+                  value={values.message}
+                  handleChange={handleChange('message')}
+                  errors={errors['message']}
+                  disabled={loading}
                 />
               </FormGroup>
             </Grid>
             <Grid item xs={12} sm={12} textAlign='left'>
               <Button
                 variant='contained'
-                sx={{ marginTop: 2, marginBottom: 5 }}>
+                sx={{ marginTop: 2, marginBottom: 5 }}
+                onClick={handleSubmit}>
                 Call Me
               </Button>
             </Grid>

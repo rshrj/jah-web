@@ -631,8 +631,19 @@ const SellProjectForm = ({
           <Typography
             variant='h6'
             color='text.secondary'
-            sx={{ fontWeight: 'bold' }}>
-            Type of Apartment
+            sx={{
+              fontWeight: 'bold',
+              display: 'inline-block',
+              marginRight: 1
+            }}>
+            Type of Units
+            <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
+          </Typography>
+          <Typography
+            variant='body2'
+            color='text.secondary'
+            sx={{ fontWeight: 'normal', display: 'inline-block' }}>
+            (Select all applicable units in your project)
             <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
           </Typography>
         </FormLabel>

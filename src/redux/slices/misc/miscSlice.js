@@ -9,7 +9,8 @@ const initialState = {
     title: '',
     tagline: '',
     image: '',
-    buttonTitle: ''
+    buttonTitle: '',
+    buttonLink: ''
   }
 };
 
@@ -50,6 +51,7 @@ export const miscSlice = createSlice({
       state.homead.tagline = action.payload.tagline;
       state.homead.image = action.payload.image;
       state.homead.buttonTitle = action.payload.buttonTitle;
+      state.homead.buttonLink = action.payload.buttonLink;
     });
   }
 });

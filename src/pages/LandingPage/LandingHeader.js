@@ -1,4 +1,11 @@
-import { Button, CardMedia, Container, Grid, Typography } from '@mui/material';
+import {
+  Button,
+  CardMedia,
+  Container,
+  Grid,
+  Link,
+  Typography
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { useEffect } from 'react';
@@ -96,7 +103,13 @@ const LandingHeader = () => {
               {homead.tagline}
             </Typography>
             {homead.buttonTitle !== '' && (
-              <Button variant='contained' disableElevation>
+              <Button
+                variant='contained'
+                disableElevation
+                component={Link}
+                href={homead.buttonLink}
+                target='_blank'
+                rel='noopener noreferrer'>
                 {homead.buttonTitle}
               </Button>
             )}

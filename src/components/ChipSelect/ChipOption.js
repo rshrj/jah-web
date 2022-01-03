@@ -7,6 +7,8 @@ const ChipOption = ({
   onChange,
   color = 'default',
   label,
+  marginBottom = 1,
+  variant = 'outlined',
   ...rest
 }) => {
   const handleChange = (event) => {
@@ -28,9 +30,9 @@ const ChipOption = ({
       onClick={handleChange}
       onChange={onChange}
       color={selected ? 'primary' : 'default'}
-      variant='outlined'
+      variant={variant}
       label={label}
-      sx={{ marginBottom: 1 }}
+      sx={{ marginBottom }}
       {...rest}></Chip>
   );
 };

@@ -35,6 +35,28 @@ const getTestimonials = createAsyncThunk(
   }
 );
 
+const submitTestimonial = createAsyncThunk(
+  'testimonials/submitTestimonial',
+  async (formData, { dispatch }) => {
+    try {
+      const data = await testimonialsService.submitTestimonial(formData);
+
+      dispatch(addToast({ type: 'success', message: data.message }));
+    } catch (error) {
+      if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
+        error.cause.toasts.forEach((toastMessage) =>
+          dispatch(addToast({ type: 'error', message: toastMessage }))
+        );
+      }
+      if (error.cause.errors !== undefined || error.cause.errors !== {}) {
+        dispatch(createFormErrors(error.cause.errors));
+      }
+
+      return Promise.reject(error);
+    }
+  }
+);
+
 export const testimonialsSlice = createSlice({
   name: 'testimonials',
   initialState,
@@ -54,6 +76,6 @@ export const testimonialsSlice = createSlice({
   }
 });
 
-export { getTestimonials };
+export { getTestimonials, submitTestimonial };
 
 export default testimonialsSlice.reducer;

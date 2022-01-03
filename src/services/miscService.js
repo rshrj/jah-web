@@ -6,7 +6,7 @@ import {
 
 export const getHomeAd = async () => {
   try {
-    const res = await fetch(`${apiUrl}/misc/homead`, {
+    const res = await fetch(`${apiUrl}/settings/homead`, {
       method: 'GET',
       mode: 'cors',
       headers: {
