@@ -130,8 +130,9 @@ const FeaturedProperties = () => {
               let prices =
                 type === 'sellapartment'
                   ? [buyproperties.listings[listingId][type].price]
-                  : buyproperties.listings[listingId][type].units.map(
-                      (u) => u.price
+                  : buyproperties.listings[listingId][type].apartmentTypes.map(
+                      (u) =>
+                        buyproperties.listings[listingId][type].units[u].price
                     );
 
               return (

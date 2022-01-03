@@ -135,8 +135,12 @@ const ListingView = () => {
                   let prices =
                     type === 'sellapartment'
                       ? [relatedProperties.listings[listingId][type].price]
-                      : relatedProperties.listings[listingId][type].units.map(
-                          (u) => u.price
+                      : relatedProperties.listings[listingId][
+                          type
+                        ].apartmentTypes.map(
+                          (u) =>
+                            relatedProperties.listings[listingId][type].units[u]
+                              .price
                         );
 
                   return (

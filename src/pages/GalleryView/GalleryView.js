@@ -271,8 +271,8 @@ const GalleryView = ({ mode = 'buy', initTab = 0 }) => {
                 let prices =
                   type === 'sellapartment'
                     ? [content.listings[listingId][type].price]
-                    : content.listings[listingId][type].units.map(
-                        (u) => u.price
+                    : content.listings[listingId][type].apartmentTypes.map(
+                        (u) => content.listings[listingId][type].units[u].price
                       );
 
                 return (
