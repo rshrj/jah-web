@@ -1,5 +1,4 @@
 export const arrayToObject = (key, array) => {
-  console.log(array);
   if (!Array.isArray(array)) {
     throw new TypeError('Object provided is not an array');
   }

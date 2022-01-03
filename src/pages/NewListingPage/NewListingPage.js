@@ -70,6 +70,7 @@ const NewListingPage = () => {
       priceNegotiable: false,
       numBathrooms: '1',
       numBalconies: '1',
+      carpetArea: '',
       builtUpArea: '',
       superBuiltUpArea: '',
       otherRooms: [],

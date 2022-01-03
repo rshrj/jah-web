@@ -23,7 +23,7 @@ import { Box } from '@mui/system';
 import { FaArrowCircleRight, FaTimes } from 'react-icons/fa';
 import { ToWords } from 'to-words';
 
-import locationOptions from './locationOptions.json';
+import locationOptions from '../../constants/locations.json';
 import unitLabels from '../../constants/unitLabels';
 
 import { ChipOption, ChipSelect } from '../../components/ChipSelect';
@@ -495,6 +495,17 @@ const SellProjectForm = ({
   disabled = false
 }) => {
   const isPhone = useMediaQuery('(min-width:600px)');
+  const [autoVal, setAutoVal] = useState({
+    location: '',
+    propertyOnFloor: ''
+  });
+
+  const handleAutoValChange = (prop) => (event, newVal) => {
+    setAutoVal({
+      ...autoVal,
+      [prop]: newVal
+    });
+  };
 
   const handleToggle = (prop) => (event, newVal) => {
     if (!onChange) {
@@ -600,10 +611,11 @@ const SellProjectForm = ({
         }
         options={locationOptions}
         spacing={5}
-        placeholder='Where is the project located?'
-        value={values.location}
-        handleChange={handleChange('location')}
-        disabled={false}
+        placeholder='Where is your property located?'
+        inputValue={values.location}
+        value={autoVal.location}
+        onChange={handleAutoValChange('location')}
+        onInputChange={handleToggle('location')}
       />
 
       <JInputField

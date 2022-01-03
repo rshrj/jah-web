@@ -83,10 +83,6 @@ const UploadZone = ({
 }) => {
   const theme = useTheme();
 
-  useEffect(() => {
-    console.log(files);
-  }, [files]);
-
   const handleChange = (e) => {
     if (!onFilesChange) {
       return;

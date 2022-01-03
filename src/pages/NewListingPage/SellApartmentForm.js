@@ -24,7 +24,7 @@ import { FaArrowCircleRight, FaTimes } from 'react-icons/fa';
 import { ToWords } from 'to-words';
 
 import floorOptions from './floorOptions.json';
-import locationOptions from './locationOptions.json';
+import locationOptions from '../../constants/locations.json';
 import unitLabels from '../../constants/unitLabels';
 
 import { ChipOption, ChipSelect } from '../../components/ChipSelect';
@@ -48,7 +48,7 @@ const toWords = new ToWords({
   }
 });
 
-const genOptions = (initOptions, totalCount) => {
+const genOptions = (totalCount) => {
   let count =
     totalCount === undefined ||
     totalCount === '' ||
@@ -120,6 +120,17 @@ const SellApartmentForm = ({
 
   const [addBuiltUpArea, setAddBuiltUpArea] = useState(false);
   const [addSuperBuiltUpArea, setAddSuperBuiltUpArea] = useState(false);
+  const [autoVal, setAutoVal] = useState({
+    location: '',
+    propertyOnFloor: ''
+  });
+
+  const handleAutoValChange = (prop) => (event, newVal) => {
+    setAutoVal({
+      ...autoVal,
+      [prop]: newVal
+    });
+  };
 
   const handleToggle = (prop) => (event, newVal) => {
     if (!onChange) {
@@ -245,9 +256,10 @@ const SellApartmentForm = ({
         options={locationOptions}
         spacing={5}
         placeholder='Where is your property located?'
-        value={values.location}
-        handleChange={handleChange('location')}
-        disabled={false}
+        inputValue={values.location}
+        value={autoVal.location}
+        onChange={handleAutoValChange('location')}
+        onInputChange={handleToggle('location')}
       />
 
       <JInputField
@@ -757,16 +769,20 @@ const SellApartmentForm = ({
           )}
 
           <Autocomplete
-            disablePortal
-            options={genOptions(floorOptions, values.totalFloors)}
+            freeSolo
+            onInputChange={handleToggle('propertyOnFloor')}
+            onChange={handleAutoValChange('propertyOnFloor')}
+            inputValue={values.propertyOnFloor}
+            value={autoVal.propertyOnFloor}
+            options={genOptions(values.totalFloors)}
             renderInput={(params) => (
-              <TextField
-                {...params}
-                error={undefined !== undefined}
-                value={values.propertyOnFloor}
-                onChange={handleChange('propertyOnFloor')}
-                label='Property on Floor'
-              />
+              <FormControl ref={params.InputProps.ref} sx={{ width: '100%' }}>
+                <TextField
+                  error={undefined !== undefined}
+                  inputProps={{ ...params.inputProps }}
+                  label='Property on Floor'
+                />
+              </FormControl>
             )}
             sx={{ width: '48%' }}
           />
