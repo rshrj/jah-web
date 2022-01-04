@@ -3,7 +3,14 @@ import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { useState } from 'react';
-import { FaBuilding, FaEdit, FaEye, FaTrash } from 'react-icons/fa';
+import {
+  FaBuilding,
+  FaEdit,
+  FaEye,
+  FaTrash,
+  FaCheck,
+  FaTimes,
+} from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getListings } from '../../redux/slices/listings/listingsSlice';
@@ -82,16 +89,16 @@ const listings = [
         'https://i.picsum.photos/id/182/800/600.jpg?hmac=tljGSjfYZx-pg_MFSQUL-Emf_FGXS3FCXB3nlEBYFtY',
         'https://i.picsum.photos/id/699/500/900.jpg?hmac=CC4usCtofVGSafR68gmrqfIoqKyUeWbqDfGXNlsnBMI',
         'https://i.picsum.photos/id/689/800/600.jpg?hmac=9Ewgx9LpNR5YK4XHAXstG8gMaBlRyWG-EirYYVkaEVU',
-        'https://i.picsum.photos/id/187/600/800.jpg?hmac=TtgRrLawCBefKSnxolzreh-dUucf0jxrfN0cQJ4Vmzg'
+        'https://i.picsum.photos/id/187/600/800.jpg?hmac=TtgRrLawCBefKSnxolzreh-dUucf0jxrfN0cQJ4Vmzg',
       ],
       featuredPicture:
         'https://i.picsum.photos/id/164/800/600.jpg?hmac=PXOkqOXBrKf4yZjDeJ3q5KtnTSFO4DOIJKNhBRDlKiY',
       videoLink:
-        'https://www.youtube.com/watch?v=2YBtspm8j8M&ab_channel=Dissolve'
+        'https://www.youtube.com/watch?v=2YBtspm8j8M&ab_channel=Dissolve',
     },
     createdBy: '61c86363686210e7fe8ffde0',
-    createdAt: Date.now()
-  }
+    createdAt: Date.now(),
+  },
 ];
 
 const columns = [
@@ -105,7 +112,7 @@ const columns = [
       <Box
         sx={{
           display: 'inline-flex',
-          alignItems: 'center'
+          alignItems: 'center',
         }}>
         <FaBuilding color='orange' />
         <Typography
@@ -115,14 +122,14 @@ const columns = [
           {params.value}
         </Typography>
       </Box>
-    )
+    ),
   },
   {
     field: 'postedBy',
     headerName: 'Posted By',
     description:
       'Customer who posted the property (click to open their profile)',
-    flex: 1
+    flex: 1,
   },
   {
     field: 'state',
@@ -144,16 +151,16 @@ const columns = [
           ? 'Deactivated'
           : 'Pending'}
       </Typography>
-    )
+    ),
   },
   {
     field: 'createdAt',
     headerName: 'Created At',
     description: 'Time of listing creation',
-    flex: 1
+    flex: 1,
   },
   {
-    field: 'type',
+    field: 'listingType',
     headerName: 'Type',
     description: 'Type of listing',
     type: 'singleSelect',
@@ -166,7 +173,7 @@ const columns = [
           {listingObject[params.value].label}
         </Typography>
       );
-    }
+    },
   },
   {
     field: 'actions',
@@ -175,11 +182,13 @@ const columns = [
     headerName: 'Actions',
     description: 'View, Edit, Delete buttons',
     getActions: (params) => [
+      <GridActionsCellItem icon={<FaCheck />} />,
+      <GridActionsCellItem icon={<FaTimes />} />,
       <GridActionsCellItem icon={<FaEye />} />,
       <GridActionsCellItem icon={<FaEdit />} />,
-      <GridActionsCellItem icon={<FaTrash />} />
-    ]
-  }
+      <GridActionsCellItem icon={<FaTrash />} />,
+    ],
+  },
 ];
 
 const ListingsPage = () => {
@@ -208,18 +217,23 @@ const ListingsPage = () => {
         m: { xs: 0, md: 1 },
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
       }}>
       <Typography
         variant='h4'
         sx={{
           textAlign: 'center',
           color: 'primary.main',
-          marginBottom: 3
+          marginBottom: 3,
         }}>
         Listings
       </Typography>
-      <Box sx={{ display: 'flex', height: 600, width: '70%' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          height: 600,
+          width: { xs: '100%', sm: '100%', md: '80%', lg: '80%' },
+        }}>
         <Box sx={{ flexGrow: 1 }}>
           <DataGrid
             // TODO: set default page size to 10 rows per page
@@ -227,9 +241,9 @@ const ListingsPage = () => {
             rows={data}
             sx={{
               '& .MuiDataGrid-iconSeparator': {
-                visibility: 'hidden'
+                visibility: 'hidden',
               },
-              border: 'none'
+              border: 'none',
             }}
           />
         </Box>
