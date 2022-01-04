@@ -33,7 +33,7 @@ const sortTypes = (types) => {
     return allTypesInOrder.indexOf(type1) - allTypesInOrder.indexOf(type2);
   };
 
-  return types.sort(sortFunc);
+  return types.slice().sort(sortFunc);
 };
 
 const SellProjectView = ({ listing }) => {
