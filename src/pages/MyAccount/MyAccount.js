@@ -1,4 +1,4 @@
-import { Avatar, Paper, Typography } from '@mui/material';
+import { Avatar, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useSelector } from 'react-redux';
 
@@ -17,7 +17,6 @@ const MyAccount = () => {
             fontSize: 40,
             marginRight: 4
           })}
-          src={user.avatar || ''}
         />
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
           <Typography variant='h4'>{`${user.name.first} ${user.name.last}`}</Typography>

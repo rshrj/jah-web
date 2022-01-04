@@ -1,173 +1,169 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import {
-  FormGroup,
-  Typography,
-  FormControl,
-  Button,
   Box,
-  FormLabel,
-  lighten,
+  Button,
+  Container,
+  FormGroup,
+  Grid,
+  Typography,
+  useMediaQuery
 } from '@mui/material';
-import UploadZone from '../../components/UploadZone';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { submitHomeAdChange } from '../../redux/slices/settings/settingsSlice';
+import { clearFormErrors } from '../../redux/slices/errors/errorsSlice';
+
 import { JInputField } from '../../components/JInputField';
-import { FaArrowCircleRight } from 'react-icons/fa';
-import Loader from '../../components/Loader';
 
 const HomeAd = () => {
-    const loading = useSelector(
-      (state) => state.listings.loading === 'loading'
-    );
+  const dispatch = useDispatch();
 
   const [values, setValues] = useState({
-    projectName: '',
+    title: '',
     tagline: '',
-    buttonLink: '',
-    picture: [],
-    featuredPicture:'',
+    image: '',
+    buttonTitle: '',
+    buttonLink: ''
   });
 
-
-
   const handleChange = (prop) => (event) => {
-    //    if (Object.entries(errors).length !== 0) {
-    //  dispatch(clearFormErrors());
-    //    }
-       setValues({ ...values, [prop]: event.target.value });
+    if (Object.entries(errors).length !== 0) {
+      dispatch(clearFormErrors());
+    }
+
+    setValues({ ...values, [prop]: event.target.value });
   };
 
-  const handleFilesChange = (event, newFiles) => {
-   
-    setValues({
-      ...values,
-      picture: newFiles
-    });
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    dispatch(
+      submitHomeAdChange({
+        title: values.title,
+        tagline: values.tagline,
+        image: values.image,
+        buttonTitle: values.buttonTitle,
+        buttonLink: values.buttonLink
+      })
+    );
   };
 
-  const handleSelectedFileChange = (event, file) => {
- 
-    setValues({
-      ...values,
-      featuredPicture: file
-    });
-  };
+  const errors = useSelector((state) => state.errors.formErrors);
+  const loading = useSelector((state) => state.settings.loading === 'loading');
 
-   const handleSubmit = (event) => {
-     event.preventDefault();
-
-    
-   };
+  const isPhone = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
   return (
-    <>
-      <Box
-        justifyContent='center'
-        sx={{
-          margin: 'auto',
-          width: { sm: '100%', md: '50%', lg: '50%', xl: '40%' },
-        }}>
-        <Typography
-          variant='h4'
+    <Box
+      sx={{
+        backgroundColor: 'common.white'
+      }}>
+      <Container maxWidth='xl'>
+        <Box
           sx={{
-            marginBottom: 4,
-            fontWeight: 'bold',
-            textAlign:'center'
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+            width: '100%',
+            paddingTop: 5,
+            px: { xs: 0, sm: 15 }
           }}>
-          Home Ad
-        </Typography>
+          <Box sx={{}}>
+            <Typography
+              textAlign='center'
+              variant={isPhone ? 'h4' : 'h3'}
+              color='primary.main'
+              sx={{ marginBottom: 1 }}>
+              Home Ad
+            </Typography>
+            <Typography
+              textAlign='center'
+              variant={isPhone ? 'subtitle1' : 'h6'}
+              color='text.secondary'>
+              Enter the details below to update the ad on home page.
+            </Typography>
+          </Box>
 
-        <FormGroup>
-          <JInputField
-            topLabel={
-              <Typography
-                variant='body1'
-                color='text.secondary'
-                sx={{ fontWeight: 'bold' }}>
-                Project Name
-                <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
-              </Typography>
-            }
-            placeholder='Enter the project name'
-            value={values.projectName}
-            spacing={2}
-            handleChange={handleChange('projectName')}
-            disabled={false}
-          />
-          <JInputField
-            topLabel={
-              <Typography
-                variant='body1'
-                color='text.secondary'
-                sx={{ fontWeight: 'bold' }}>
-                Tag Line
-                <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
-              </Typography>
-            }
-            placeholder='Enter the tag line'
-            value={values.tagline}
-            spacing={2}
-            handleChange={handleChange('tagline')}
-            disabled={false}
-          />
-          <JInputField
-            topLabel={
-              <Typography
-                variant='body1'
-                color='text.secondary'
-                sx={{ fontWeight: 'bold' }}>
-                Button Link
-                <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
-              </Typography>
-            }
-            placeholder='Enter the tag line'
-            value={values.buttonLink}
-            spacing={2}
-            handleChange={handleChange('buttonLink')}
-            disabled={false}
-          />
-          <FormControl sx={{ marginBottom: 5 }}>
-            <FormLabel
-              sx={{
-                color: 'text.primary',
-                marginBottom: 1,
-              }}>
-              <Typography
-                variant='body1'
-                color='text.secondary'
-                sx={{ fontWeight: 'bold' }}>
-                Add a picture for Ad
-                <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
-              </Typography>
-            </FormLabel>
-            <UploadZone
-              multiple={false}
-              files={values.picture}
-              selectedFile={values.picture}
-              onFilesChange={handleFilesChange}
-              onSelectedFileChange={handleSelectedFileChange}
-              label1='Drag and drop or click to choose file'
-              label2='Select the uploaded image.'
-              accept='image/*'
-            />
-          </FormControl>
-          <FormControl
-            sx={{
-              display: 'flex',
-              justifyContents: 'center',
-              alignItems: 'center',
-            }}>
-            <Button
-              disabled={loading}
-              variant='contained'
-              sx={{ width: 200, textAlign: 'center' }}
-              endIcon={<FaArrowCircleRight />}
-              onClick={handleSubmit}>
-              {loading ? <Loader /> : 'Submit'}
-            </Button>
-          </FormControl>
-        </FormGroup>
-      </Box>
-    </>
+          <Grid container spacing={2} sx={{ marginTop: 3, maxWidth: 600 }}>
+            <Grid item xs={12} sm={6}>
+              <FormGroup>
+                <JInputField
+                  topLabel='Title'
+                  placeholder='Enter the title'
+                  spacing={0}
+                  value={values.title}
+                  handleChange={handleChange('title')}
+                  errors={errors['title']}
+                  disabled={loading}
+                />
+              </FormGroup>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormGroup>
+                <JInputField
+                  topLabel='Tagline'
+                  placeholder='Enter a tagline'
+                  spacing={0}
+                  value={values.tagline}
+                  handleChange={handleChange('tagline')}
+                  errors={errors['tagline']}
+                  disabled={loading}
+                />
+              </FormGroup>
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <FormGroup>
+                <JInputField
+                  topLabel='Image Link'
+                  placeholder='Please enter a link to the image'
+                  spacing={0}
+                  value={values.image}
+                  handleChange={handleChange('image')}
+                  errors={errors['image']}
+                  disabled={loading}
+                />
+              </FormGroup>
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <FormGroup>
+                <JInputField
+                  topLabel='Button text'
+                  placeholder='Please enter the text to appear on the button'
+                  spacing={0}
+                  value={values.buttonTitle}
+                  handleChange={handleChange('buttonTitle')}
+                  errors={errors['buttonTitle']}
+                  disabled={loading}
+                />
+              </FormGroup>
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <FormGroup>
+                <JInputField
+                  topLabel='Button link'
+                  placeholder='Please enter the link that opens on button click'
+                  spacing={0}
+                  value={values.buttonLink}
+                  handleChange={handleChange('buttonLink')}
+                  errors={errors['buttonLink']}
+                  disabled={loading}
+                />
+              </FormGroup>
+            </Grid>
+            <Grid item xs={12} sm={12} textAlign='center'>
+              <Button
+                variant='contained'
+                sx={{ marginTop: 2, marginBottom: 5 }}
+                disabled={loading}
+                onClick={handleSubmit}>
+                Submit
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+      </Container>
+    </Box>
   );
 };
 

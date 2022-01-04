@@ -32,7 +32,8 @@ const DashboardPage = () => {
       <Box
         sx={{
           display: 'flex',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          backgroundColor: 'common.white'
         }}>
         <Sidebar />
 

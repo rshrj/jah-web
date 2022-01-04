@@ -11,29 +11,43 @@ const initialState = {
   fetchLoading: 'idle',
   content: {
     ids: [],
-    listings: {},
+    listings: {}
   },
   single: {},
   buyproperties: {
     ids: [],
-    listings: {},
+    listings: {}
   },
   rentproperties: {
     ids: [],
-    listings: {},
+    listings: {}
   },
+
+  featured: {
+    buy: {
+      ids: [],
+      listings: {}
+    },
+    rent: {
+      ids: [],
+      listings: {}
+    }
+  }
 };
 
 const addNewListing = createAsyncThunk(
   'listings/addNewListing',
   async ({ navigate, listing }, { dispatch }) => {
+    dispatch(setTopLoader());
     try {
       const data = await listingsService.addNewListing(listing);
+      dispatch(clearTopLoader());
 
       dispatch(addToast({ type: 'success', message: data.message }));
       navigate(`/dashboard/listing/${data.payload.id}`);
       return data.payload;
     } catch (error) {
+      dispatch(clearTopLoader());
       if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
         error.cause.toasts.forEach((toastMessage) =>
           dispatch(addToast({ type: 'error', message: toastMessage }))
@@ -58,6 +72,29 @@ const getListings = createAsyncThunk(
       console.log(data.payload);
       return data.payload;
     } catch (error) {
+      if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
+        error.cause.toasts.forEach((toastMessage) =>
+          dispatch(addToast({ type: 'error', message: toastMessage }))
+        );
+      }
+
+      return Promise.reject(error);
+    }
+  }
+);
+
+const getFeaturedListings = createAsyncThunk(
+  'listings/getFeaturedListings',
+  async (arg, { dispatch }) => {
+    dispatch(setTopLoader());
+    try {
+      const data = await listingsService.getFeaturedListings();
+      dispatch(clearTopLoader());
+
+      return data.payload;
+    } catch (error) {
+      dispatch(clearTopLoader());
+      console.log(error.cause);
       if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
         error.cause.toasts.forEach((toastMessage) =>
           dispatch(addToast({ type: 'error', message: toastMessage }))
@@ -119,12 +156,34 @@ const getRentBuyProperties = createAsyncThunk(
   }
 );
 
-const getListingById = createAsyncThunk(
-  'listings/getListingById',
+const getPublicListingById = createAsyncThunk(
+  'listings/getPublicListingById',
   async (listingId, { dispatch }) => {
     dispatch(setTopLoader());
     try {
-      const data = await listingsService.getListingById(listingId);
+      const data = await listingsService.getPublicListingById(listingId);
+
+      dispatch(clearTopLoader());
+      return data.payload;
+    } catch (error) {
+      dispatch(clearTopLoader());
+      if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
+        error.cause.toasts.forEach((toastMessage) =>
+          dispatch(addToast({ type: 'error', message: toastMessage }))
+        );
+      }
+
+      return Promise.reject(error);
+    }
+  }
+);
+
+const getRelatedListings = createAsyncThunk(
+  'listings/getRelatedListings',
+  async (listingId, { dispatch }) => {
+    dispatch(setTopLoader());
+    try {
+      const data = await listingsService.getRelatedListings(listingId);
 
       dispatch(clearTopLoader());
       return data.payload;
@@ -242,14 +301,25 @@ export const listingsSlice = createSlice({
     builder.addCase(getListings.rejected, (state, action) => {
       state.fetchLoading = 'idle';
     });
-    builder.addCase(getListingById.pending, (state, action) => {
+    builder.addCase(getPublicListingById.pending, (state, action) => {
       state.fetchLoading = 'loading';
     });
-    builder.addCase(getListingById.fulfilled, (state, action) => {
+    builder.addCase(getPublicListingById.fulfilled, (state, action) => {
       state.fetchLoading = 'idle';
-      state.single = action.payload;
+      state.single = { ...action.payload };
     });
-    builder.addCase(getListingById.rejected, (state, action) => {
+    builder.addCase(getPublicListingById.rejected, (state, action) => {
+      state.fetchLoading = 'idle';
+    });
+    builder.addCase(getRelatedListings.pending, (state, action) => {
+      state.fetchLoading = 'loading';
+    });
+    builder.addCase(getRelatedListings.fulfilled, (state, action) => {
+      state.content.listings = arrayToObject('_id', action.payload);
+      state.content.ids = action.payload.map((listing) => listing._id);
+      state.fetchLoading = 'idle';
+    });
+    builder.addCase(getRelatedListings.rejected, (state, action) => {
       state.fetchLoading = 'idle';
     });
 
@@ -286,16 +356,34 @@ export const listingsSlice = createSlice({
     builder.addCase(getRentBuyProperties.rejected, (state, action) => {
       state.fetchLoading = 'idle';
     });
-  },
+
+    builder.addCase(getFeaturedListings.pending, (state, action) => {
+      state.fetchLoading = 'loading';
+    });
+    builder.addCase(getFeaturedListings.fulfilled, (state, action) => {
+      state.featured.buy.listings = arrayToObject('_id', action.payload.buy);
+      state.featured.buy.ids = action.payload.buy.map((listing) => listing._id);
+      state.featured.rent.listings = arrayToObject('_id', action.payload.rent);
+      state.featured.rent.ids = action.payload.rent.map(
+        (listing) => listing._id
+      );
+      state.fetchLoading = 'idle';
+    });
+    builder.addCase(getFeaturedListings.rejected, (state, action) => {
+      state.fetchLoading = 'idle';
+    });
+  }
 });
 
 export {
   addNewListing,
   getListings,
-  getListingById,
+  getPublicListingById,
   getListingsFuzzy,
   getBuyProperties,
   getRentBuyProperties,
+  getFeaturedListings,
+  getRelatedListings
 };
 
 export default listingsSlice.reducer;

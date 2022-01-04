@@ -12,6 +12,8 @@ import {
   FaLinkedinIn
 } from 'react-icons/fa';
 
+import contactInfo from '../../constants/contactInfo.json';
+
 const Icon = styled.div`
   width: 30px;
   height: 30px;
@@ -229,8 +231,9 @@ const Footer = () => {
                     textDecoration: 'none',
                     color: '#828282',
                     fontSize: '15px'
-                  }}>
-                  +91-1234567890
+                  }}
+                  href={`tel:${contactInfo.phone}`}>
+                  {contactInfo.phone}
                 </Link>
               </Grid>
               <Grid item xs={12} sx={{ mt: '15px' }}>
@@ -240,8 +243,9 @@ const Footer = () => {
                     textDecoration: 'none',
                     color: '#828282',
                     fontSize: '15px'
-                  }}>
-                  email@jaiambe.com
+                  }}
+                  href={`mailto:${contactInfo.email}`}>
+                  {contactInfo.email}
                 </Link>
               </Grid>
               <Grid

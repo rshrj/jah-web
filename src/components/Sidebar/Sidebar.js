@@ -11,22 +11,19 @@ import {
 import {
   FaBell,
   FaCheck,
-  FaChevronCircleLeft,
-  FaChevronCircleRight,
-  FaEllipsisV,
   FaList,
   FaPlus,
   FaUser,
-  FaPhoneAlt,
+  FaPhoneAlt
 } from 'react-icons/fa';
 import { Box } from '@mui/system';
 import { useTheme, lighten } from '@mui/material/styles';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { stringAvatar } from '../../utils/avatars';
-import { MdArrowLeft, MdArrowRight, MdMenu, MdMenuOpen } from 'react-icons/md';
+import { MdMenuOpen } from 'react-icons/md';
 
 export const adminPages = [
   { id: 1, name: 'Listings', icon: FaList, to: '/dashboard/listings' },
@@ -37,8 +34,8 @@ export const adminPages = [
     id: 5,
     name: 'Callback Requests',
     icon: FaPhoneAlt,
-    to: '/dashboard/callbackrequests',
-  },
+    to: '/dashboard/callbackrequests'
+  }
 ];
 
 export const customerPages = [
@@ -202,10 +199,7 @@ const Sidebar = () => {
               backgroundColor: collapsed ? 'inherit' : 'grey.50',
               borderRadius: 10
             }}>
-            <Avatar
-              {...stringAvatar(`${name.first} ${name.last}`)}
-              src='/static/images/avatar/2.jpg'
-            />
+            <Avatar {...stringAvatar(`${name.first} ${name.last}`)} />
             {!collapsed && (
               <Typography
                 variant='subtitle1'
@@ -270,18 +264,6 @@ const Sidebar = () => {
       </Box>
 
       <Divider orientation='vertical' flexItem />
-    </Box>
-  );
-
-  let blah = (
-    <Box
-      sx={{
-        position: 'sticky',
-        top: 80,
-        height: '100px',
-        backgroundColor: 'pink'
-      }}>
-      abracadabra
     </Box>
   );
 };

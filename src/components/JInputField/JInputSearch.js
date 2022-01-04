@@ -9,44 +9,57 @@ import {
 const JInputSearch = ({
   options,
   errors,
-  handleChange,
   value,
+  inputValue,
+  onChange,
+  onInputChange,
   topLabel,
   spacing,
   placeholder,
+  disabled = false,
   ...rest
 }) => {
   return (
-    <FormControl
-      sx={{
-        marginBottom: spacing === undefined ? 2 : spacing
-      }}>
-      <FormLabel
-        sx={{
-          color: 'text.primary',
-          marginBottom: 1
-        }}>
-        {topLabel}
-      </FormLabel>
-      <Autocomplete
-        disablePortal
-        options={options}
-        renderInput={(params) => {
-          return (
+    <Autocomplete
+      freeSolo
+      options={options}
+      onInputChange={onInputChange}
+      onChange={onChange}
+      inputValue={inputValue}
+      value={value}
+      disabled={disabled}
+      renderInput={(params) => {
+        return (
+          <FormControl
+            sx={{
+              marginBottom: spacing === undefined ? 2 : spacing,
+              width: '100%'
+            }}
+            ref={params.InputProps.ref}>
+            <FormLabel
+              sx={{
+                color: 'text.primary',
+                marginBottom: 1
+              }}
+              ref={params.InputLabelProps.ref}>
+              {topLabel}
+            </FormLabel>
             <TextField
-              {...params}
               error={errors !== undefined}
-              value={value}
-              onChange={handleChange}
+              type='text'
+              inputProps={{ ...params.inputProps }}
               label={placeholder}
+              disabled={disabled}
               {...rest}
             />
-          );
-        }}
-      />
 
-      {errors !== undefined && <FormHelperText error>{errors}</FormHelperText>}
-    </FormControl>
+            {errors !== undefined && (
+              <FormHelperText error>{errors}</FormHelperText>
+            )}
+          </FormControl>
+        );
+      }}
+    />
   );
 };
 

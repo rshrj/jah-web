@@ -64,41 +64,43 @@ const App = () => {
       )}
 
       <BrowserRouter>
-        <ScrollReset>
-          <Routes>
-            <Route path='/login' element={<LoginPage />} />
-            <Route path='/signup' element={<SignupPage />} />
-            <Route path='/' element={<PublicPage />}>
-              <Route index element={<LandingPage />} />
-              <Route path='listing/:listingId' element={<ListingView />} />
-              <Route path='forbuyers' element={<GalleryView mode='buy' />} />
-              <Route path='fortenants' element={<GalleryView mode='rent' />} />
-              <Route path='contact' element={<ContactPage />} />
-              <Route path='tnc' element={<TermsAndConditions />} />
-              <Route path='submittestimonial' element={<SubmitTestimonial />} />
-              <Route path='privacy' element={<PrivacyPolicy />} />
-              <Route path='about' element={<AboutPage />} />
-              <Route
-                path='dashboard'
-                element={
-                  <PrivateRoute>
-                    <DashboardPage />
-                  </PrivateRoute>
-                }>
-                <Route path='listings' element={<ListingsPage />} />
-                <Route path='users' element={<Users />} />
-                <Route path='myaccount' element={<MyAccount />} />
-                <Route path='newlisting' element={<NewListingPage />} />
-                <Route path='testimonials' element={<Testimonials />} />
-                <Route path='callbackrequests' element={<CallbackRequests />} />
-                <Route path='homead' element={<HomeAd />} />
-              </Route>
+        {/* <ScrollReset> */}
+        <Routes>
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/signup' element={<SignupPage />} />
+          <Route path='/' element={<PublicPage />}>
+            <Route index element={<LandingPage />} />
+            <Route path='home' element={<LandingPage />} />
+            <Route path='listing/:listingId' element={<ListingView />} />
+            <Route path='forbuyers' element={<GalleryView mode='buy' />} />
+            <Route path='fortenants' element={<GalleryView mode='rent' />} />
+            <Route path='contact' element={<ContactPage />} />
+            <Route path='tnc' element={<TermsAndConditions />} />
+            <Route path='submittestimonial' element={<SubmitTestimonial />} />
+            <Route path='privacy' element={<PrivacyPolicy />} />
+            <Route path='about' element={<AboutPage />} />
+            <Route
+              path='dashboard'
+              element={
+                <PrivateRoute>
+                  <DashboardPage />
+                </PrivateRoute>
+              }>
+              <Route index element={<ListingsPage />} />
+              <Route path='listings' element={<ListingsPage />} />
+              <Route path='users' element={<Users />} />
+              <Route path='myaccount' element={<MyAccount />} />
+              <Route path='homead' element={<HomeAd />} />
+              <Route path='newlisting' element={<NewListingPage />} />
+              <Route path='testimonials' element={<Testimonials />} />
+              <Route path='callbackrequests' element={<CallbackRequests />} />
             </Route>
-            {/* Testing */}
-            <Route path='/splash' element={<SplashScreen />} />
-            <Route path='*' element={<NotFoundPage />} />
-          </Routes>
-        </ScrollReset>
+          </Route>
+          {/* Testing */}
+          <Route path='/splash' element={<SplashScreen />} />
+          <Route path='*' element={<NotFoundPage />} />
+        </Routes>
+        {/* </ScrollReset> */}
       </BrowserRouter>
     </ThemeProvider>
   );

@@ -8,6 +8,7 @@ import {
   CardContent,
   Grid
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 import { BiRupee } from 'react-icons/bi';
 import { MdLocationOn } from 'react-icons/md';
@@ -28,17 +29,29 @@ const MyCard = styled(Card)(({ theme }) => ({
   }
 }));
 
-const PropertyCard = ({ image, title, location, price }) => {
+const PropertyCard = ({ image, title, location, price, link }) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = (event) => {
+    event.preventDefault();
+
+    if (!link) {
+      return;
+    }
+
+    navigate(link);
+  };
+
   return (
     <>
-      <MyCard>
+      <MyCard onClick={handleCardClick}>
         <CardMedia
           height='190px'
           sx={{ minWidth: '290px' }}
           component='img'
           image={image}
         />
-        <CardContent>
+        <CardContent sx={{ pt: 0 }}>
           <Typography variant='h6'>{title}</Typography>
           <Grid container>
             <Grid item display='flex' alignItems='center' width='50%'>
@@ -58,7 +71,12 @@ const PropertyCard = ({ image, title, location, price }) => {
                 {location}
               </Typography>
             </Grid>
-            <Grid item sx={{ width: '50%' }} display='flex' alignItems='center' justifyContent="flex-end">
+            <Grid
+              item
+              sx={{ width: '50%' }}
+              display='flex'
+              alignItems='center'
+              justifyContent='flex-end'>
               <BiRupee
                 style={{ height: '15px', width: '15px', color: '#6c757d' }}
               />

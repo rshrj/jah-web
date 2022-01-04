@@ -59,7 +59,7 @@ const CountInput = ({
           }
         />
       </IconButton>
-      <Typography variant='h6' sx={{ mx: 1 }}>
+      <Typography variant='h6' sx={{ mx: 1 }} component='div'>
         {value}
       </Typography>
       <IconButton

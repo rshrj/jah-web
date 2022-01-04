@@ -153,17 +153,20 @@ const columns = [
     flex: 1
   },
   {
-    field: 'listingType',
+    field: 'type',
     headerName: 'Type',
     description: 'Type of listing',
     type: 'singleSelect',
     flex: 1,
     valueOptions: ['rentlease', 'sellapartment', 'sellproject'],
-    renderCell: (params) => (
-      <Typography color={listingObject[params.value].color}>
-        {listingObject[params.value].label}
-      </Typography>
-    )
+    renderCell: (params) => {
+      console.log(params.value);
+      return (
+        <Typography color={listingObject[params.value].color}>
+          {listingObject[params.value].label}
+        </Typography>
+      );
+    }
   },
   {
     field: 'actions',

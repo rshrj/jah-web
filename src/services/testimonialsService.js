@@ -1,24 +1,18 @@
 import {
   rejectWithToast,
   apiUrl,
-  errorWithToast,
+  errorWithToast
 } from '../utils/serviceHelpers';
 
-
 export const getTestimonials = async () => {
-  let token = localStorage.getItem('token');
-  if (!token) {
-    return rejectWithToast('Not authorized to perform this action');
-  }
   try {
-    const res = await fetch(`${apiUrl}/testimonial/all`, {
+    const res = await fetch(`${apiUrl}/testimonials/show`, {
       method: 'GET',
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8',
-        Authorization: `Bearer ${token}`,
-      },
+        'Content-Type': 'application/json;charset=UTF-8'
+      }
     });
 
     if (!res) {
@@ -40,6 +34,37 @@ export const getTestimonials = async () => {
   }
 };
 
-const testimonialsService = {  getTestimonials };
+export const submitTestimonial = async (formData) => {
+  try {
+    const res = await fetch(`${apiUrl}/testimonials/add`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+      body: JSON.stringify(formData)
+    });
+
+    if (!res) {
+      throw errorWithToast('Server did not respond');
+    }
+
+    const data = await res.json();
+    console.log(data);
+    if (!res.ok) {
+      throw new Error('Request error', { cause: data });
+    }
+
+    return data;
+  } catch (e) {
+    if (e instanceof TypeError && e.message === 'Failed to fetch') {
+      return rejectWithToast('Server is offline');
+    }
+    return Promise.reject(e);
+  }
+};
+
+const testimonialsService = { getTestimonials, submitTestimonial };
 
 export default testimonialsService;
