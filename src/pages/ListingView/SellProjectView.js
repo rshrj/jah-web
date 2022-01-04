@@ -36,10 +36,9 @@ const sortTypes = (types) => {
   return types.slice().sort(sortFunc);
 };
 
-const SellProjectView = ({ listing }) => {
+const SellProjectView = ({ listing, name }) => {
   const theme = useTheme();
   const {
-    name,
     location,
     landmark,
     apartmentTypes,

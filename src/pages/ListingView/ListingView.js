@@ -58,13 +58,19 @@ const ListingView = () => {
       ) : (
         <Container maxWidth='lg'>
           {listing.type === 'sellapartment' && (
-            <SellApartmentView listing={listing.sellapartment} />
+            <SellApartmentView
+              listing={listing.sellapartment}
+              name={listing.name}
+            />
           )}
           {listing.type === 'rentlease' && (
-            <RentLeaseView listing={listing.rentlease} />
+            <RentLeaseView listing={listing.rentlease} name={listing.name} />
           )}
           {listing.type === 'sellproject' && (
-            <SellProjectView listing={listing.sellproject} />
+            <SellProjectView
+              listing={listing.sellproject}
+              name={listing.name}
+            />
           )}
 
           <Box sx={{ mt: 2 }}>
