@@ -132,9 +132,9 @@ const GalleryView = ({ mode = 'buy', initTab = 0 }) => {
             {mode === 'buy' ? 'Buy Homes in Mumbai' : 'Rent Homes in Mumbai'}
           </Typography>
           <Typography variant='body1' color='text.secondary' align='center'>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tristique
-            est congue integer integer at quis ac. Sed egestas pellentesque
-            lectus amet ac id viverra.
+            {mode === 'buy'
+              ? "Make your move to Mumbai's best properties. Start hunting homes right away. Jai Ambe Advisory is here to ensure your best deal."
+              : "Get the perfect space for your needs. It's time to rent homes in Mumbai. Get the best deal on rents with Jai Ambe Advisory."}
           </Typography>
           <SearchCard
             sx={{
