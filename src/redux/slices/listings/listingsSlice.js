@@ -44,7 +44,7 @@ const addNewListing = createAsyncThunk(
       dispatch(clearTopLoader());
 
       dispatch(addToast({ type: 'success', message: data.message }));
-      navigate(`/listing/${data.payload.id}`);
+      navigate(`/listing/${data.payload._id}`);
       return data.payload;
     } catch (error) {
       dispatch(clearTopLoader());

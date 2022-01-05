@@ -270,28 +270,34 @@ const UploadZone = ({
           </Typography>
         </Box>
       </label>
-      <Typography variant='body1' color='text.secondary' sx={{ marginLeft: 2 }}>
-        {label2}
-      </Typography>
+
       {isFiles && (
-        <Box
-          sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            m: 2,
-            maxWidth: '750px'
-          }}>
-          {files.map((filep) => (
-            <FileBox
-              key={filep.name}
-              file={filep}
-              selected={selectedFile !== undefined && selectedFile === filep}
-              onDeleteClick={handleDeleteClick(filep)}
-              onImgClick={handleImgClick(filep)}
-            />
-          ))}
-        </Box>
+        <>
+          <Typography
+            variant='subtitle1'
+            color='text.primary'
+            sx={{ marginLeft: 2, fontWeight: 'bold' }}>
+            {label2}
+          </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              m: 2,
+              maxWidth: '750px'
+            }}>
+            {files.map((filep) => (
+              <FileBox
+                key={filep.name}
+                file={filep}
+                selected={selectedFile !== undefined && selectedFile === filep}
+                onDeleteClick={handleDeleteClick(filep)}
+                onImgClick={handleImgClick(filep)}
+              />
+            ))}
+          </Box>
+        </> 
       )}
       {file !== undefined && (
         <Box sx={{ m: 2 }}>
