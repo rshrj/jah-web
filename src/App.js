@@ -1,7 +1,7 @@
 import { CssBaseline, Stack } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { Global } from '@emotion/react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
