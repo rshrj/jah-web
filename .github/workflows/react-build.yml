@@ -17,20 +17,20 @@ jobs:
       REACT_APP_APIURL: ${{ secrets.API_URL }}
     steps:
       - uses: actions/checkout@v2
-      # - name: User Node.js v16
-      #   uses: actions/setup-node@v2
-      #   with:
-      #     node-version: '16'
-      #     cache: 'npm'
-      # - name: Install dependencies
-      #   run: npm install
-      # - name: Build the React app
-      #   run: CI= npm run build
-      # - name: Prepare to SSH into the VPS
-      # - run: mkdir ~/.ssh
-      # - run: 'echo "$SSH_KEY" >> ~/.ssh/id_deploy_machine'
-      # - run: 'chmod 400 ~/.ssh/id_deploy_machine'
-      # - run: 'echo -e "Host deploy-machine\n\tUser $SSH_USER\n\tHostName $SSH_HOST\n\tIdentityFile ~/.ssh/id_deploy_machine\n\tStrictHostKeyChecking No" >> ~/.ssh/config'
-      # - run: 'rsync ${{ github-workspace }}/'
-      - run: ls -al
+      - name: User Node.js v16
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Build the React app
+        run: CI= npm run build
+      - name: Prepare to SSH into the VPS
+      - run: mkdir ~/.ssh
+      - run: 'echo "$SSH_KEY" >> ~/.ssh/id_deploy_machine'
+      - run: 'chmod 400 ~/.ssh/id_deploy_machine'
+      - run: 'echo -e "Host deploy-machine\n\tUser $SSH_USER\n\tHostName $SSH_HOST\n\tIdentityFile ~/.ssh/id_deploy_machine\n\tStrictHostKeyChecking No" >> ~/.ssh/config'
+      - run: 'rsync -a ${{ github-workspace }}/build deploy-machine:~/jaiambe/jah-web/build'
+      - run: 'ssh deploy-machine "sudo systemctl restart nginx"'
       - run: echo "🍏 This job's status is ${{ job.status }}."
