@@ -40,11 +40,17 @@ const Users = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [one, setOne] = useState({ name:'', company:'', testimonial:'' });
-  const showTestimonial = (t) =>{
+  const [one, setOne] = useState({
+    name: '',
+    company: '',
+    testimonial: '',
+    date: '',
+    status: true,
+  });
+  const showTestimonial = (t) => {
     setOne(t);
     handleOpen();
-  }
+  };
   const columns = [
     {
       field: 'name',
@@ -81,12 +87,12 @@ const Users = () => {
         </Typography>
       ),
     },
-    {
-      field: 'mobile',
-      headerName: 'Mobile No.',
-      description: 'Mobile number of the user',
-      flex: 1,
-    },
+    // {
+    //   field: 'mobile',
+    //   headerName: 'Mobile No.',
+    //   description: 'Mobile number of the user',
+    //   flex: 1,
+    // },
     {
       field: 'createdAt',
       headerName: 'Created At',
@@ -100,9 +106,14 @@ const Users = () => {
       type: 'actions',
       flex: 1,
       headerName: 'Actions',
-      getActions: (params) =>{ 
-        
-        const data = {name : params.row.name, company:params.row.company, testimonial: params.row.testimonial}
+      getActions: (params) => {
+        const data = {
+          name: params.row.name,
+          company: params.row.company,
+          message: params.row.message,
+          date: params.row.createdAt,
+          status: params.row.show,
+        };
         return [
           <GridActionsCellItem icon={<FaCheck />} />,
           <GridActionsCellItem icon={<FaTimes />} />,
@@ -112,7 +123,8 @@ const Users = () => {
           />,
           <GridActionsCellItem icon={<FaEdit />} />,
           <GridActionsCellItem icon={<FaTrash />} />,
-        ];},
+        ];
+      },
     },
   ];
 
@@ -167,14 +179,50 @@ const Users = () => {
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'>
         <Box sx={style}>
-          <Typography id='modal-modal-title' variant='h6' component='h2'>
+          <Box
+            width='100%'
+            justifyContent='space-between'
+            display='inline-flex'>
+            <Typography variant='body2'>
+              {new Date(one.date).toLocaleDateString('en-IN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour:'2-digit',
+                minute:'2-digit',
+                second:'2-digit'
+              })}
+            </Typography>
+            <Typography
+              varient='body2'
+              color={
+                one.status === true
+                  ? '#28a745'
+                  : one.status === false
+                  ? '#dc3545'
+                  : '#ffc107'
+              }>
+              {one.status === true
+                ? 'Approved'
+                : one.status === false
+                ? 'Rejected'
+                : 'Pending'}
+            </Typography>
+          </Box>
+          <Typography
+            id='modal-modal-title'
+            variant='h6'
+            component='h2'
+            sx={{ textAlign: 'center' }}>
             {one.name}
           </Typography>
-          <Typography id='modal-modal-description' sx={{ mt: 2 }}>
+          <Typography
+            id='modal-modal-description'
+            sx={{ mt: 2, textAlign: 'center' }}>
             {one.company}
           </Typography>
           <Typography id='modal-modal-description' sx={{ mt: 2 }}>
-            {one.testimonial}
+            {one.message}
           </Typography>
         </Box>
       </Modal>

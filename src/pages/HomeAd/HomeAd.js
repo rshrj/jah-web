@@ -176,7 +176,7 @@ const HomeAd = () => {
                     variant='body1'
                     // color='text.secondary'
                     sx={{ color: 'rgba(0, 0, 0, 0.87)' }}>
-                    Add a Ad photo
+                    HomeAd Poster
                     <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
                   </Typography>
                 </FormLabel>
