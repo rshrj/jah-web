@@ -46,7 +46,7 @@ const App = () => {
 
   // To trigger GH Actions
   useEffect(() => {
-    console.log('hello');
+    console.log('hello 2');
   }, []);
 
   const toasts = useSelector((state) => state.errors.toastErrors);

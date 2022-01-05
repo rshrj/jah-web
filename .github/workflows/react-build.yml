@@ -30,8 +30,10 @@ jobs:
         run: mkdir ~/.ssh
       - run: 'echo "$SSH_KEY" >> ~/.ssh/deploy-machine'
       - run: 'chmod 400 ~/.ssh/deploy-machine'
-      - run: 'echo -e "Host deploy-machine\n\tUser $SSH_USER\n\tHostname $SSH_HOST\n\tIdentityFile ~/.ssh/deploy-machine\n\tStrictHostKeyChecking No" >> ~/.ssh/config'
+      - run: 'echo -e "Host deploy-machine\n\tUser $SSH_USER\n\tHostName $SSH_HOST\n\tIdentityFile ~/.ssh/deploy-machine\n\tStrictHostKeyChecking No" >> ~/.ssh/config'
       - name: Transferring files to the server
-        run: 'ssh deploy-machine "uname -a"'
+        run: 'cat ~/.ssh/deploy-machine'
+      - run: 'cat ~/.ssh/config'
+      - run: 'ssh deploy-machine "uname -a"'
       - run: 'ls -al'
       - run: echo "🍏 This job's status is ${{ job.status }}."
