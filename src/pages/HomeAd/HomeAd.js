@@ -5,7 +5,10 @@ import {
   FormGroup,
   Grid,
   Typography,
-  useMediaQuery
+  useMediaQuery,
+  FormControl,
+  FormLabel,
+  lighten,
 } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +17,7 @@ import { submitHomeAdChange } from '../../redux/slices/settings/settingsSlice';
 import { clearFormErrors } from '../../redux/slices/errors/errorsSlice';
 
 import { JInputField } from '../../components/JInputField';
+import UploadZone from '../../components/UploadZone';
 
 const HomeAd = () => {
   const dispatch = useDispatch();
@@ -23,8 +27,10 @@ const HomeAd = () => {
     tagline: '',
     image: '',
     buttonTitle: '',
-    buttonLink: ''
+    buttonLink: '',
+    adImage: '',
   });
+  console.log(values);
 
   const handleChange = (prop) => (event) => {
     if (Object.entries(errors).length !== 0) {
@@ -43,10 +49,18 @@ const HomeAd = () => {
         tagline: values.tagline,
         image: values.image,
         buttonTitle: values.buttonTitle,
-        buttonLink: values.buttonLink
+        buttonLink: values.buttonLink,
       })
     );
   };
+
+  const handleFilesChange = (event, newFiles) => {
+    setValues({
+      ...values,
+      adImage: newFiles,
+    });
+  };
+
 
   const errors = useSelector((state) => state.errors.formErrors);
   const loading = useSelector((state) => state.settings.loading === 'loading');
@@ -56,7 +70,7 @@ const HomeAd = () => {
   return (
     <Box
       sx={{
-        backgroundColor: 'common.white'
+        backgroundColor: 'common.white',
       }}>
       <Container maxWidth='xl'>
         <Box
@@ -67,7 +81,7 @@ const HomeAd = () => {
             flexDirection: 'column',
             width: '100%',
             paddingTop: 5,
-            px: { xs: 0, sm: 15 }
+            px: { xs: 0, sm: 15 },
           }}>
           <Box sx={{}}>
             <Typography
@@ -150,6 +164,30 @@ const HomeAd = () => {
                   disabled={loading}
                 />
               </FormGroup>
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <FormControl sx={{ marginBottom: 5, width:'100%' }}>
+                <FormLabel
+                  sx={{
+                    color: 'text.primary',
+                    marginBottom: 1,
+                  }}>
+                  <Typography
+                    variant='body1'
+                    // color='text.secondary'
+                    sx={{ color: 'rgba(0, 0, 0, 0.87)' }}>
+                    Add a Ad photo
+                    <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
+                  </Typography>
+                </FormLabel>
+                  <UploadZone
+                    file={values.adImage}
+                    onFilesChange={handleFilesChange}
+                    label1='Drag and drop or click to choose file'
+                    accept='image/*'
+                    multiple={false}
+                  />
+              </FormControl>
             </Grid>
             <Grid item xs={12} sm={12} textAlign='center'>
               <Button
