@@ -44,7 +44,7 @@ const addNewListing = createAsyncThunk(
       dispatch(clearTopLoader());
 
       dispatch(addToast({ type: 'success', message: data.message }));
-      navigate(`/dashboard/listing/${data.payload.id}`);
+      navigate(`/listing/${data.payload.id}`);
       return data.payload;
     } catch (error) {
       dispatch(clearTopLoader());
@@ -221,13 +221,11 @@ const getListingsFuzzy = createAsyncThunk(
   }
 );
 
-
 export const listingsSlice = createSlice({
   name: 'listings',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-  
     builder.addCase(addNewListing.pending, (state, action) => {
       state.loading = 'loading';
     });
