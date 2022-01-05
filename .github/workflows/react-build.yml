@@ -16,7 +16,7 @@ jobs:
       SSH_USER: ${{ secrets.SSH_USER }}
       REACT_APP_APIURL: ${{ secrets.API_URL }}
     steps:
-      # - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       # - name: User Node.js v16
       #   uses: actions/setup-node@v2
       #   with:
@@ -27,12 +27,10 @@ jobs:
       # - name: Build the React app
       #   run: CI= npm run build
       # - name: Prepare to SSH into the VPS
-      - run: mkdir ~/.ssh
-      - run: 'echo "$SSH_KEY" >> ~/.ssh/id_deploy_machine'
-      - run: 'chmod 400 ~/.ssh/id_deploy_machine'
-      - run: 'echo -e "Host deploy-machine\n\tUser $SSH_USER\n\tHostName $SSH_HOST\n\tIdentityFile ~/.ssh/id_deploy_machine\n\tStrictHostKeyChecking No" >> ~/.ssh/config'
-      - run: 'ssh deploy-machine "uname -a"'
-      - name: Debugging with ssh
-        uses: lhotari/action-upterm@v1
-      - run: 'ls -al'
+      # - run: mkdir ~/.ssh
+      # - run: 'echo "$SSH_KEY" >> ~/.ssh/id_deploy_machine'
+      # - run: 'chmod 400 ~/.ssh/id_deploy_machine'
+      # - run: 'echo -e "Host deploy-machine\n\tUser $SSH_USER\n\tHostName $SSH_HOST\n\tIdentityFile ~/.ssh/id_deploy_machine\n\tStrictHostKeyChecking No" >> ~/.ssh/config'
+      # - run: 'rsync ${{ github-workspace }}/'
+      - run: ls -al
       - run: echo "🍏 This job's status is ${{ job.status }}."
