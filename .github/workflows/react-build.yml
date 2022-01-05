@@ -1,9 +1,26 @@
-name: GitHub Actions Demo
-on: [push]
+name: React Build and Deploy
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - '.github/**'
+      - '**.md'
+    branches:
+      - main
 jobs:
-  Explore-GitHub-Actions:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      SSH_KEY: ${{ secrets.SSH_KEY }}
+      REACT_APP_APIURL: ${{ secrets.API_URL }}
     steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'
+      - run: npm install
+      - run: npm build
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."

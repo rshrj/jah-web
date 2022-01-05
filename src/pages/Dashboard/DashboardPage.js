@@ -67,7 +67,7 @@ const DashboardPage = () => {
                 </Link>
               ))}
               <Typography color='text.primary'>
-                {routes.at(-1)?.name}
+                {routes[routes.length - 1]?.name}
               </Typography>
             </Breadcrumbs>
           </Box>
