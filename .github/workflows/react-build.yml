@@ -28,9 +28,9 @@ jobs:
       #   run: CI= npm run build
       # - name: Prepare to SSH into the VPS
       - run: mkdir ~/.ssh
-      - run: 'echo "$SSH_KEY" >> ~/.ssh/id_deploy_machine.pub'
-      - run: 'chmod 400 ~/.ssh/id_deploy_machine.pub'
-      - run: 'echo -e "Host deploy-machine\n\tUser $SSH_USER\n\tHostName $SSH_HOST\n\tIdentityFile ~/.ssh/id_deploy_machine.pub\n\tStrictHostKeyChecking No" >> ~/.ssh/config'
+      - run: 'echo "$SSH_KEY" >> ~/.ssh/id_deploy_machine'
+      - run: 'chmod 400 ~/.ssh/id_deploy_machine'
+      - run: 'echo -e "Host deploy-machine\n\tUser $SSH_USER\n\tHostName $SSH_HOST\n\tIdentityFile ~/.ssh/id_deploy_machine\n\tStrictHostKeyChecking No" >> ~/.ssh/config'
       - run: 'ssh deploy-machine "uname -a"'
       - name: Debugging with ssh
         uses: lhotari/action-upterm@v1
