@@ -16,18 +16,18 @@ jobs:
       SSH_USER: ${{ secrets.SSH_USER }}
       REACT_APP_APIURL: ${{ secrets.API_URL }}
     steps:
-      - uses: actions/checkout@v2
-      - name: User Node.js v16
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-          cache: 'npm'
-      - name: Install dependencies
-        run: npm install
-      - name: Build the React app
-        run: CI= npm run build
-      - name: Prepare to SSH into the VPS
-        run: mkdir ~/.ssh
+      # - uses: actions/checkout@v2
+      # - name: User Node.js v16
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: '16'
+      #     cache: 'npm'
+      # - name: Install dependencies
+      #   run: npm install
+      # - name: Build the React app
+      #   run: CI= npm run build
+      # - name: Prepare to SSH into the VPS
+      - run: mkdir ~/.ssh
       - run: 'echo "$SSH_KEY" >> ~/.ssh/id_deploy_machine.pub'
       - run: 'chmod 400 ~/.ssh/deploy-machine'
       - run: 'echo -e "Host deploy-machine\n\tUser $SSH_USER\n\tHostName $SSH_HOST\n\tIdentityFile ~/.ssh/id_deploy_machine.pub\n\tStrictHostKeyChecking No" >> ~/.ssh/config'
