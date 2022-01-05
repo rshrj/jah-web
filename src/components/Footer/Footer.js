@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Link, Grid, Divider } from '@mui/material';
+import { Box, Link, Grid } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
 import Logo from '../Logo';

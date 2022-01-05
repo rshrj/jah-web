@@ -1,17 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Chip, Modal, Box } from '@mui/material';
+import { Typography, Modal, Box } from '@mui/material';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
-import {
-  FaBars,
-  FaBuilding,
-  FaEdit,
-  FaEllipsisH,
-  FaEye,
-  FaTrash,
-  FaUser,
-  FaCheck,
-  FaTimes,
-} from 'react-icons/fa';
+import { FaEdit, FaEye, FaTrash, FaCheck, FaTimes } from 'react-icons/fa';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getTestimonials } from '../../redux/slices/testimonials/testimonialsSlice';
@@ -24,7 +14,6 @@ const style = {
   width: '600px',
   bgcolor: 'background.paper',
   // border: '2px solid #000',
-  boxShadow: 24,
   p: 4,
   transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
   borderRadius: '4px',
@@ -32,7 +21,7 @@ const style = {
     'rgb(0 0 0 / 20%) 0px 2px 1px -1px, rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px',
   backgroundImage:
     'linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))',
-  overflow: 'hidden',
+  overflow: 'hidden'
 };
 
 const Users = () => {
@@ -40,24 +29,24 @@ const Users = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [one, setOne] = useState({ name:'', company:'', testimonial:'' });
-  const showTestimonial = (t) =>{
+  const [one, setOne] = useState({ name: '', company: '', testimonial: '' });
+  const showTestimonial = (t) => {
     setOne(t);
     handleOpen();
-  }
+  };
   const columns = [
     {
       field: 'name',
       headerName: 'Full Name',
       description: 'Full Name',
       flex: 1,
-      headerClassName: {},
+      headerClassName: {}
     },
     {
       field: 'company',
       headerName: 'Campany',
       description: 'Company of the user',
-      flex: 1,
+      flex: 1
     },
     {
       field: 'show',
@@ -79,20 +68,20 @@ const Users = () => {
             ? 'Rejected'
             : 'Pending'}
         </Typography>
-      ),
+      )
     },
     {
       field: 'mobile',
       headerName: 'Mobile No.',
       description: 'Mobile number of the user',
-      flex: 1,
+      flex: 1
     },
     {
       field: 'createdAt',
       headerName: 'Created At',
       type: 'dateTime',
       description: 'Time of user creation',
-      flex: 1,
+      flex: 1
     },
 
     {
@@ -100,9 +89,12 @@ const Users = () => {
       type: 'actions',
       flex: 1,
       headerName: 'Actions',
-      getActions: (params) =>{ 
-        
-        const data = {name : params.row.name, company:params.row.company, testimonial: params.row.testimonial}
+      getActions: (params) => {
+        const data = {
+          name: params.row.name,
+          company: params.row.company,
+          testimonial: params.row.testimonial
+        };
         return [
           <GridActionsCellItem icon={<FaCheck />} />,
           <GridActionsCellItem icon={<FaTimes />} />,
@@ -111,9 +103,10 @@ const Users = () => {
             onClick={() => showTestimonial(data)}
           />,
           <GridActionsCellItem icon={<FaEdit />} />,
-          <GridActionsCellItem icon={<FaTrash />} />,
-        ];},
-    },
+          <GridActionsCellItem icon={<FaTrash />} />
+        ];
+      }
+    }
   ];
 
   const { ids, testimonials } = useSelector(
@@ -128,7 +121,7 @@ const Users = () => {
 
   useEffect(() => {
     dispatch(getTestimonials());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Box
@@ -137,14 +130,14 @@ const Users = () => {
         m: { xs: 0, md: 2 },
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
+        alignItems: 'center'
       }}>
       <Typography
         variant='h4'
         sx={{
           textAlign: 'center',
           color: 'primary.main',
-          marginBottom: 2,
+          marginBottom: 2
         }}>
         Testimonials
       </Typography>
@@ -155,8 +148,8 @@ const Users = () => {
             rows={data}
             sx={{
               '& .MuiDataGrid-iconSeparator': {
-                visibility: 'hidden',
-              },
+                visibility: 'hidden'
+              }
             }}
           />
         </Box>

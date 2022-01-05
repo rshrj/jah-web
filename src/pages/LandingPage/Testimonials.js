@@ -13,12 +13,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import TestimonialCard from './TestimonialCard';
 import { getTestimonials } from '../../redux/slices/testimonials/testimonialsSlice';
 
-let sample = {
-  message:
-    'They provided stellar service and left me spell bound. Will definitely choose again',
-  name: 'John Doe',
-  company: 'Web Space Inc.'
-};
+// let sample = {
+//   message:
+//     'They provided stellar service and left me spell bound. Will definitely choose again',
+//   name: 'John Doe',
+//   company: 'Web Space Inc.'
+// };
 
 const num = 3;
 

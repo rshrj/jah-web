@@ -46,10 +46,6 @@ const toWords = new ToWords({
   }
 });
 
-const label = () => {
-  return <span style={{ fontWeight: 'bold' }}>Security Deposit:</span>;
-};
-
 const RentLeaseView = ({ listing }) => {
   const theme = useTheme();
   const {
@@ -76,7 +72,6 @@ const RentLeaseView = ({ listing }) => {
     availableFrom,
     willingToRentOutTo,
     pictures,
-    featuredPicture,
     videoLink
   } = listing;
 

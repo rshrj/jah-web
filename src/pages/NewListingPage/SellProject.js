@@ -1,5 +1,4 @@
 import {
-  Button,
   Checkbox,
   Divider,
   FormControl,
@@ -20,7 +19,7 @@ import {
 } from '@mui/material';
 import { DatePicker } from '@mui/lab';
 import { Box } from '@mui/system';
-import { FaArrowCircleRight, FaTimes } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
 import { ToWords } from 'to-words';
 
 import locationOptions from '../../constants/locations.json';
@@ -494,7 +493,6 @@ const SellProjectForm = ({
   onChange,
   disabled = false
 }) => {
-  const isPhone = useMediaQuery('(min-width:600px)');
   const [autoVal, setAutoVal] = useState({
     location: '',
     propertyOnFloor: ''
@@ -521,17 +519,6 @@ const SellProjectForm = ({
     }
 
     onChange({ ...values, [prop]: event.target.value });
-  };
-
-  const handleCheck = (prop) => (event) => {
-    if (!onChange) {
-      return;
-    }
-
-    onChange({
-      ...values,
-      [prop]: event.target.checked
-    });
   };
 
   const handleDateChange = (prop) => (newDate) => {

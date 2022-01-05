@@ -1,13 +1,8 @@
 import { useTheme } from '@emotion/react';
-import { Button, IconButton, Stack, Typography } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { styled, lighten } from '@mui/material/styles';
-import {
-  FaCheckCircle,
-  FaCloudUploadAlt,
-  FaTimes,
-  FaTimesCircle
-} from 'react-icons/fa';
+import { FaCheckCircle, FaCloudUploadAlt, FaTimes } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { useDropArea } from 'react-use';
 
@@ -121,7 +116,7 @@ const UploadZone = ({
 }) => {
   const theme = useTheme();
   const [isDragged, setIsDragged] = useState(false);
-  const [bond, state] = useDropArea({
+  const [bond] = useDropArea({
     onFiles: (f) => {
       setIsDragged(false);
       if (!onFilesChange) {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Snackbar, useMediaQuery } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
 import { useDispatch } from 'react-redux';
