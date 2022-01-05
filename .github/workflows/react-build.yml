@@ -32,8 +32,8 @@ jobs:
       - run: 'chmod 400 ~/.ssh/deploy-machine'
       - run: 'echo -e "Host deploy-machine\n\tUser $SSH_USER\n\tHostName $SSH_HOST\n\tIdentityFile ~/.ssh/deploy-machine\n\tStrictHostKeyChecking No" >> ~/.ssh/config'
       - name: Transferring files to the server
-        run: 'cat ~/.ssh/deploy-machine'
-      - run: 'cat ~/.ssh/config'
+      - name: Debugging with ssh
+        uses: lhotari/action-upterm@v1
       - run: 'ssh deploy-machine "uname -a"'
       - run: 'ls -al'
       - run: echo "🍏 This job's status is ${{ job.status }}."
