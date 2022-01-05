@@ -265,8 +265,12 @@ const GalleryView = ({ mode = 'buy', initTab = 0 }) => {
               content.ids.length > 0 &&
               content.ids.map((listingId) => {
                 let type = content.listings[listingId].type;
-                let image = content.listings[listingId][type].featuredPicture;
+                let image = content.listings[listingId][type]?.featuredPicture;
                 let name = content.listings[listingId].name;
+                console.log(type);
+                console.log(content.listings[listingId]);
+                console.log(content.listings[listingId][type]);
+                console.log(content.listings[listingId][type].location);
                 let location = content.listings[listingId][type].location;
                 let prices =
                   type === 'sellapartment'

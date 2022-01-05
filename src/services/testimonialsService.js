@@ -6,13 +6,19 @@ import {
 
 export const getTestimonials = async () => {
   try {
-    const res = await fetch(`${apiUrl}/testimonials/show`, {
+    let token = localStorage.getItem('token');
+    if (!token) {
+      return rejectWithToast('Not authorized to perform this action');
+    }
+
+    const res = await fetch(`${apiUrl}/testimonials/all`, {
       method: 'GET',
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
-      }
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (!res) {
