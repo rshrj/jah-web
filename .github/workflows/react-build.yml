@@ -18,20 +18,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: User Node.js v16
-      - uses: actions/setup-node@v2
+        uses: actions/setup-node@v2
         with:
           node-version: '16'
           cache: 'npm'
       - name: Install dependencies
-      - run: npm install
+        run: npm install
       - name: Build the React app
-      - run: npm build
+        run: npm build
       - name: Prepare to SSH into the VPS
-      - run: mkdir ~/.ssh
+        run: mkdir ~/.ssh
       - run: 'echo "$SSH_KEY" >> ~/.ssh/deploy-machine'
       - run: 'chmod 400 ~/.ssh/deploy-machine'
       - run: 'echo -e "Host deploy-machine\n\tUser $SSH_USER\n\tHostname $SSH_HOST\n\tIdentityFile ~/.ssh/deploy-machine\n\tStrictHostKeyChecking No" >> ~/.ssh/config'
       - name: Transferring files to the server
-      - run: 'ssh deploy-machine "uname -a"'
+        run: 'ssh deploy-machine "uname -a"'
       - run: 'ls -al'
       - run: echo "🍏 This job's status is ${{ job.status }}."
