@@ -33,7 +33,7 @@ jobs:
       - run: 'chmod 400 ~/.ssh/id_deploy_machine'
       - run: 'echo -e "Host deploy-machine\n\tUser $SSH_USER\n\tHostName $SSH_HOST\n\tIdentityFile ~/.ssh/id_deploy_machine\n\tStrictHostKeyChecking No" >> ~/.ssh/config'
       - name: Copy the build to the server
-        run: 'rsync -a ${{ github.workspace }}/build deploy-machine:~/jaiambe/jah-web/build'
+        run: 'rsync -a ${{ github.workspace }}/build deploy-machine:~/jaiambe/jah-web'
       - name: Restart Nginx
         run: 'ssh deploy-machine "sudo systemctl restart nginx"'
       - run: echo "🍏 This job's status is ${{ job.status }}."
