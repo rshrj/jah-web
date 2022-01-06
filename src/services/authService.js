@@ -1,7 +1,7 @@
 import {
   rejectWithToast,
   apiUrl,
-  errorWithToast
+  errorWithToast,
 } from '../utils/serviceHelpers';
 
 export const login = async (email, password) => {
@@ -11,12 +11,12 @@ export const login = async (email, password) => {
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
+        'Content-Type': 'application/json;charset=UTF-8',
       },
       body: JSON.stringify({
         email,
-        password
-      })
+        password,
+      }),
     });
     if (!res) {
       throw errorWithToast('Server did not respond');
@@ -44,15 +44,15 @@ export const signup = async ({ email, name, password, password2, phone }) => {
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
+        'Content-Type': 'application/json;charset=UTF-8',
       },
       body: JSON.stringify({
         email,
         name,
         password,
         password2,
-        phone
-      })
+        phone,
+      }),
     });
 
     if (!res) {
@@ -83,14 +83,14 @@ export const loadUserByToken = async (token) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json;charset=UTF-8',
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (!res) {
       throw new Error({
         success: false,
-        message: 'Server did not respond'
+        message: 'Server did not respond',
       });
     }
 
@@ -113,14 +113,14 @@ export const verifyEmail = async (token) => {
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
-      }
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
     });
 
     if (!res) {
       throw new Error({
         success: false,
-        message: 'Server did not respond'
+        message: 'Server did not respond',
       });
     }
 
@@ -138,6 +138,115 @@ export const verifyEmail = async (token) => {
   }
 };
 
-const authService = { login, signup, loadUserByToken, verifyEmail };
+export const forgotPassword = async (email) => {
+  try {
+    const res = await fetch(`${apiUrl}/auth/forgotpassword`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      body: JSON.stringify({
+        email: email,
+      }),
+    });
+
+    if (!res) {
+      throw errorWithToast('Server did not respond');
+    }
+
+    const data = await res.json();
+    console.log(data);
+
+    if (!res.ok) {
+      throw new Error('Request error', { cause: data });
+    }
+
+    return data;
+  } catch (e) {
+    if (e instanceof TypeError && e.message === 'Failed to fetch') {
+      return rejectWithToast('Server is offline');
+    }
+    return Promise.reject(e);
+  }
+};
+
+export const verifyResetToken = async (token) => {
+  try {
+    const res = await fetch(`${apiUrl}/auth/forgotpassword/${token}`, {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+    });
+
+    if (!res) {
+      throw errorWithToast('Server did not respond');
+    }
+
+    const data = await res.json();
+    console.log(data);
+
+    if (!res.ok) {
+      throw new Error('Request error', { cause: data });
+    }
+
+    return data;
+  } catch (e) {
+    if (e instanceof TypeError && e.message === 'Failed to fetch') {
+      return rejectWithToast('Server is offline');
+    }
+    return Promise.reject(e);
+  }
+};
+
+export const resetPassword = async ({ token, password, password2 }) => {
+  try {
+    const res = await fetch(`${apiUrl}/auth/resetpassword`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      body: JSON.stringify({
+        token: token,
+        password: password,
+        password2: password2,
+      }),
+    });
+
+    if (!res) {
+      throw errorWithToast('Server did not respond');
+    }
+
+    const data = await res.json();
+    console.log(data);
+
+    if (!res.ok) {
+      throw new Error('Request error', { cause: data });
+    }
+
+    return data;
+  } catch (e) {
+    if (e instanceof TypeError && e.message === 'Failed to fetch') {
+      return rejectWithToast('Server is offline');
+    }
+    return Promise.reject(e);
+  }
+};
+
+const authService = {
+  login,
+  signup,
+  loadUserByToken,
+  verifyEmail,
+  forgotPassword,
+  verifyResetToken,
+  resetPassword,
+};
 
 export default authService;
