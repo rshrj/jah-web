@@ -854,6 +854,7 @@ const SellApartmentForm = ({
               views={['year', 'month']}
               value={values.possessionBy}
               onChange={handleDateChange('possessionBy')}
+              inputFormat='MMMM yyyy'
               renderInput={(params) => <TextField {...params} />}
             />
           </>

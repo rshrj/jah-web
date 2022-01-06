@@ -31,6 +31,7 @@ const pages = [
   { name: 'For Buyers', link: '/forbuyers' },
   { name: 'For Tenants', link: '/fortenants' },
   { name: 'About', link: '/about' },
+  { name: 'Testimonials', link: '/submittestimonial' },
   { name: 'Contact Us', link: '/contact' }
 ];
 
@@ -121,7 +122,7 @@ const NavBar = () => {
               component={RouterLink}
               to='/'
               sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}>
-              <Logo size={40} />
+              <Logo size={60} />
             </StyledToolbar>
 
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -267,9 +268,7 @@ const NavBar = () => {
                 {/* TODO: Handle logged in case */}
                 <Tooltip title='Open settings'>
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar
-                      {...stringAvatar(`${name.first} ${name.last}`)}
-                    />
+                    <Avatar {...stringAvatar(`${name.first} ${name.last}`)} />
                   </IconButton>
                 </Tooltip>
                 <Menu

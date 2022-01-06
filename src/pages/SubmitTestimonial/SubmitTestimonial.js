@@ -1,14 +1,41 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Container, FormGroup, Grid, Typography } from '@mui/material';
+import {
+  Button,
+  Container,
+  FormGroup,
+  FormHelperText,
+  FormLabel,
+  Grid,
+  TextareaAutosize,
+  Typography
+} from '@mui/material';
 import { Box } from '@mui/system';
 import { JInputField } from '../../components/JInputField';
+import { useTheme, styled } from '@mui/material/styles';
 
 import { clearFormErrors } from '../../redux/slices/errors/errorsSlice';
 import { submitTestimonial } from '../../redux/slices/testimonials/testimonialsSlice';
 import illustration from '../../assets/vectors/submit-testimonial.svg';
 import Footer from '../../components/Footer';
-import { useTheme } from '@emotion/react';
+import Testimonials from '../LandingPage/Testimonials';
+
+const StyledTextareaAutosize = styled(TextareaAutosize)(({ theme }) => ({
+  fontFamily: 'inherit',
+  borderColor: theme.palette.grey[400],
+  borderRadius: 5,
+  padding: theme.spacing(1),
+  backgroundColor: 'inherit',
+  '&:hover': {
+    borderColor: theme.palette.grey[600]
+  },
+  '&:focus': {
+    borderColor: theme.palette.primary.main
+  },
+  '&:focus-visible': {
+    borderColor: theme.palette.primary.main
+  }
+}));
 
 const SubmitTestimonial = () => {
   const theme = useTheme();
@@ -18,7 +45,8 @@ const SubmitTestimonial = () => {
   const [values, setValues] = useState({
     name: '',
     company: '',
-    message: ''
+    message: '',
+    phone: ''
   });
 
   const handleChange = (prop) => (event) => {
@@ -36,7 +64,8 @@ const SubmitTestimonial = () => {
       submitTestimonial({
         name: values.name,
         company: values.company,
-        message: values.message
+        message: values.message,
+        phone: values.phone
       })
     );
   };
@@ -106,21 +135,60 @@ const SubmitTestimonial = () => {
             <Grid item xs={12} sm={12}>
               <FormGroup>
                 <JInputField
-                  topLabel='Testomonial'
-                  placeholder='Enter your testimonial'
+                  topLabel='Phone number'
+                  placeholder='Enter your phone number'
+                  helperText='We will not share your phone number with anyone'
                   spacing={0}
-                  value={values.message}
-                  handleChange={handleChange('message')}
-                  errors={errors['message']}
+                  value={values.phone}
+                  handleChange={handleChange('phone')}
+                  errors={errors['phone']}
                   disabled={loading}
                 />
+              </FormGroup>
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <FormGroup>
+                <FormLabel
+                  sx={{
+                    color: 'text.primary',
+                    marginBottom: 1
+                  }}>
+                  <Typography
+                    variant='body1'
+                    color='text.primary'
+                    sx={{
+                      display: 'inline-block',
+                      marginRight: 1
+                    }}>
+                    Testimonial
+                  </Typography>
+                </FormLabel>
+                <StyledTextareaAutosize
+                  aria-label='Testimonial message'
+                  minRows={4}
+                  value={values.message}
+                  onChange={handleChange('message')}
+                  placeholder='Enter your testimonial'
+                />
+                {errors['message'] !== undefined && (
+                  <FormHelperText error>{errors['message']}</FormHelperText>
+                )}
+                <Typography
+                  color={
+                    values.message.length <= 140 ? 'text.secondary' : 'error'
+                  }
+                  fontWeight={values.message.length <= 140 ? 'normal' : 'bold'}
+                  sx={{ marginTop: 1 }}>
+                  {values.message.length} / 140
+                </Typography>
               </FormGroup>
             </Grid>
             <Grid item xs={12} sm={12} textAlign='left'>
               <Button
                 variant='contained'
                 sx={{ marginTop: 2, marginBottom: 5 }}
-                onClick={handleSubmit}>
+                onClick={handleSubmit}
+                disabled={loading || values.message.length > 140}>
                 Submit
               </Button>
             </Grid>
@@ -138,6 +206,10 @@ const SubmitTestimonial = () => {
               }}></Box>
           </Grid>
         </Grid>
+
+        <Testimonials submit={false} />
+
+        <Box sx={{ height: 100 }}> </Box>
       </Container>
       <Footer />
     </>

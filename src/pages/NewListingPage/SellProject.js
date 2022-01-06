@@ -21,6 +21,7 @@ import { DatePicker } from '@mui/lab';
 import { Box } from '@mui/system';
 import { FaTimes } from 'react-icons/fa';
 import { ToWords } from 'to-words';
+import { useTheme, styled } from '@mui/material/styles';
 
 import locationOptions from '../../constants/locations.json';
 import unitLabels from '../../constants/unitLabels';
@@ -45,6 +46,22 @@ const toWords = new ToWords({
     currency: true
   }
 });
+
+const StyledTextareaAutosize = styled(TextareaAutosize)(({ theme }) => ({
+  fontFamily: 'inherit',
+  borderColor: theme.palette.grey[400],
+  borderRadius: 5,
+  padding: theme.spacing(1),
+  '&:hover': {
+    borderColor: theme.palette.grey[600]
+  },
+  '&:focus': {
+    borderColor: theme.palette.primary.main
+  },
+  '&:focus-visible': {
+    borderColor: theme.palette.primary.main
+  }
+}));
 
 const UnitForm = ({
   unit,
@@ -493,6 +510,7 @@ const SellProjectForm = ({
   onChange,
   disabled = false
 }) => {
+  const theme = useTheme();
   const [autoVal, setAutoVal] = useState({
     location: '',
     propertyOnFloor: ''
@@ -840,6 +858,7 @@ const SellProjectForm = ({
               openTo='year'
               views={['year', 'month']}
               value={values.possessionBy}
+              inputFormat='MMMM yyyy'
               onChange={handleDateChange('possessionBy')}
               renderInput={(params) => <TextField {...params} />}
             />
@@ -888,13 +907,12 @@ const SellProjectForm = ({
             What makes the project unique?
           </Typography>
         </FormLabel>
-        <TextareaAutosize
+        <StyledTextareaAutosize
           aria-label='What makes the project unique?'
           minRows={3}
           value={values.usp}
           onChange={handleChange('usp')}
           placeholder='Spacious rooms, well maintained facilities, sufficient ventilation'
-          style={{ fontFamily: 'inherit' }}
           disabled={values.usp.length > 5000}
         />
         <Typography color='text.secondary' sx={{ marginTop: 1 }}>

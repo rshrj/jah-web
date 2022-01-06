@@ -4,7 +4,8 @@ import {
   Typography,
   FormControl,
   Button,
-  Link
+  Link,
+  FormHelperText
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -37,7 +38,8 @@ const SignupPage = () => {
   }, [loggedIn, navigate]);
 
   const [values, setValues] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     phone: '',
     email: '',
     password: '',
@@ -58,14 +60,12 @@ const SignupPage = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const [first, last] = values.name.split(' ');
-
     dispatch(
       signup({
         email: values.email,
         password: values.password,
         password2: values.password2,
-        name: { first, last },
+        name: { first: values.firstName, last: values.lastName },
         phone: values.phone
       })
     );
@@ -81,8 +81,8 @@ const SignupPage = () => {
   return (
     <Grid container sx={{ backgroundColor: 'white' }}>
       <Grid item container xs={12} sm={8} lg={6}>
-        <Grid item xs={2} sm={2} lg={3} xl={4} />
-        <Grid item xs={8} sm={8} lg={6} xl={4}>
+        <Grid item xs={2} sm={2} lg={3} xl={3.5} />
+        <Grid item xs={8} sm={8} lg={6} xl={5}>
           <Box
             sx={{
               display: 'flex',
@@ -99,10 +99,13 @@ const SignupPage = () => {
               sx={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                marginBottom: 2
+                marginBottom: 2,
+                color: 'primary.main'
               }}>
-              <FaArrowLeft />
-              <Typography sx={{ marginLeft: 1 }}>Back to Home</Typography>
+              <FaArrowLeft style={{ color: 'inherit' }} />
+              <Typography sx={{ marginLeft: 1, color: 'inherit' }}>
+                Back to Home
+              </Typography>
             </Link>
 
             <Typography
@@ -116,14 +119,37 @@ const SignupPage = () => {
             </Typography>
 
             <FormGroup>
-              <JInputField
-                topLabel='Name'
-                placeholder='Enter your name'
-                value={values.name}
-                handleChange={handleChange('name')}
-                errors={errors.name}
-                disabled={loading}
-              />
+              <FormControl sx={{ marginBottom: 1 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: { xs: 'column', sm: 'row' }
+                  }}>
+                  <JInputField
+                    topLabel='First Name'
+                    placeholder='Enter your first name'
+                    value={values.firstName}
+                    handleChange={handleChange('firstName')}
+                    disabled={loading}
+                    spacing={0}
+                    error={errors['name'] !== undefined}
+                    sx={{ marginRight: 1 }}
+                  />
+
+                  <JInputField
+                    topLabel='Last Name'
+                    placeholder='Enter your last name'
+                    value={values.lastName}
+                    handleChange={handleChange('lastName')}
+                    disabled={loading}
+                    error={errors['name'] !== undefined}
+                    spacing={0}
+                  />
+                </Box>
+                {errors['name'] !== undefined && (
+                  <FormHelperText error>{errors['name']}</FormHelperText>
+                )}
+              </FormControl>
 
               <JInputField
                 topLabel='Phone number'
@@ -205,7 +231,7 @@ const SignupPage = () => {
             </FormGroup>
           </Box>
         </Grid>
-        <Grid item xs={2} sm={2} lg={3} xl={4} />
+        <Grid item xs={2} sm={2} lg={3} xl={3.5} />
       </Grid>
       <Background />
     </Grid>

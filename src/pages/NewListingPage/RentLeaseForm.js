@@ -103,6 +103,7 @@ const RentLeaseForm = ({
     videoLink: ''
   },
   onChange,
+  errors,
   disabled = false
 }) => {
   const isPhone = useMediaQuery('(min-width:600px)');
@@ -771,6 +772,7 @@ const RentLeaseForm = ({
           openTo='day'
           views={['year', 'month', 'day']}
           value={values.availableFrom}
+          inputFormat='MMM dd, yyyy'
           onChange={handleDateChange}
           renderInput={(params) => <TextField {...params} />}
         />

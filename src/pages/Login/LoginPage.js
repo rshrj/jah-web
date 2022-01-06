@@ -94,10 +94,13 @@ const LoginPage = () => {
               sx={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                marginBottom: 2
+                marginBottom: 2,
+                color: 'primary.main'
               }}>
-              <FaArrowLeft />
-              <Typography sx={{ marginLeft: 1 }}>Back to Home</Typography>
+              <FaArrowLeft style={{ color: 'inherit' }} />
+              <Typography sx={{ marginLeft: 1, color: 'inherit' }}>
+                Back to Home
+              </Typography>
             </Link>
 
             <Typography

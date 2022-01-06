@@ -22,7 +22,7 @@ import { getTestimonials } from '../../redux/slices/testimonials/testimonialsSli
 
 const num = 3;
 
-const Testimonials = () => {
+const Testimonials = ({ submit = true }) => {
   const dispatch = useDispatch();
 
   const [page, setPage] = useState(1);
@@ -82,7 +82,8 @@ const Testimonials = () => {
             variant='outlined'
             size='small'
             sx={{
-              marginTop: { xs: 2, sm: 0 }
+              marginTop: { xs: 2, sm: 0 },
+              visibility: submit ? 'visible' : 'hidden'
             }}
             component={RouterLink}
             to='/submittestimonial'>
