@@ -4,8 +4,6 @@ import {
   errorWithToast
 } from '../utils/serviceHelpers';
 
-import { listingKeys } from '../constants/listingTypes';
-
 export const login = async (email, password) => {
   try {
     const res = await fetch(`${apiUrl}/auth/login`, {

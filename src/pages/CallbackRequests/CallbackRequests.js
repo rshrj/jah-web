@@ -1,21 +1,13 @@
-import { useCallback, useState, useEffect } from 'react';
-import { Container, Typography, Chip } from '@mui/material';
+import { useCallback, useEffect } from 'react';
+import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
-import {
-  FaBars,
-  FaBuilding,
-  FaEdit,
-  FaEllipsisH,
-  FaEye,
-  FaTrash,
-  FaUser,
-} from 'react-icons/fa';
+import { FaTrash, FaUser } from 'react-icons/fa';
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchCallBackRequests,
-  updateState,
+  updateState
 } from '../../redux/slices/callback/callbackSlice';
 
 const CallbackRequests = () => {
@@ -41,13 +33,12 @@ const CallbackRequests = () => {
       let callbackId = keys[0];
       let currentState = model[keys[0]].state.value;
       console.log(data);
-        dispatch(
-          updateState({
-            callbackId: callbackId,
-            state: currentState,
-          })
-        );
-      
+      dispatch(
+        updateState({
+          callbackId: callbackId,
+          state: currentState
+        })
+      );
     }
   };
 
@@ -70,7 +61,7 @@ const CallbackRequests = () => {
         <Box
           sx={{
             display: 'inline-flex',
-            alignItems: 'center',
+            alignItems: 'center'
           }}>
           <FaUser color='black' />
           <Typography
@@ -80,13 +71,13 @@ const CallbackRequests = () => {
             {params.value}
           </Typography>
         </Box>
-      ),
+      )
     },
     {
       field: 'phone',
       headerName: 'Phone No.',
       description: 'Phone no of the user',
-      flex: 1,
+      flex: 1
     },
     {
       field: 'state',
@@ -102,7 +93,7 @@ const CallbackRequests = () => {
           color={params.value === 'calledAlready' ? '#28a745' : '#dc3545'}>
           {params.value === 'calledAlready' ? 'Called Already' : 'Pending Call'}
         </Typography>
-      ),
+      )
       //  renderEditCell: renderRatingEditInputCell,
     },
     {
@@ -110,15 +101,15 @@ const CallbackRequests = () => {
       headerName: 'Created At',
       type: 'dateTime',
       description: 'Time of user creation',
-      flex: 1,
+      flex: 1
     },
     {
       field: 'actions',
       type: 'actions',
       flex: 1,
       headerName: 'Actions',
-      getActions: (params) => [<GridActionsCellItem icon={<FaTrash />} />],
-    },
+      getActions: (params) => [<GridActionsCellItem icon={<FaTrash />} />]
+    }
   ];
 
   return (
@@ -128,14 +119,14 @@ const CallbackRequests = () => {
         m: { xs: 0, md: 2 },
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
+        alignItems: 'center'
       }}>
       <Typography
         variant='h4'
         sx={{
           textAlign: 'center',
           color: 'primary.main',
-          marginBottom: 2,
+          marginBottom: 2
         }}>
         Callback Requests
       </Typography>
@@ -146,8 +137,8 @@ const CallbackRequests = () => {
             rows={data}
             sx={{
               '& .MuiDataGrid-iconSeparator': {
-                visibility: 'hidden',
-              },
+                visibility: 'hidden'
+              }
             }}
             onEditRowsModelChange={handleEditRowsModelChange}
           />

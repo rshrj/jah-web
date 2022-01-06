@@ -9,7 +9,6 @@ import {
   useNavigate
 } from 'react-router-dom';
 
-import NavBar from '../../components/NavBar';
 import Sidebar from '../../components/Sidebar';
 
 const DashboardPage = () => {
@@ -67,7 +66,7 @@ const DashboardPage = () => {
                 </Link>
               ))}
               <Typography color='text.primary'>
-                {routes.at(-1)?.name}
+                {routes[routes.length - 1]?.name}
               </Typography>
             </Breadcrumbs>
           </Box>

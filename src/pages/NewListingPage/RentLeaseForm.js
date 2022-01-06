@@ -1,6 +1,5 @@
 import {
   Autocomplete,
-  Button,
   Checkbox,
   FormControl,
   FormControlLabel,
@@ -19,10 +18,9 @@ import {
 } from '@mui/material';
 import { DatePicker } from '@mui/lab';
 import { Box } from '@mui/system';
-import { FaArrowCircleRight, FaTimes } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
 import { ToWords } from 'to-words';
 
-import floorOptions from './floorOptions.json';
 import locationOptions from '../../constants/locations.json';
 import unitLabels from '../../constants/unitLabels';
 
@@ -32,12 +30,6 @@ import Emoji from '../../components/Emoji/Emoji';
 import { JInputField, JInputSearch } from '../../components/JInputField';
 import { useState } from 'react';
 import UploadZone from '../../components/UploadZone';
-import {
-  MdArrowCircleDown,
-  MdArrowRight,
-  MdArrowRightAlt,
-  MdExitToApp
-} from 'react-icons/md';
 
 import { isNumeric } from '../../utils/helpers';
 

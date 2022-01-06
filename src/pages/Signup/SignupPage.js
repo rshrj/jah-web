@@ -11,8 +11,6 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import validator from 'validator';
-
 import { signup } from '../../redux/slices/auth/authSlice';
 
 import Background from '../../components/AuthBackground/AuthBackground';

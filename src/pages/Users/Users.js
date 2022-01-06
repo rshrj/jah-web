@@ -1,20 +1,11 @@
 import { useEffect } from 'react';
-import { Container, Typography, Chip } from '@mui/material';
+import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
-import {
-  FaBars,
-  FaBuilding,
-  FaEdit,
-  FaEllipsisH,
-  FaEye,
-  FaTrash,
-  FaUser,
-} from 'react-icons/fa';
+import { FaTrash, FaUser } from 'react-icons/fa';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getUsers } from '../../redux/slices/users/usersSlice';
-
 
 const columns = [
   {
@@ -27,7 +18,7 @@ const columns = [
       <Box
         sx={{
           display: 'inline-flex',
-          alignItems: 'center',
+          alignItems: 'center'
         }}>
         <FaUser color='black' />
         <Typography
@@ -37,22 +28,22 @@ const columns = [
           {params.value}
         </Typography>
       </Box>
-    ),
+    )
   },
   {
     field: 'email',
     headerName: 'Email ID',
     description: 'Email id of the user',
-    flex: 1,
+    flex: 1
   },
   {
     field: 'createdAt',
     headerName: 'Created At',
     type: 'dateTime',
     description: 'Time of user creation',
-    flex: 1,
+    flex: 1
   },
-  
+
   {
     field: 'role',
     headerName: 'Role',
@@ -61,16 +52,19 @@ const columns = [
     flex: 1,
     valueOptions: ['CUSTOMER', 'ADMIN'],
     renderCell: (params) => (
-      <Typography color={params.value == 'ADMIN' ? 'success.main' : 'info.main'}>{params.value}</Typography>
-    ),
+      <Typography
+        color={params.value === 'ADMIN' ? 'success.main' : 'info.main'}>
+        {params.value}
+      </Typography>
+    )
   },
   {
     field: 'actions',
     type: 'actions',
     flex: 1,
     headerName: 'Actions',
-    getActions: (params) => [<GridActionsCellItem icon={<FaTrash />} />],
-  },
+    getActions: (params) => [<GridActionsCellItem icon={<FaTrash />} />]
+  }
 ];
 
 const Users = () => {
@@ -87,7 +81,7 @@ const Users = () => {
 
   useEffect(() => {
     dispatch(getUsers());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Box
@@ -96,14 +90,14 @@ const Users = () => {
         m: { xs: 0, md: 2 },
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
+        alignItems: 'center'
       }}>
       <Typography
         variant='h4'
         sx={{
           textAlign: 'center',
           color: 'primary.main',
-          marginBottom: 2,
+          marginBottom: 2
         }}>
         Users
       </Typography>
@@ -114,8 +108,8 @@ const Users = () => {
             rows={data}
             sx={{
               '& .MuiDataGrid-iconSeparator': {
-                visibility: 'hidden',
-              },
+                visibility: 'hidden'
+              }
             }}
           />
         </Box>

@@ -1,17 +1,39 @@
-name: GitHub Actions Demo
-on: [push]
+name: React Build and Deploy
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - '.github/**'
+      - '**.md'
+    branches:
+      - main
 jobs:
-  Explore-GitHub-Actions:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      SSH_KEY: ${{ secrets.SSH_KEY }}
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USER: ${{ secrets.SSH_USER }}
+      REACT_APP_APIURL: ${{ secrets.API_URL }}
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
+      - name: Pull the repo
         uses: actions/checkout@v2
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
+      - name: Use Node.js v16
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Build the React app
+        run: CI= npm run build
+      - name: Prepare to SSH into the VPS
+        run: mkdir ~/.ssh
+      - run: 'echo "$SSH_KEY" >> ~/.ssh/id_deploy_machine'
+      - run: 'chmod 400 ~/.ssh/id_deploy_machine'
+      - run: 'echo -e "Host deploy-machine\n\tUser $SSH_USER\n\tHostName $SSH_HOST\n\tIdentityFile ~/.ssh/id_deploy_machine\n\tStrictHostKeyChecking No" >> ~/.ssh/config'
+      - name: Copy the build to the server
+        run: 'rsync -a ${{ github.workspace }}/build deploy-machine:~/jaiambe/jah-web'
+      - name: Restart Nginx
+        run: 'ssh deploy-machine "sudo systemctl restart nginx"'
       - run: echo "🍏 This job's status is ${{ job.status }}."

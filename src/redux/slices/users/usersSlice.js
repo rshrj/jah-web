@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-import { addToast, createFormErrors } from '../errors/errorsSlice';
+import { addToast } from '../errors/errorsSlice';
 
 import usersService from '../../../services/usersService';
 import { clearTopLoader, setTopLoader } from '../misc/miscSlice';
@@ -11,8 +11,8 @@ const initialState = {
   fetchLoading: 'idle',
   content: {
     ids: [],
-    users: {},
-  },
+    users: {}
+  }
 };
 
 const getUsers = createAsyncThunk(
@@ -39,7 +39,6 @@ export const usersSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-   
     builder.addCase(getUsers.pending, (state, action) => {
       state.fetchLoading = 'loading';
     });
@@ -52,7 +51,7 @@ export const usersSlice = createSlice({
     builder.addCase(getUsers.rejected, (state, action) => {
       state.fetchLoading = 'idle';
     });
-  },
+  }
 });
 
 export { getUsers };

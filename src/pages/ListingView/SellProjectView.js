@@ -18,13 +18,12 @@ import { useTheme } from '@mui/material/styles';
 import { FaTimes } from 'react-icons/fa';
 import { format } from 'date-fns';
 import { MdPlayArrow } from 'react-icons/md';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { shortenedPriceWords } from '../../utils/helpers';
 import unitLabels from '../../constants/unitLabels';
 import contactInfo from '../../constants/contactInfo.json';
-import { ChipOption, ChipSelect } from '../../components/ChipSelect';
 import DetailsBox from './DetailsBox';
 
 const sortTypes = (types) => {
@@ -52,7 +51,6 @@ const SellProjectView = ({ listing, name }) => {
     ownershipType,
     usp,
     pictures,
-    featuredPicture,
     videoLink,
     brochureLink
   } = listing;
@@ -75,13 +73,6 @@ const SellProjectView = ({ listing, name }) => {
   const handleCloseBackdrop = (e) => {
     setBackdropShown(false);
   };
-
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
-
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages);
-  }
 
   const isPhone = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 

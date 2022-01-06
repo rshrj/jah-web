@@ -1,7 +1,7 @@
 import { CssBaseline, Stack } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { Global } from '@emotion/react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -45,6 +45,11 @@ const App = () => {
     dispatch(loadUserByToken(token));
   }, [dispatch]);
 
+  // To trigger GH Actions
+  useEffect(() => {
+    console.log('hello 15');
+  }, []);
+
   const toasts = useSelector((state) => state.errors.toastErrors);
 
   return (
@@ -65,44 +70,44 @@ const App = () => {
       )}
 
       <BrowserRouter>
-        {/* <ScrollReset> */}
-        <Routes>
-          <Route path='/login' element={<LoginPage />} />
-          <Route path='/signup' element={<SignupPage />} />
-          <Route path='/forgotpassword' element={<ForgotPassword />} />
-          <Route path='/' element={<PublicPage />}>
-            <Route index element={<LandingPage />} />
-            <Route path='home' element={<LandingPage />} />
-            <Route path='listing/:listingId' element={<ListingView />} />
-            <Route path='forbuyers' element={<GalleryView mode='buy' />} />
-            <Route path='fortenants' element={<GalleryView mode='rent' />} />
-            <Route path='contact' element={<ContactPage />} />
-            <Route path='tnc' element={<TermsAndConditions />} />
-            <Route path='submittestimonial' element={<SubmitTestimonial />} />
-            <Route path='privacy' element={<PrivacyPolicy />} />
-            <Route path='about' element={<AboutPage />} />
-            <Route
-              path='dashboard'
-              element={
-                <PrivateRoute>
-                  <DashboardPage />
-                </PrivateRoute>
-              }>
-              <Route index element={<ListingsPage />} />
-              <Route path='listings' element={<ListingsPage />} />
-              <Route path='users' element={<Users />} />
-              <Route path='myaccount' element={<MyAccount />} />
-              <Route path='homead' element={<HomeAd />} />
-              <Route path='newlisting' element={<NewListingPage />} />
-              <Route path='testimonials' element={<Testimonials />} />
-              <Route path='callbackrequests' element={<CallbackRequests />} />
+        <ScrollReset>
+          <Routes>
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/signup' element={<SignupPage />} />
+            <Route path='/forgotpassword' element={<ForgotPassword />} />
+            <Route path='/' element={<PublicPage />}>
+              <Route index element={<LandingPage />} />
+              <Route path='home' element={<LandingPage />} />
+              <Route path='listing/:listingId' element={<ListingView />} />
+              <Route path='forbuyers' element={<GalleryView mode='buy' />} />
+              <Route path='fortenants' element={<GalleryView mode='rent' />} />
+              <Route path='contact' element={<ContactPage />} />
+              <Route path='tnc' element={<TermsAndConditions />} />
+              <Route path='submittestimonial' element={<SubmitTestimonial />} />
+              <Route path='privacy' element={<PrivacyPolicy />} />
+              <Route path='about' element={<AboutPage />} />
+              <Route
+                path='dashboard'
+                element={
+                  <PrivateRoute>
+                    <DashboardPage />
+                  </PrivateRoute>
+                }>
+                <Route index element={<ListingsPage />} />
+                <Route path='listings' element={<ListingsPage />} />
+                <Route path='users' element={<Users />} />
+                <Route path='myaccount' element={<MyAccount />} />
+                <Route path='homead' element={<HomeAd />} />
+                <Route path='newlisting' element={<NewListingPage />} />
+                <Route path='testimonials' element={<Testimonials />} />
+                <Route path='callbackrequests' element={<CallbackRequests />} />
+              </Route>
             </Route>
-          </Route>
-          {/* Testing */}
-          <Route path='/splash' element={<SplashScreen />} />
-          <Route path='*' element={<NotFoundPage />} />
-        </Routes>
-        {/* </ScrollReset> */}
+            {/* Testing */}
+            <Route path='/splash' element={<SplashScreen />} />
+            <Route path='*' element={<NotFoundPage />} />
+          </Routes>
+        </ScrollReset>
       </BrowserRouter>
     </ThemeProvider>
   );
