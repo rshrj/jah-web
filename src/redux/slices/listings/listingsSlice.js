@@ -221,11 +221,46 @@ const getListingsFuzzy = createAsyncThunk(
   }
 );
 
+
+const deleteListing = createAsyncThunk(
+  'listings/deleteListing',
+  async ({ listingId }, { dispatch }) => {
+    console.log(listingId);
+    console.log('Called');
+    dispatch(setTopLoader());
+    try {
+      const data = await listingsService.deleteListing(listingId);
+      dispatch(clearTopLoader());
+      dispatch(getListings());
+      return data.payload;
+      
+    } catch (error) {
+      dispatch(clearTopLoader());
+      if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
+        error.cause.toasts.forEach((toastMessage) =>
+          dispatch(addToast({ type: 'error', message: toastMessage }))
+        );
+      }
+
+      return Promise.reject(error);
+    }
+  }
+);
+
 export const listingsSlice = createSlice({
   name: 'listings',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(deleteListing.pending, (state, action) => {
+      state.loading = 'loading';
+    });
+    builder.addCase(deleteListing.fulfilled, (state, action) => {
+      state.loading = 'idle';
+    });
+    builder.addCase(deleteListing.rejected, (state, action) => {
+      state.loading = 'idle';
+    });
     builder.addCase(addNewListing.pending, (state, action) => {
       state.loading = 'loading';
     });
@@ -330,7 +365,8 @@ export {
   getBuyProperties,
   getRentBuyProperties,
   getFeaturedListings,
-  getRelatedListings
+  getRelatedListings,
+  deleteListing,
 };
 
 export default listingsSlice.reducer;

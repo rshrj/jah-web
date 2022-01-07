@@ -1,7 +1,7 @@
 import {
   rejectWithToast,
   apiUrl,
-  errorWithToast
+  errorWithToast,
 } from '../utils/serviceHelpers';
 
 import { listingKeys } from '../constants/listingTypes';
@@ -34,9 +34,9 @@ export const addNewListing = async ({ type, ...listingFormData }) => {
           mode: 'cors',
           headers: {
             Accept: 'application/json',
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
-          body
+          body,
         });
         return res;
       })
@@ -57,8 +57,8 @@ export const addNewListing = async ({ type, ...listingFormData }) => {
       throw new Error('Request error', {
         cause: {
           success: false,
-          toasts: [].concat(picturesData.map((data) => data.toasts))
-        }
+          toasts: [].concat(picturesData.map((data) => data.toasts)),
+        },
       });
     }
 
@@ -71,13 +71,13 @@ export const addNewListing = async ({ type, ...listingFormData }) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json;charset=UTF-8',
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         ...listingFormData,
         pictures: links,
-        featuredPicture: featuredLink
-      })
+        featuredPicture: featuredLink,
+      }),
     });
 
     if (!res) {
@@ -106,9 +106,46 @@ export const getParticularListing = async (type, page = 1, size = 10) => {
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
+        'Content-Type': 'application/json;charset=UTF-8',
       },
-      body: JSON.stringify({ type, page, size })
+      body: JSON.stringify({ type, page, size }),
+    });
+
+    if (!res) {
+      throw errorWithToast('Server did not respond');
+    }
+
+    const data = await res.json();
+    console.log(data);
+    if (!res.ok) {
+      throw new Error('Request error', { cause: data });
+    }
+
+    return data;
+  } catch (e) {
+    if (e instanceof TypeError && e.message === 'Failed to fetch') {
+      return rejectWithToast('Server is offline');
+    }
+    return Promise.reject(e);
+  }
+};
+
+export const deleteListing = async (listingId) => {
+  let token = localStorage.getItem('token');
+  if (!token) {
+    return rejectWithToast('Not authorized to perform this action');
+  }
+
+  try {
+    const res = await fetch(`${apiUrl}/listings/delete`, {
+      method: 'DELETE',
+      mode: 'cors',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ listingId: listingId }),
     });
 
     if (!res) {
@@ -142,8 +179,8 @@ export const getListings = async () => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json;charset=UTF-8',
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (!res) {
@@ -171,12 +208,12 @@ export const getListingsFuzzy = async (query, type) => {
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
+        'Content-Type': 'application/json;charset=UTF-8',
       },
       body: JSON.stringify({
         query,
-        type
-      })
+        type,
+      }),
     });
 
     // const g = await (() =>
@@ -211,8 +248,8 @@ export const getFeaturedListings = async () => {
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
-      }
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
     });
 
     if (!res) {
@@ -241,8 +278,8 @@ export const getPublicListingById = async (id) => {
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
-      }
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
     });
 
     if (!res) {
@@ -271,8 +308,8 @@ export const getRelatedListings = async (id) => {
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
-      }
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
     });
 
     if (!res) {
@@ -301,7 +338,8 @@ const listingsService = {
   getParticularListing,
   getFeaturedListings,
   getPublicListingById,
-  getRelatedListings
+  getRelatedListings,
+  deleteListing,
 };
 
 export default listingsService;

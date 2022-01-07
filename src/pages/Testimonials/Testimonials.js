@@ -1,12 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Modal, Box } from '@mui/material';
+import {
+  Typography,
+  Modal,
+  Box,
+  Button,
+  Container,
+  FormGroup,
+  FormHelperText,
+  FormLabel,
+  Grid,
+  TextareaAutosize,
+} from '@mui/material';
+import { JInputField } from '../../components/JInputField';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { FaEdit, FaEye, FaTrash, FaCheck, FaTimes } from 'react-icons/fa';
-
+import { useTheme, styled } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
+import { clearFormErrors } from '../../redux/slices/errors/errorsSlice';
 import {
   getAllTestimonials,
   updateTestimonialState,
+  deleteTestimonial,
 } from '../../redux/slices/testimonials/testimonialsSlice';
 
 const style = {
@@ -14,7 +28,8 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '600px',
+  width: '100%',
+  maxWidth: '600px',
   bgcolor: 'background.paper',
   p: 4,
   transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
@@ -26,11 +41,40 @@ const style = {
   overflow: 'hidden',
 };
 
+const StyledTextareaAutosize = styled(TextareaAutosize)(({ theme }) => ({
+  fontFamily: 'inherit',
+  borderColor: theme.palette.grey[400],
+  borderRadius: 5,
+  padding: theme.spacing(1),
+  backgroundColor: 'inherit',
+  '&:hover': {
+    borderColor: theme.palette.grey[600],
+  },
+  '&:focus': {
+    borderColor: theme.palette.primary.main,
+  },
+  '&:focus-visible': {
+    borderColor: theme.palette.primary.main,
+  },
+}));
+
 const Users = () => {
   const dispatch = useDispatch();
+  const errors = useSelector((state) => state.errors.formErrors);
+  const theme = useTheme();
+  const loading = useSelector((state) => state.callback.loading === 'loading');
+  const [isUpdate, setUpdate] = useState(true);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [values, setValues] = useState({
+    name: '',
+    company: '',
+    message: '',
+    phone: '',
+  });
+
   const [one, setOne] = useState({
     name: '',
     company: '',
@@ -40,12 +84,45 @@ const Users = () => {
   });
 
   const showTestimonial = (t) => {
+    setUpdate(false);
     setOne(t);
+    handleOpen();
+  };
+
+  const openUpdateHandler = (data) => {
+    setUpdate(true);
+    setValues({
+      name: data.name,
+      company: data.company,
+      message: data.message,
+      phone: data.phone,
+    });
     handleOpen();
   };
 
   const changeTestimonialState = (id, show) => {
     dispatch(updateTestimonialState({ testimonialId: id, show: show }));
+  };
+
+  const handleChange = (prop) => (event) => {
+    if (Object.entries(errors).length !== 0) {
+      dispatch(clearFormErrors());
+    }
+
+    setValues({ ...values, [prop]: event.target.value });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    //  dispatch(
+    //    submitTestimonial({
+    //      name: values.name,
+    //      company: values.company,
+    //      message: values.message,
+    //      phone: values.phone,
+    //    })
+    //  );
   };
 
   const columns = [
@@ -104,7 +181,6 @@ const Users = () => {
       flex: 1,
       headerName: 'Actions',
       getActions: (params) => {
-        
         const data = {
           name: params.row.name,
           company: params.row.company,
@@ -125,8 +201,16 @@ const Users = () => {
             icon={<FaEye />}
             onClick={() => showTestimonial(data)}
           />,
-          <GridActionsCellItem icon={<FaEdit />} />,
-          <GridActionsCellItem icon={<FaTrash />} />,
+          <GridActionsCellItem
+            icon={<FaEdit />}
+            onClick={() => openUpdateHandler(params.row)}
+          />,
+          <GridActionsCellItem
+            icon={<FaTrash />}
+            onClick={() =>
+              dispatch(deleteTestimonial({ testimonialId: params.id }))
+            }
+          />,
         ];
       },
     },
@@ -183,51 +267,173 @@ const Users = () => {
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'>
         <Box sx={style}>
-          <Box
-            width='100%'
-            justifyContent='space-between'
-            display='inline-flex'>
-            <Typography variant='body2'>
-              {new Date(one.date).toLocaleDateString('en-IN', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-              })}
-            </Typography>
-            <Typography
-              varient='body2'
-              color={
-                one.status === true
-                  ? '#28a745'
-                  : one.status === false
-                  ? '#dc3545'
-                  : '#ffc107'
-              }>
-              {one.status === true
-                ? 'Approved'
-                : one.status === false
-                ? 'Rejected'
-                : 'Pending'}
-            </Typography>
-          </Box>
-          <Typography
-            id='modal-modal-title'
-            variant='h6'
-            component='h2'
-            sx={{ textAlign: 'center' }}>
-            {one.name}
-          </Typography>
-          <Typography
-            id='modal-modal-description'
-            sx={{ mt: 2, textAlign: 'center' }}>
-            {one.company}
-          </Typography>
-          <Typography id='modal-modal-description' sx={{ mt: 2 }}>
-            {one.message}
-          </Typography>
+          {isUpdate ? (
+            <>
+              <Typography
+                sx={{ mb: 1, textAlign: 'center', fontSize:'20px' }}>
+                Update Testimonial
+              </Typography>
+              <Grid
+                container
+                spacing={2}
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <Grid item xs={12} sm={6}>
+                  <FormGroup>
+                    <JInputField
+                      topLabel='Name'
+                      placeholder='Enter your name'
+                      spacing={0}
+                      value={values.name}
+                      handleChange={handleChange('name')}
+                      errors={errors['name']}
+                      disabled={loading}
+                    />
+                  </FormGroup>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <FormGroup>
+                    <JInputField
+                      topLabel={
+                        <Typography>
+                          Company Name{' '}
+                          <span
+                            style={{
+                              color: theme.palette.text.secondary,
+                              fontSize: 13,
+                              marginLeft: 1,
+                            }}>
+                            (Optional)
+                          </span>
+                        </Typography>
+                      }
+                      placeholder='Enter your company name'
+                      spacing={0}
+                      value={values.company}
+                      handleChange={handleChange('company')}
+                      errors={errors['company']}
+                      disabled={loading}
+                    />
+                  </FormGroup>
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                  <FormGroup>
+                    <JInputField
+                      topLabel='Phone number'
+                      placeholder='Enter your phone number'
+                      helperText='We will not share your phone number with anyone'
+                      spacing={0}
+                      value={values.phone}
+                      handleChange={handleChange('phone')}
+                      errors={errors['phone']}
+                      disabled={loading}
+                    />
+                  </FormGroup>
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                  <FormGroup>
+                    <FormLabel
+                      sx={{
+                        color: 'text.primary',
+                        marginBottom: 1,
+                      }}>
+                      <Typography
+                        variant='body1'
+                        color='text.primary'
+                        sx={{
+                          display: 'inline-block',
+                          marginRight: 1,
+                        }}>
+                        Testimonial
+                      </Typography>
+                    </FormLabel>
+                    <StyledTextareaAutosize
+                      aria-label='Testimonial message'
+                      minRows={4}
+                      value={values.message}
+                      onChange={handleChange('message')}
+                      placeholder='Enter your testimonial'
+                    />
+                    {errors['message'] !== undefined && (
+                      <FormHelperText error>{errors['message']}</FormHelperText>
+                    )}
+                    <Typography
+                      color={
+                        values.message.length <= 140
+                          ? 'text.secondary'
+                          : 'error'
+                      }
+                      fontWeight={
+                        values.message.length <= 140 ? 'normal' : 'bold'
+                      }
+                      sx={{ marginTop: 1 }}>
+                      {values.message.length} / 140
+                    </Typography>
+                  </FormGroup>
+                </Grid>
+                <Grid item xs={12} sm={12} textAlign='center'>
+                  <Button
+                    variant='contained'
+                    sx={{ marginTop: 1, marginBottom: 1 }}
+                    onClick={handleSubmit}
+                    disabled={loading || values.message.length > 140}>
+                    Submit
+                  </Button>
+                </Grid>
+              </Grid>
+            </>
+          ) : (
+            <>
+              <Box
+                width='100%'
+                justifyContent='space-between'
+                display='inline-flex'>
+                <Typography variant='body2'>
+                  {new Date(one.date).toLocaleDateString('en-IN', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                  })}
+                </Typography>
+                <Typography
+                  varient='body2'
+                  color={
+                    one.status === true
+                      ? '#28a745'
+                      : one.status === false
+                      ? '#dc3545'
+                      : '#ffc107'
+                  }>
+                  {one.status === true
+                    ? 'Approved'
+                    : one.status === false
+                    ? 'Rejected'
+                    : 'Pending'}
+                </Typography>
+              </Box>
+              <Typography
+                id='modal-modal-title'
+                variant='h6'
+                component='h2'
+                sx={{ textAlign: 'center' }}>
+                {one.name}
+              </Typography>
+              <Typography
+                id='modal-modal-description'
+                sx={{ mt: 2, textAlign: 'center' }}>
+                {one.company}
+              </Typography>
+              <Typography id='modal-modal-description' sx={{ mt: 2 }}>
+                {one.message}
+              </Typography>
+            </>
+          )}
         </Box>
       </Modal>
     </Box>
