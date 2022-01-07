@@ -35,6 +35,50 @@ const getTestimonials = createAsyncThunk(
   }
 );
 
+const getAllTestimonials = createAsyncThunk(
+  'testimonials/getAllTestimonials',
+  async (arg, { dispatch }) => {
+    dispatch(setTopLoader());
+    try {
+      const data = await testimonialsService.getAllTestimonials();
+
+      dispatch(clearTopLoader());
+      return data.payload;
+    } catch (error) {
+      dispatch(clearTopLoader());
+      console.log(error);
+      error.cause?.toasts.forEach((toastMessage) =>
+        dispatch(addToast({ type: 'error', message: toastMessage }))
+      );
+      return Promise.reject(error);
+    }
+  }
+);
+
+const updateTestimonialState = createAsyncThunk(
+  'testimonials/updateTestimonialState',
+  async ({testimonialId, show}, { dispatch }) => {
+    dispatch(setTopLoader());
+    try {
+      const data = await testimonialsService.updateTestimonialState({
+        testimonialId,
+        show,
+      });
+
+      dispatch(clearTopLoader());
+      dispatch(getAllTestimonials());
+      
+    } catch (error) {
+      dispatch(clearTopLoader());
+      console.log(error);
+      error.cause?.toasts.forEach((toastMessage) =>
+        dispatch(addToast({ type: 'error', message: toastMessage }))
+      );
+      return Promise.reject(error);
+    }
+  }
+);
+
 const submitTestimonial = createAsyncThunk(
   'testimonials/submitTestimonial',
   async (formData, { dispatch }) => {
@@ -73,9 +117,34 @@ export const testimonialsSlice = createSlice({
     builder.addCase(getTestimonials.rejected, (state, action) => {
       state.fetchLoading = 'idle';
     });
+    builder.addCase(getAllTestimonials.pending, (state, action) => {
+      state.fetchLoading = 'loading';
+    });
+    builder.addCase(getAllTestimonials.fulfilled, (state, action) => {
+      state.fetchLoading = 'idle';
+      state.content.testimonials = arrayToObject('_id', action.payload);
+      state.content.ids = action.payload.map((listing) => listing._id);
+    });
+    builder.addCase(getAllTestimonials.rejected, (state, action) => {
+      state.fetchLoading = 'idle';
+    });
+    builder.addCase(updateTestimonialState.pending, (state, action) => {
+      state.fetchLoading = 'loading';
+    });
+    builder.addCase(updateTestimonialState.fulfilled, (state, action) => {
+      state.fetchLoading = 'idle';
+    });
+    builder.addCase(updateTestimonialState.rejected, (state, action) => {
+      state.fetchLoading = 'idle';
+    });
   }
 });
 
-export { getTestimonials, submitTestimonial };
+export {
+  getTestimonials,
+  submitTestimonial,
+  getAllTestimonials,
+  updateTestimonialState,
+};
 
 export default testimonialsSlice.reducer;
