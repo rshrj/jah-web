@@ -112,6 +112,8 @@ const SellApartmentForm = ({
     videoLink: ''
   },
   onChange,
+  edit = false,
+  newPictures = [],
   disabled = false
 }) => {
   const isPhone = useMediaQuery('(min-width:600px)');
@@ -132,6 +134,10 @@ const SellApartmentForm = ({
 
   const handleToggle = (prop) => (event, newVal) => {
     if (!onChange) {
+      return;
+    }
+
+    if (event?.type !== 'change' || event?.type !== 'click') {
       return;
     }
 
@@ -198,6 +204,18 @@ const SellApartmentForm = ({
     onChange({
       ...values,
       pictures: newFiles
+    });
+  };
+
+  const handleFilesChangeEdit = (event, newFiles, newLinks) => {
+    if (!onChange) {
+      return;
+    }
+
+    onChange({
+      ...values,
+      pictures: newLinks,
+      newPictures: newFiles
     });
   };
 
@@ -925,19 +943,31 @@ const SellApartmentForm = ({
           <Typography
             variant='h6'
             color='text.secondary'
-            sx={{ fontWeight: 'bold' }}>
+            sx={{
+              fontWeight: 'bold',
+              display: 'inline-block',
+              marginRight: 1
+            }}>
             Add pictures of your property
             <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
           </Typography>
+          <Typography
+            variant='body2'
+            color='text.secondary'
+            sx={{ display: 'inline-block' }}>
+            (Atleast six)
+          </Typography>
         </FormLabel>
         <UploadZone
-          files={values.pictures}
+          files={edit ? newPictures : values.pictures}
+          oldFiles={edit ? values.pictures : []}
           selectedFile={values.featuredPicture}
-          onFilesChange={handleFilesChange}
+          onFilesChange={edit ? handleFilesChangeEdit : handleFilesChange}
           onSelectedFileChange={handleSelectedFileChange}
           label1='Drag and drop or click to choose files'
           label2='Select one of the uploads below as the featured image'
           accept='image/*'
+          edit={edit}
         />
       </FormControl>
 

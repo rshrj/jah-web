@@ -44,9 +44,11 @@ const TestimonialCard = ({ message, name, company }) => {
         />
         <Box>
           <Typography variant='h6'>{name}</Typography>
-          <Typography variant='subtitle2' color='text.secondary'>
-            {company}
-          </Typography>
+          {company !== undefined && (
+            <Typography variant='subtitle2' color='text.secondary'>
+              {company}
+            </Typography>
+          )}
         </Box>
       </Box>
     </Paper>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
@@ -10,11 +10,13 @@ import {
   FaCheck,
   FaTimes
 } from 'react-icons/fa';
+import { format } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getListings } from '../../redux/slices/listings/listingsSlice';
 
 import { listingObject } from '../../constants/listingTypes';
+import { useNavigate } from 'react-router-dom';
 
 // const data = [
 //   {
@@ -100,100 +102,116 @@ import { listingObject } from '../../constants/listingTypes';
 //   },
 // ];
 
-const columns = [
-  {
-    field: 'name',
-    headerName: 'Listing name',
-    description: 'Name of the property / project',
-    type: 'string',
-    flex: 1,
-    renderCell: (params) => (
-      <Box
-        sx={{
-          display: 'inline-flex',
-          alignItems: 'center'
-        }}>
-        <FaBuilding color='orange' />
-        <Typography
-          color='text.primary'
-          variant='body1'
-          sx={{ fontWeight: 'bold', marginLeft: 2 }}>
-          {params.value}
-        </Typography>
-      </Box>
-    )
-  },
-  {
-    field: 'postedBy',
-    headerName: 'Posted By',
-    description:
-      'Customer who posted the property (click to open their profile)',
-    flex: 1
-  },
-  {
-    field: 'state',
-    headerName: 'Status',
-    description: 'status of listing',
-    flex: 1,
-    renderCell: (params) => (
-      <Typography
-        color={
-          params.value === 'Approved'
-            ? '#28a745'
-            : params.value === 'Deactivated'
-            ? '#dc3545'
-            : '#ffc107'
-        }>
-        {params.value === 'Approved'
-          ? 'Approved'
-          : params.value === 'Deactivated'
-          ? 'Deactivated'
-          : 'Pending'}
-      </Typography>
-    )
-  },
-  {
-    field: 'createdAt',
-    headerName: 'Created At',
-    description: 'Time of listing creation',
-    flex: 1
-  },
-  {
-    field: 'listingType',
-    headerName: 'Type',
-    description: 'Type of listing',
-    type: 'singleSelect',
-    flex: 1,
-    valueOptions: ['rentlease', 'sellapartment', 'sellproject'],
-    renderCell: (params) => {
-      console.log(params.value);
-      return (
-        <Typography color={listingObject[params.value].color}>
-          {listingObject[params.value].label}
-        </Typography>
-      );
-    }
-  },
-  {
-    field: 'actions',
-    type: 'actions',
-    flex: 1,
-    headerName: 'Actions',
-    description: 'View, Edit, Delete buttons',
-    getActions: (params) => [
-      <GridActionsCellItem icon={<FaCheck />} />,
-      <GridActionsCellItem icon={<FaTimes />} />,
-      <GridActionsCellItem icon={<FaEye />} />,
-      <GridActionsCellItem icon={<FaEdit />} />,
-      <GridActionsCellItem icon={<FaTrash />} />
-    ]
-  }
-];
-
 const ListingsPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { ids, listings } = useSelector((store) => store.listings.content);
+
+  const columns = useMemo(() => {
+    const handleEdit = (id) => (e) => {
+      navigate(`/dashboard/edit/${id}`);
+    };
+    return [
+      {
+        field: 'name',
+        headerName: 'Listing name',
+        description: 'Name of the property / project',
+        type: 'string',
+        flex: 3,
+        renderCell: (params) => (
+          <Box
+            sx={{
+              display: 'inline-flex',
+              alignItems: 'center'
+            }}>
+            <FaBuilding color='orange' />
+            <Typography
+              color='text.primary'
+              variant='body1'
+              sx={{ fontWeight: 'bold', marginLeft: 2 }}>
+              {params.value}
+            </Typography>
+          </Box>
+        )
+      },
+      {
+        field: 'postedBy',
+        headerName: 'Posted By',
+        description:
+          'Customer who posted the property (click to open their profile)',
+        flex: 1
+      },
+      {
+        field: 'state',
+        headerName: 'Status',
+        description: 'status of listing',
+        flex: 1,
+        renderCell: (params) => (
+          <Typography
+            color={
+              params.value === 'Approved'
+                ? '#28a745'
+                : params.value === 'Deactivated'
+                ? '#dc3545'
+                : '#ffc107'
+            }>
+            {params.value === 'Approved'
+              ? 'Approved'
+              : params.value === 'Deactivated'
+              ? 'Deactivated'
+              : 'Pending'}
+          </Typography>
+        )
+      },
+      {
+        field: 'createdAt',
+        headerName: 'Created At',
+        description: 'Time of listing creation',
+        flex: 1,
+        renderCell: (params) => (
+          <Typography>
+            {format(new Date(params.value), 'MMM dd, yy')}
+          </Typography>
+        )
+      },
+      {
+        field: 'type',
+        headerName: 'Type',
+        description: 'Type of listing',
+        type: 'singleSelect',
+        flex: 1,
+        valueOptions: ['rentlease', 'sellapartment', 'sellproject'],
+        renderCell: (params) => {
+          console.log(params.value);
+          return (
+            <Typography color={listingObject[params.value].color}>
+              {listingObject[params.value].label}
+            </Typography>
+          );
+        }
+      },
+      {
+        field: 'actions',
+        type: 'actions',
+        flex: 1,
+        headerName: 'Actions',
+        description: 'View, Edit, Delete buttons',
+        getActions: (params) => [
+          <GridActionsCellItem icon={<FaCheck />} label='Approve' showInMenu />,
+          <GridActionsCellItem icon={<FaTimes />} label='Reject' showInMenu />,
+          <GridActionsCellItem icon={<FaEye />} label='View' showInMenu />,
+          <GridActionsCellItem
+            icon={<FaEdit />}
+            label='Edit'
+            onClick={handleEdit(params.id)}
+            showInMenu
+          />,
+          <GridActionsCellItem icon={<FaTrash />} label='Delete' showInMenu />
+        ]
+      }
+    ];
+  }, [navigate]);
 
   let data = [];
   if (ids.length !== 0) {
@@ -231,7 +249,9 @@ const ListingsPage = () => {
         sx={{
           display: 'flex',
           height: 600,
-          width: { xs: '100%', sm: '100%', md: '80%', lg: '80%' }
+          width: { xs: '100vw', sm: '600px', md: '850px' },
+          overflowX: { xs: 'scroll', md: 'hidden' },
+          px: 2
         }}>
         <Box sx={{ flexGrow: 1 }}>
           <DataGrid
@@ -242,8 +262,11 @@ const ListingsPage = () => {
               '& .MuiDataGrid-iconSeparator': {
                 visibility: 'hidden'
               },
-              border: 'none'
+              border: 'none',
+              width: 800
             }}
+            pageSize={10}
+            pagination
           />
         </Box>
       </Box>

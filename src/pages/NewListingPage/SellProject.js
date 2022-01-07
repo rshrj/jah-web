@@ -29,7 +29,7 @@ import unitLabels from '../../constants/unitLabels';
 import { ChipOption, ChipSelect } from '../../components/ChipSelect';
 import CountInput from '../../components/CountInput/CountInput';
 import { JInputField, JInputSearch } from '../../components/JInputField';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import UploadZone from '../../components/UploadZone';
 
 const isNumeric = (str) => {
@@ -508,13 +508,18 @@ const SellProjectForm = ({
     brochureLink: ''
   },
   onChange,
+  edit = false,
+  newPictures = [],
   disabled = false
 }) => {
-  const theme = useTheme();
   const [autoVal, setAutoVal] = useState({
     location: '',
     propertyOnFloor: ''
   });
+
+  useEffect(() => {
+    console.log('location is', values.location);
+  }, [values.location]);
 
   const handleAutoValChange = (prop) => (event, newVal) => {
     setAutoVal({
@@ -525,6 +530,10 @@ const SellProjectForm = ({
 
   const handleToggle = (prop) => (event, newVal) => {
     if (!onChange) {
+      return;
+    }
+
+    if (event?.type !== 'change' || event?.type !== 'click') {
       return;
     }
 
@@ -558,6 +567,18 @@ const SellProjectForm = ({
     onChange({
       ...values,
       pictures: newFiles
+    });
+  };
+
+  const handleFilesChangeEdit = (event, newFiles, newLinks) => {
+    if (!onChange) {
+      return;
+    }
+
+    onChange({
+      ...values,
+      pictures: newLinks,
+      newPictures: newFiles
     });
   };
 
@@ -929,19 +950,31 @@ const SellProjectForm = ({
           <Typography
             variant='h6'
             color='text.secondary'
-            sx={{ fontWeight: 'bold' }}>
+            sx={{
+              fontWeight: 'bold',
+              display: 'inline-block',
+              marginRight: 1
+            }}>
             Add pictures of the project
             <span style={{ color: lighten('#ff0000', 0.5) }}>*</span>
           </Typography>
+          <Typography
+            variant='body2'
+            color='text.secondary'
+            sx={{ display: 'inline-block' }}>
+            (Atleast six)
+          </Typography>
         </FormLabel>
         <UploadZone
-          files={values.pictures}
+          files={edit ? newPictures : values.pictures}
+          oldFiles={edit ? values.pictures : []}
           selectedFile={values.featuredPicture}
-          onFilesChange={handleFilesChange}
+          onFilesChange={edit ? handleFilesChangeEdit : handleFilesChange}
           onSelectedFileChange={handleSelectedFileChange}
           label1='Drag and drop or click to choose files'
           label2='Select one of the uploads below as the featured image'
           accept='image/*'
+          edit={edit}
         />
       </FormControl>
 

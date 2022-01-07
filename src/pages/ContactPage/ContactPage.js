@@ -16,7 +16,7 @@ const ContactPage = () => {
   const [values, setValues] = useState({
     name: '',
     phone: '',
-    message: ''
+    message: 'Please call me back'
   });
 
   const handleChange = (prop) => (event) => {
@@ -102,7 +102,7 @@ const ContactPage = () => {
               <FormGroup>
                 <JInputField
                   topLabel='Message'
-                  placeholder='"Please call me back"'
+                  placeholder='Enter your message'
                   spacing={0}
                   value={values.message}
                   handleChange={handleChange('message')}

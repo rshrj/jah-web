@@ -13,7 +13,7 @@ import {
   MdMapsHomeWork,
   MdAccountBalance
 } from 'react-icons/md';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import RentLeaseForm from './RentLeaseForm';
 import SellApartmentForm from './SellApartmentForm';
@@ -109,10 +109,6 @@ const NewListingPage = () => {
       brochureLink: ''
     }
   });
-
-  useEffect(() => {
-    console.log(values.rentlease.name);
-  }, [values.rentlease.name]);
 
   const handleTabChange = (event, newVal) => {
     setTab(newVal);

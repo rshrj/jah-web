@@ -35,6 +35,7 @@ import AboutPage from './pages/AboutPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import SubmitTestimonial from './pages/SubmitTestimonial/SubmitTestimonial';
 import HomeAd from './pages/HomeAd/HomeAd';
+import EditListing from './pages/EditListing/EditListing';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -93,6 +94,7 @@ const App = () => {
                 }>
                 <Route index element={<ListingsPage />} />
                 <Route path='listings' element={<ListingsPage />} />
+                <Route path='edit/:id' element={<EditListing />} />
                 <Route path='users' element={<Users />} />
                 <Route path='myaccount' element={<MyAccount />} />
                 <Route path='homead' element={<HomeAd />} />
