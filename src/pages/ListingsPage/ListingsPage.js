@@ -159,7 +159,7 @@ const columns = [
     flex: 1
   },
   {
-    field: 'listingType',
+    field: 'type',
     headerName: 'Type',
     description: 'Type of listing',
     type: 'singleSelect',

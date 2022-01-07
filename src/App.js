@@ -35,6 +35,7 @@ import AboutPage from './pages/AboutPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import SubmitTestimonial from './pages/SubmitTestimonial/SubmitTestimonial';
 import HomeAd from './pages/HomeAd/HomeAd';
+import ForgotPassword from './pages/ForgotPassword'
 
 const App = () => {
   const dispatch = useDispatch();
@@ -73,6 +74,7 @@ const App = () => {
           <Routes>
             <Route path='/login' element={<LoginPage />} />
             <Route path='/signup' element={<SignupPage />} />
+            <Route path='/forgotpassword' element={<ForgotPassword />} />
             <Route path='/' element={<PublicPage />}>
               <Route index element={<LandingPage />} />
               <Route path='home' element={<LandingPage />} />
