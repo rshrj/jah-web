@@ -6,15 +6,12 @@ import {
 
 export const getTestimonials = async () => {
   try {
-    let token = localStorage.getItem('token');
-
     const res = await fetch(`${apiUrl}/testimonials/show`, {
       method: 'GET',
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8',
-        Authorization: `Bearer ${token}`
+        'Content-Type': 'application/json;charset=UTF-8'
       }
     });
 
