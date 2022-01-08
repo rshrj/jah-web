@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import theme from './styles/theme';
-import globalStyles from './styles/global';
 
 import { loadUserByToken } from './redux/slices/auth/authSlice';
 
@@ -50,7 +49,6 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Global styles={globalStyles} />
       {/* Toasts */}
       {toasts.ids.length !== 0 && (
         <Stack spacing={2} sx={{ width: '100%' }}>
