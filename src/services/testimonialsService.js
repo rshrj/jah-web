@@ -20,13 +20,13 @@ export const getTestimonials = async () => {
     }
 
     const data = await res.json();
-    console.log(data);
     if (!res.ok) {
       throw new Error('Request error', { cause: data });
     }
 
     return data;
   } catch (e) {
+    console.log(e);
     if (e instanceof TypeError && e.message === 'Failed to fetch') {
       return rejectWithToast('Server is offline');
     }
@@ -51,13 +51,13 @@ export const submitTestimonial = async (formData) => {
     }
 
     const data = await res.json();
-    console.log(data);
     if (!res.ok) {
       throw new Error('Request error', { cause: data });
     }
 
     return data;
   } catch (e) {
+    console.log(e);
     if (e instanceof TypeError && e.message === 'Failed to fetch') {
       return rejectWithToast('Server is offline');
     }

@@ -137,7 +137,7 @@ const SellApartmentForm = ({
       return;
     }
 
-    if (event?.type !== 'change' || event?.type !== 'click') {
+    if (event?.type !== 'change' && event?.type !== 'click') {
       return;
     }
 

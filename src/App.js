@@ -45,11 +45,6 @@ const App = () => {
     dispatch(loadUserByToken(token));
   }, [dispatch]);
 
-  // To trigger GH Actions
-  useEffect(() => {
-    console.log('hello 15');
-  }, []);
-
   const toasts = useSelector((state) => state.errors.toastErrors);
 
   return (

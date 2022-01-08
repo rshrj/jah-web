@@ -129,7 +129,7 @@ const RentLeaseForm = ({
       return;
     }
 
-    if (event?.type !== 'change' || event?.type !== 'click') {
+    if (event?.type !== 'change' && event?.type !== 'click') {
       return;
     }
 
@@ -250,6 +250,7 @@ const RentLeaseForm = ({
         spacing={5}
         handleChange={handleChange('societyName')}
         disabled={false}
+        errors={errors['societyName']}
       />
 
       <JInputSearch
@@ -268,6 +269,7 @@ const RentLeaseForm = ({
         value={autoVal.location}
         onChange={handleAutoValChange('location')}
         onInputChange={handleToggle('location')}
+        errors={errors['location']}
       />
 
       <JInputField
@@ -284,6 +286,7 @@ const RentLeaseForm = ({
         spacing={5}
         handleChange={handleChange('landmark')}
         disabled={false}
+        errors={errors['landmark']}
       />
 
       <FormControl sx={{ marginBottom: 5 }}>
@@ -310,6 +313,9 @@ const RentLeaseForm = ({
           <ChipOption value='3bhk' label='3BHK' />
           <ChipOption value='4bhk' label='4BHK' />
         </ChipSelect>
+        {errors['apartmentType'] !== undefined && (
+          <FormHelperText error>{errors['apartmentType']}</FormHelperText>
+        )}
       </FormControl>
 
       <JInputField
@@ -332,6 +338,7 @@ const RentLeaseForm = ({
             ? toWords.convert(values.rent)
             : 'Rent in words'
         }
+        errors={errors['rent']}
       />
 
       <FormControl
@@ -359,6 +366,12 @@ const RentLeaseForm = ({
           }
           label='Price Negotiable'
         />
+        {errors['electricityIncluded'] !== undefined && (
+          <FormHelperText error>{errors['electricityIncluded']}</FormHelperText>
+        )}
+        {errors['priceNegotiable'] !== undefined && (
+          <FormHelperText error>{errors['priceNegotiable']}</FormHelperText>
+        )}
       </FormControl>
 
       <JInputField
@@ -393,6 +406,7 @@ const RentLeaseForm = ({
             ? toWords.convert(values.deposit)
             : 'Deposit in words'
         }
+        errors={errors['deposit']}
       />
 
       <FormControl sx={{ marginBottom: 5 }}>
@@ -418,6 +432,9 @@ const RentLeaseForm = ({
           <ChipOption value='3' label='3' />
           <ChipOption value='4' label='4' />
         </ChipSelect>
+        {errors['numBathrooms'] !== undefined && (
+          <FormHelperText error>{errors['numBathrooms']}</FormHelperText>
+        )}
       </FormControl>
 
       <FormControl sx={{ marginBottom: 5 }}>
@@ -444,6 +461,9 @@ const RentLeaseForm = ({
           <ChipOption value='3' label='3' />
           <ChipOption value='3+' label='More than 3' />
         </ChipSelect>
+        {errors['numBalconies'] !== undefined && (
+          <FormHelperText error>{errors['numBalconies']}</FormHelperText>
+        )}
       </FormControl>
 
       <FormControl
@@ -474,17 +494,13 @@ const RentLeaseForm = ({
           </Typography>
         </FormLabel>
         <TextField
-          error={undefined !== undefined}
+          error={errors['carpetArea'] !== undefined}
           value={values.carpetArea}
           onChange={handleChange('carpetArea')}
           label='Carpet Area in sq. ft.'
         />
-        {undefined !== undefined ? (
-          <FormHelperText error>{undefined}</FormHelperText>
-        ) : (
-          undefined !== undefined && (
-            <FormHelperText>{undefined}</FormHelperText>
-          )
+        {errors['carpetArea'] !== undefined && (
+          <FormHelperText error>{errors['carpetArea']}</FormHelperText>
         )}
 
         {addBuiltUpArea && (
@@ -493,7 +509,7 @@ const RentLeaseForm = ({
               Built-up Area in sq. ft.
             </InputLabel>
             <OutlinedInput
-              error={undefined !== undefined}
+              error={errors['builtUpArea'] !== undefined}
               id='builtUpArea-field'
               value={values.builtUpArea}
               onChange={handleChange('builtUpArea')}
@@ -510,12 +526,8 @@ const RentLeaseForm = ({
               }
               label='Built-up Area in sq. ft.'
             />
-            {undefined !== undefined ? (
-              <FormHelperText error>{undefined}</FormHelperText>
-            ) : (
-              undefined !== undefined && (
-                <FormHelperText>{undefined}</FormHelperText>
-              )
+            {errors['builtUpArea'] !== undefined && (
+              <FormHelperText error>{errors['builtUpArea']}</FormHelperText>
             )}
           </FormControl>
         )}
@@ -526,7 +538,7 @@ const RentLeaseForm = ({
               Super Built-up Area in sq. ft.
             </InputLabel>
             <OutlinedInput
-              error={undefined !== undefined}
+              error={errors['superBuiltUpArea'] !== undefined}
               id='superBuiltUpArea-field'
               value={values.superBuiltUpArea}
               onChange={handleChange('superBuiltUpArea')}
@@ -543,12 +555,10 @@ const RentLeaseForm = ({
               }
               label='Super Built-up Area in sq. ft.'
             />
-            {undefined !== undefined ? (
-              <FormHelperText error>{undefined}</FormHelperText>
-            ) : (
-              undefined !== undefined && (
-                <FormHelperText>{undefined}</FormHelperText>
-              )
+            {errors['superBuiltUpArea'] !== undefined && (
+              <FormHelperText error>
+                {errors['superBuiltUpArea']}
+              </FormHelperText>
             )}
           </FormControl>
         )}
@@ -610,6 +620,9 @@ const RentLeaseForm = ({
           <ChipOption value='servantRoom' label='Servant Room' />
           <ChipOption value='storeRoom' label='Store Room' />
         </ChipSelect>
+        {errors['otherRooms'] !== undefined && (
+          <FormHelperText error>{errors['otherRooms']}</FormHelperText>
+        )}
       </FormControl>
 
       <FormControl sx={{ marginBottom: 5 }}>
@@ -634,6 +647,9 @@ const RentLeaseForm = ({
           <ChipOption value='semiFurnished' label='Semi-furnished' />
           <ChipOption value='unFurnished' label='Un-furnished' />
         </ChipSelect>
+        {errors['furnishing'] !== undefined && (
+          <FormHelperText error>{errors['furnishing']}</FormHelperText>
+        )}
       </FormControl>
 
       <FormControl sx={{ marginBottom: 5 }}>
@@ -669,6 +685,7 @@ const RentLeaseForm = ({
             label='Covered Parking'
             sx={{ marginRight: 5 }}
           />
+
           <CountInput
             value={values.openParking}
             minValue={0}
@@ -677,6 +694,12 @@ const RentLeaseForm = ({
             label='Open Parking'
           />
         </Box>
+        {errors['coveredParking'] !== undefined && (
+          <FormHelperText error>{errors['coveredParking']}</FormHelperText>
+        )}
+        {errors['openParking'] !== undefined && (
+          <FormHelperText error>{errors['openParking']}</FormHelperText>
+        )}
       </FormControl>
 
       <FormControl
@@ -711,19 +734,12 @@ const RentLeaseForm = ({
           row
           sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <TextField
-            error={undefined !== undefined}
+            error={errors['totalFloors'] !== undefined}
             value={values.totalFloors}
             onChange={handleChange('totalFloors')}
             label='Total Floors'
             sx={{ width: '48%' }}
           />
-          {undefined !== undefined ? (
-            <FormHelperText error>{undefined}</FormHelperText>
-          ) : (
-            undefined !== undefined && (
-              <FormHelperText>{undefined}</FormHelperText>
-            )
-          )}
 
           <Autocomplete
             freeSolo
@@ -735,7 +751,7 @@ const RentLeaseForm = ({
             renderInput={(params) => (
               <FormControl ref={params.InputProps.ref} sx={{ width: '100%' }}>
                 <TextField
-                  error={undefined !== undefined}
+                  error={errors['propertyOnFloor'] !== undefined}
                   inputProps={{ ...params.inputProps }}
                   label='Property on Floor'
                 />
@@ -744,6 +760,12 @@ const RentLeaseForm = ({
             sx={{ width: '48%' }}
           />
         </FormGroup>
+        {errors['totalFloors'] !== undefined && (
+          <FormHelperText error>{errors['totalFloors']}</FormHelperText>
+        )}
+        {errors['propertyOnFloor'] !== undefined && (
+          <FormHelperText error>{errors['propertyOnFloor']}</FormHelperText>
+        )}
       </FormControl>
 
       <FormControl sx={{ marginBottom: 5 }}>
@@ -769,6 +791,9 @@ const RentLeaseForm = ({
           <ChipOption value='5-10yrs' label='5-10 years' />
           <ChipOption value='10+yrs' label='10+ years' />
         </ChipSelect>
+        {errors['ageOfProperty'] !== undefined && (
+          <FormHelperText error>{errors['ageOfProperty']}</FormHelperText>
+        )}
       </FormControl>
 
       <FormControl sx={{ marginBottom: 5 }}>
@@ -790,10 +815,13 @@ const RentLeaseForm = ({
           openTo='day'
           views={['year', 'month', 'day']}
           value={values.availableFrom}
-          inputFormat='MMM dd, yyyy'
+          inputFormat={'MMM dd, yyyy'}
           onChange={handleDateChange}
           renderInput={(params) => <TextField {...params} />}
         />
+        {errors['availableFrom'] !== undefined && (
+          <FormHelperText error>{errors['availableFrom']}</FormHelperText>
+        )}
       </FormControl>
 
       <FormControl sx={{ marginBottom: 5 }}>
@@ -847,6 +875,9 @@ const RentLeaseForm = ({
             }
           />
         </ChipSelect>
+        {errors['willingToRentOutTo'] !== undefined && (
+          <FormHelperText error>{errors['willingToRentOutTo']}</FormHelperText>
+        )}
       </FormControl>
 
       <FormControl sx={{ marginBottom: 5 }}>
@@ -884,6 +915,12 @@ const RentLeaseForm = ({
           accept='image/*'
           edit={edit}
         />
+        {errors['pictures'] !== undefined && (
+          <FormHelperText error>{errors['pictures']}</FormHelperText>
+        )}
+        {errors['featuredPicture'] !== undefined && (
+          <FormHelperText error>{errors['featuredPicture']}</FormHelperText>
+        )}
       </FormControl>
 
       <JInputField
@@ -912,6 +949,7 @@ const RentLeaseForm = ({
         handleChange={handleChange('videoLink')}
         disabled={false}
         spacing={5}
+        errors={errors['videoLink']}
       />
     </>
   );

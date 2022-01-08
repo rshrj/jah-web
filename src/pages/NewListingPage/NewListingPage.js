@@ -121,6 +121,7 @@ const NewListingPage = () => {
   const isPhone = useMediaQuery('(min-width:600px)');
 
   const loading = useSelector((state) => state.listings.loading === 'loading');
+  const errors = useSelector((state) => state.errors.formErrors);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -254,6 +255,7 @@ const NewListingPage = () => {
           <RentLeaseForm
             values={values.rentlease}
             onChange={handleChange('rentlease')}
+            errors={errors}
           />
         )}
         {tab === 'sellproject' && (

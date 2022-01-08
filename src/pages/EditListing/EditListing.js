@@ -3,7 +3,7 @@ import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
 import { FaArrowCircleRight, FaTimesCircle } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import {
   getListingById,
@@ -16,21 +16,103 @@ import SellApartmentForm from '../NewListingPage/SellApartmentForm';
 import SellProjectForm from '../NewListingPage/SellProject';
 import { listingKeys } from '../../constants/listingTypes';
 
+const initState = {
+  _id: '',
+  type: '',
+  rentlease: {
+    name: '',
+    societyName: '',
+    location: '',
+    landmark: '',
+    apartmentType: '1rk',
+    rent: '',
+    electricityIncluded: false,
+    priceNegotiable: false,
+    deposit: '',
+    numBathrooms: '1',
+    numBalconies: '1',
+    carpetArea: '',
+    builtUpArea: '',
+    superBuiltUpArea: '',
+    otherRooms: [],
+    furnishing: '',
+    coveredParking: 0,
+    openParking: 0,
+    totalFloors: '',
+    propertyOnFloor: '',
+    ageOfProperty: '',
+    availableFrom: new Date(),
+    willingToRentOutTo: [],
+    pictures: [],
+    featuredPicture: undefined,
+    videoLink: ''
+  },
+  sellapartment: {
+    name: '',
+    societyName: '',
+    location: '',
+    landmark: '',
+    apartmentType: '1rk',
+    price: '',
+    pricePerSqFt: '',
+    allInclusivePrice: false,
+    taxAndGovtChargesExcluded: true,
+    priceNegotiable: false,
+    numBathrooms: '1',
+    numBalconies: '1',
+    carpetArea: '',
+    builtUpArea: '',
+    superBuiltUpArea: '',
+    otherRooms: [],
+    furnishing: '',
+    coveredParking: 0,
+    openParking: 0,
+    totalFloors: '',
+    propertyOnFloor: '',
+    ageOfProperty: '',
+    availabilityStatus: 'readyToMove',
+    possessionBy: new Date(),
+    ownershipType: 'freehold',
+    usp: 'Spacious rooms, well maintained facilities, sufficient ventilation',
+    pictures: [],
+    featuredPicture: undefined,
+    videoLink: ''
+  },
+  sellproject: {
+    name: '',
+    location: '',
+    landmark: '',
+    apartmentTypes: ['1rk'],
+    units: {},
+    coveredParking: 0,
+    openParking: 0,
+    totalFloors: '',
+    propertyOnFloor: '',
+    ageOfProperty: '',
+    availabilityStatus: 'readyToMove',
+    possessionBy: new Date(),
+    ownershipType: 'freehold',
+    usp: 'Spacious rooms, well maintained facilities, sufficient ventilation',
+    pictures: [],
+    featuredPicture: undefined,
+    videoLink: '',
+    brochureLink: ''
+  }
+};
+
 const EditListing = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  let [values, setValues] = useState(initState);
 
-  let [values, setValues] = useState({});
   let [newPictures, setNewPictures] = useState([]);
 
   useEffect(() => {
-    dispatch(getListingById({ id, setValues }));
+    dispatch(getListingById({ id, initState, setValues }));
   }, [dispatch, id, setValues]);
 
-  let loading =
-    useSelector((state) => state.listings.loading === 'loading') ||
-    Object.keys(values).length < 1;
+  let loading = useSelector((state) => state.listings.loading === 'loading');
 
   const handleChange = (prop) => (newVal) => {
     if (newVal.hasOwnProperty('newPictures')) {

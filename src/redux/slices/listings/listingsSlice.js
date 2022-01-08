@@ -37,7 +37,7 @@ const initialState = {
 
 const getListingById = createAsyncThunk(
   'listings/getListingById',
-  async ({ id, setValues }, { dispatch }) => {
+  async ({ id, values, setValues }, { dispatch }) => {
     dispatch(setTopLoader());
     try {
       const data = await listingsService.getPublicListingById(id);
@@ -47,7 +47,9 @@ const getListingById = createAsyncThunk(
       console.log(data.payload);
       let type = data.payload.type;
       setValues({
-        ...data.payload,
+        ...values,
+        _id: data.payload._id,
+        type,
         [type]: { ...data.payload[type], name: data.payload.name }
       });
 
@@ -101,6 +103,7 @@ const updateListing = createAsyncThunk(
       dispatch(clearTopLoader());
 
       dispatch(addToast({ type: 'success', message: data.message }));
+      console.log(`/listing/${data.payload._id}`);
       navigate(`/listing/${data.payload._id}`);
       return data.payload;
     } catch (error) {
@@ -312,7 +315,7 @@ export const listingsSlice = createSlice({
     builder.addCase(updateListing.rejected, (state, action) => {
       state.loading = 'idle';
     });
-    
+
     builder.addCase(getListings.pending, (state, action) => {
       state.fetchLoading = 'loading';
     });

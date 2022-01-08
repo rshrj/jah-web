@@ -138,7 +138,7 @@ export const updateListing = async ({
     let newLinks = [];
     if (newPictures.length > 0) {
       const uploadRes = await Promise.all(
-        listingFormData.pictures.map(async (picture) => {
+        newPictures.map(async (picture) => {
           let body = new FormData();
           body.append('picture', picture);
 
@@ -201,13 +201,13 @@ export const updateListing = async ({
     }
 
     const data = await res.json();
-    console.log(data);
     if (!res.ok) {
       throw new Error('Request error', { cause: data });
     }
 
     return data;
   } catch (e) {
+    console.log(e);
     if (e instanceof TypeError && e.message === 'Failed to fetch') {
       return rejectWithToast('Server is offline');
     }
@@ -232,13 +232,13 @@ export const getParticularListing = async (type, page = 1, size = 10) => {
     }
 
     const data = await res.json();
-    console.log(data);
     if (!res.ok) {
       throw new Error('Request error', { cause: data });
     }
 
     return data;
   } catch (e) {
+    console.log(e);
     if (e instanceof TypeError && e.message === 'Failed to fetch') {
       return rejectWithToast('Server is offline');
     }
@@ -273,6 +273,7 @@ export const getListings = async () => {
 
     return data;
   } catch (e) {
+    console.log(e);
     if (e instanceof TypeError && e.message === 'Failed to fetch') {
       return rejectWithToast('Server is offline');
     }
@@ -313,6 +314,7 @@ export const getListingsFuzzy = async (query, type) => {
 
     return data;
   } catch (e) {
+    console.log(e);
     if (e instanceof TypeError && e.message === 'Failed to fetch') {
       return rejectWithToast('Server is offline');
     }
@@ -336,13 +338,13 @@ export const getFeaturedListings = async () => {
     }
 
     const data = await res.json();
-    console.log(data);
     if (!res.ok) {
       throw new Error('Request error', { cause: data });
     }
 
     return data;
   } catch (e) {
+    console.log(e);
     if (e instanceof TypeError && e.message === 'Failed to fetch') {
       return rejectWithToast('Server is offline');
     }
@@ -366,13 +368,13 @@ export const getPublicListingById = async (id) => {
     }
 
     const data = await res.json();
-    console.log(data);
     if (!res.ok) {
       throw new Error('Request error', { cause: data });
     }
 
     return data;
   } catch (e) {
+    console.log(e);
     if (e instanceof TypeError && e.message === 'Failed to fetch') {
       return rejectWithToast('Server is offline');
     }
@@ -396,13 +398,13 @@ export const getRelatedListings = async (id) => {
     }
 
     const data = await res.json();
-    console.log(data);
     if (!res.ok) {
       throw new Error('Request error', { cause: data });
     }
 
     return data;
   } catch (e) {
+    console.log(e);
     if (e instanceof TypeError && e.message === 'Failed to fetch') {
       return rejectWithToast('Server is offline');
     }
