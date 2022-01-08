@@ -33,10 +33,10 @@ jobs:
       - run: 'chmod 400 ~/.ssh/id_deploy_machine'
       - run: 'echo -e "Host deploy-machine\n\tUser $SSH_USER\n\tHostName $SSH_HOST\n\tIdentityFile ~/.ssh/id_deploy_machine\n\tStrictHostKeyChecking No" >> ~/.ssh/config'
       - name: Enter maintainance mode on the server
-        run: 'ssh deploy-machine "~/setMaintainance -t"'
+        run: 'ssh deploy-machine "~/setMaintainance.sh -t"'
       - name: Copy the build to the server
         run: 'rsync -a ${{ github.workspace }}/build deploy-machine:~/jaiambe/jah-web'
       - name: Restart Nginx
         run: 'ssh deploy-machine "sudo systemctl restart nginx"'
       - name: Exit maintainance mode
-        run: 'ssh deploy-machine "~/setMaintainance -f"'
+        run: 'ssh deploy-machine "~/setMaintainance.sh -f"'
