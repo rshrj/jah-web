@@ -43,7 +43,7 @@ const Testimonials = ({ submit = true }) => {
 
   return (
     <Box>
-      <Container maxWidth='xl'>
+      <Container maxWidth='xl' sx={{ mb: 5 }}>
         <Box
           sx={{
             display: 'flex',
@@ -146,9 +146,10 @@ const Testimonials = ({ submit = true }) => {
                 .slice(num * (page - 1), num * page)
                 .map((id) => (
                   <TestimonialCard
+                    key={testimonials.testimonials[id].createdAt}
                     message={testimonials.testimonials[id].message}
                     name={testimonials.testimonials[id].name}
-                    company={testimonials.testimonials[id].company}
+                    company={testimonials.testimonials[id]?.company}
                   />
                 ))}
             </Box>

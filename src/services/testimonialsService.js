@@ -6,19 +6,13 @@ import {
 
 export const getAllTestimonials = async () => {
   try {
-    let token = localStorage.getItem('token');
-    if (!token) {
-      return rejectWithToast('Not authorized to perform this action');
-    }
-
-    const res = await fetch(`${apiUrl}/testimonials/all`, {
+    const res = await fetch(`${apiUrl}/testimonials/show`, {
       method: 'GET',
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8',
-        Authorization: `Bearer ${token}`,
-      },
+        'Content-Type': 'application/json;charset=UTF-8'
+      }
     });
 
     if (!res) {
@@ -137,6 +131,7 @@ export const getTestimonials = async () => {
 
     return data;
   } catch (e) {
+    console.log(e);
     if (e instanceof TypeError && e.message === 'Failed to fetch') {
       return rejectWithToast('Server is offline');
     }
@@ -168,6 +163,7 @@ export const submitTestimonial = async (formData) => {
 
     return data;
   } catch (e) {
+    console.log(e);
     if (e instanceof TypeError && e.message === 'Failed to fetch') {
       return rejectWithToast('Server is offline');
     }

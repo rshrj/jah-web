@@ -4,7 +4,7 @@ import {
   Typography,
   FormControl,
   Button,
-  Link,
+  Link
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useTheme } from '@mui/material/styles';
@@ -14,7 +14,7 @@ import {
   Link as RouterLink,
   useLocation,
   useNavigate,
-  useSearchParams,
+  useSearchParams
 } from 'react-router-dom';
 import { HashLoader } from 'react-spinners';
 
@@ -22,7 +22,7 @@ import { clearFormErrors } from '../../redux/slices/errors/errorsSlice';
 import {
   forgotPassword,
   verifyResetToken,
-  resetPassword,
+  resetPassword
 } from '../../redux/slices/auth/authSlice';
 
 import Background from '../../components/AuthBackground/AuthBackground';
@@ -36,7 +36,7 @@ const ForgotPassword = () => {
   const [values, setValues] = useState({
     email: '',
     password: '',
-    password2: '',
+    password2: ''
   });
 
   const location = useLocation();
@@ -71,7 +71,7 @@ const ForgotPassword = () => {
     if (loggedIn) {
       navigate(from, { replace: true });
     }
-  }, [loggedIn, navigate, from]);
+  }, [dispatch, verificationToken, loggedIn, navigate, from]);
 
   const handleChange = (prop) => (event) => {
     if (Object.entries(errors).length !== 0) {
@@ -92,7 +92,7 @@ const ForgotPassword = () => {
       resetPassword({
         token: verificationToken,
         password: values.password,
-        password2: values.password2,
+        password2: values.password2
       })
     );
   };
@@ -100,7 +100,7 @@ const ForgotPassword = () => {
   const handleClickShowPassword = (prop) => () => {
     setValues({
       ...values,
-      [prop]: !values[prop],
+      [prop]: !values[prop]
     });
   };
 
@@ -116,7 +116,7 @@ const ForgotPassword = () => {
                 flexDirection: 'column',
                 width: '100%',
                 height: '100%',
-                justifyContent: 'center',
+                justifyContent: 'center'
               }}>
               {verificationToken ? (
                 <>
@@ -128,7 +128,7 @@ const ForgotPassword = () => {
                         width: '100%',
                         height: '100%',
                         justifyContent: 'center',
-                        alignItems: 'center',
+                        alignItems: 'center'
                       }}>
                       <HashLoader
                         color={theme.palette.primary.main}
@@ -148,14 +148,14 @@ const ForgotPassword = () => {
                                   mb: 4,
                                   mt: 2,
                                   fontWeight: 'bold',
-                                  color: '#28a745',
+                                  color: '#28a745'
                                 }}>
                                 Your password has been changed successfully.
                               </Typography>
-                              
+
                               <FormControl
                                 sx={{
-                                  textAlign: 'center',
+                                  textAlign: 'center'
                                 }}>
                                 <Link
                                   component={RouterLink}
@@ -172,7 +172,7 @@ const ForgotPassword = () => {
                                 variant='h5'
                                 sx={{
                                   marginBottom: 4,
-                                  fontWeight: 'bold',
+                                  fontWeight: 'bold'
                                 }}>
                                 Reset Password
                               </Typography>
@@ -208,7 +208,7 @@ const ForgotPassword = () => {
                                   sx={{
                                     color: 'text.primary',
                                     mb: 2,
-                                    mt: 3,
+                                    mt: 3
                                   }}>
                                   <Button
                                     disabled={loading}
@@ -216,8 +216,8 @@ const ForgotPassword = () => {
                                     sx={{
                                       boxShadow: 'none',
                                       '&:hover': {
-                                        boxShadow: 'none',
-                                      },
+                                        boxShadow: 'none'
+                                      }
                                     }}
                                     onClick={handleResetSubmit}>
                                     {loading ? <Loader /> : 'Submit'}
@@ -236,7 +236,7 @@ const ForgotPassword = () => {
                             height: '100%',
                             flexDirection: 'column',
                             justifyContent: 'center',
-                            alignItems: 'center',
+                            alignItems: 'center'
                           }}>
                           <Typography
                             variant='body1'
@@ -244,7 +244,7 @@ const ForgotPassword = () => {
                               mb: 4,
                               mt: 2,
                               fontWeight: 'bold',
-                              color: '#dc3545',
+                              color: '#dc3545'
                             }}>
                             Invalid Link.
                           </Typography>
@@ -254,7 +254,7 @@ const ForgotPassword = () => {
                               mb: 4,
                               mt: 2,
                               fontWeight: 'bold',
-                              color: '#dc3545',
+                              color: '#dc3545'
                             }}>
                             Please close the window.
                           </Typography>
@@ -273,7 +273,7 @@ const ForgotPassword = () => {
                     sx={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      marginBottom: 2,
+                      marginBottom: 2
                     }}>
                     <FaArrowLeft />
                     <Typography sx={{ marginLeft: 1 }}>Back to Home</Typography>
@@ -282,7 +282,7 @@ const ForgotPassword = () => {
                     variant='h5'
                     sx={{
                       marginBottom: 4,
-                      fontWeight: 'bold',
+                      fontWeight: 'bold'
                     }}>
                     Forgot Password
                   </Typography>
@@ -295,7 +295,7 @@ const ForgotPassword = () => {
                           mb: 4,
                           mt: 2,
                           fontWeight: 'bold',
-                          color: '#28a745',
+                          color: '#28a745'
                         }}>
                         Please check your email.
                       </Typography>
@@ -314,7 +314,7 @@ const ForgotPassword = () => {
                           sx={{
                             color: 'text.primary',
                             mb: 2,
-                            mt: 3,
+                            mt: 3
                           }}>
                           <Button
                             disabled={loading}
@@ -322,8 +322,8 @@ const ForgotPassword = () => {
                             sx={{
                               boxShadow: 'none',
                               '&:hover': {
-                                boxShadow: 'none',
-                              },
+                                boxShadow: 'none'
+                              }
                             }}
                             onClick={handleSubmit}>
                             {loading ? <Loader /> : 'Submit'}
@@ -334,7 +334,7 @@ const ForgotPassword = () => {
 
                     <FormControl
                       sx={{
-                        textAlign: 'center',
+                        textAlign: 'center'
                       }}>
                       <Link
                         component={RouterLink}
@@ -347,7 +347,7 @@ const ForgotPassword = () => {
 
                     <FormControl
                       sx={{
-                        textAlign: 'center',
+                        textAlign: 'center'
                       }}>
                       <Link
                         component={RouterLink}

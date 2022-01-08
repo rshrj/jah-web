@@ -17,7 +17,7 @@ import { Box } from '@mui/system';
 import { useState } from 'react';
 import { FaBars, FaPlus, FaSignInAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import { logout } from '../../redux/slices/auth/authSlice';
 
@@ -48,8 +48,14 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 
 const settings = [
   {
+    label: 'Dashboard',
+    action: (_, navigate) => {
+      navigate('/dashboard');
+    }
+  },
+  {
     label: 'Logout',
-    action: (dispatch) => {
+    action: (dispatch, _) => {
       dispatch(logout());
     }
   }
@@ -59,6 +65,7 @@ const settings = [
 const NavBar = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -76,7 +83,7 @@ const NavBar = () => {
       setAnchorElNav(null);
       return;
     }
-    action(dispatch);
+    action(dispatch, navigate);
     setAnchorElNav(null);
   };
 
@@ -213,7 +220,7 @@ const NavBar = () => {
               sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
               component={RouterLink}
               to='/'>
-              <Logo size={60} />
+              <Logo size={50} />
             </StyledToolbar>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               {pages.map((page) => (

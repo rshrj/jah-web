@@ -25,17 +25,17 @@ import ListingView from './pages/ListingView';
 import LandingPage from './pages/LandingPage';
 import GalleryView from './pages/GalleryView';
 import NotFoundPage from './pages/NotFoundPage';
-import ListingsPage from './pages/ListingsPage/ListingsPage';
-import Users from './pages/Users/Users';
-import Testimonials from './pages/Testimonials/Testimonials';
-import CallbackRequests from './pages/CallbackRequests/CallbackRequests';
+import ListingsPage from './pages/ListingsPage';
+import Users from './pages/Users';
+import CallbackRequests from './pages/CallbackRequests';
 import TermsAndConditions from './pages/TermsAndConditions';
 import ContactPage from './pages/ContactPage';
 import AboutPage from './pages/AboutPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
-import SubmitTestimonial from './pages/SubmitTestimonial/SubmitTestimonial';
-import HomeAd from './pages/HomeAd/HomeAd';
-import ForgotPassword from './pages/ForgotPassword'
+import SubmitTestimonial from './pages/SubmitTestimonial';
+import HomeAd from './pages/HomeAd';
+import EditListing from './pages/EditListing';
+// import ForgotPassword from './pages/ForgotPassword';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -44,11 +44,6 @@ const App = () => {
     let token = localStorage.getItem('token');
     dispatch(loadUserByToken(token));
   }, [dispatch]);
-
-  // To trigger GH Actions
-  useEffect(() => {
-    console.log('hello 15');
-  }, []);
 
   const toasts = useSelector((state) => state.errors.toastErrors);
 
@@ -74,7 +69,7 @@ const App = () => {
           <Routes>
             <Route path='/login' element={<LoginPage />} />
             <Route path='/signup' element={<SignupPage />} />
-            <Route path='/forgotpassword' element={<ForgotPassword />} />
+            {/* <Route path='/forgotpassword' element={<ForgotPassword />} /> */}
             <Route path='/' element={<PublicPage />}>
               <Route index element={<LandingPage />} />
               <Route path='home' element={<LandingPage />} />
@@ -95,11 +90,12 @@ const App = () => {
                 }>
                 <Route index element={<ListingsPage />} />
                 <Route path='listings' element={<ListingsPage />} />
+                <Route path='edit/:id' element={<EditListing />} />
                 <Route path='users' element={<Users />} />
                 <Route path='myaccount' element={<MyAccount />} />
                 <Route path='homead' element={<HomeAd />} />
                 <Route path='newlisting' element={<NewListingPage />} />
-                <Route path='testimonials' element={<Testimonials />} />
+                <Route path='testimonials' element={<SubmitTestimonial />} />
                 <Route path='callbackrequests' element={<CallbackRequests />} />
               </Route>
             </Route>

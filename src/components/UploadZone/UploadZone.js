@@ -10,7 +10,14 @@ const Input = styled('input')({
   display: 'none'
 });
 
-const FileBox = ({ file, selected = false, onImgClick, onDeleteClick }) => {
+const FileBox = ({
+  old = false,
+  link,
+  file,
+  selected = false,
+  onImgClick,
+  onDeleteClick
+}) => {
   const theme = useTheme();
   const [preview, setPreview] = useState('');
 
@@ -62,10 +69,10 @@ const FileBox = ({ file, selected = false, onImgClick, onDeleteClick }) => {
         onClick={onDeleteClick}>
         <FaTimes />
       </IconButton>
-      {/^image\/[a-zA-Z]+$/i.test(file.type) && (
+      {(old || /^image\/[a-zA-Z]+$/i.test(file.type)) && (
         <Box>
           <img
-            src={preview}
+            src={old ? link : preview}
             alt='blah'
             style={{
               display: 'block',
@@ -104,6 +111,8 @@ const FileBox = ({ file, selected = false, onImgClick, onDeleteClick }) => {
 };
 
 const UploadZone = ({
+  edit = false,
+  oldFiles = [],
   files = [],
   file,
   selectedFile,
@@ -136,6 +145,11 @@ const UploadZone = ({
 
       newFiles = Array.from(new Set(newFiles).values());
 
+      if (edit) {
+        onFilesChange(null, newFiles, oldFiles);
+        return;
+      }
+
       onFilesChange(null, newFiles);
     }
   });
@@ -167,11 +181,22 @@ const UploadZone = ({
 
     newFiles = Array.from(new Set(newFiles).values());
 
+    if (edit) {
+      onFilesChange(e, newFiles, oldFiles);
+      return;
+    }
+
     onFilesChange(e, newFiles);
   };
 
   const handleDeleteClick = (file) => (event) => {
     if (!onFilesChange) {
+      return;
+    }
+
+    if (edit && oldFiles.includes(file)) {
+      let f2 = oldFiles.filter((f) => f !== file);
+      onFilesChange(event, files, f2);
       return;
     }
 
@@ -181,6 +206,11 @@ const UploadZone = ({
 
     let newFiles = files.filter((f) => f !== file);
 
+    if (edit) {
+      onFilesChange(event, newFiles, oldFiles);
+      return;
+    }
+
     onFilesChange(event, newFiles);
   };
 
@@ -189,7 +219,11 @@ const UploadZone = ({
       return;
     }
 
-    if (!files.includes(file)) {
+    if (!edit && !files.includes(file)) {
+      return;
+    }
+
+    if (edit && !files.includes(file) && !oldFiles.includes(file)) {
       return;
     }
 
@@ -227,7 +261,12 @@ const UploadZone = ({
     onFilesChange(event, undefined);
   };
 
-  let isFiles = files.length > 0;
+  console.log(oldFiles);
+
+  let isFiles =
+    (!edit && files.length > 0) ||
+    (edit && oldFiles.length > 0) ||
+    files.length > 0;
 
   return (
     <>
@@ -287,6 +326,19 @@ const UploadZone = ({
               m: 2,
               maxWidth: '750px'
             }}>
+            {edit &&
+              oldFiles.map((filep) => (
+                <FileBox
+                  old
+                  key={filep}
+                  link={filep}
+                  selected={
+                    selectedFile !== undefined && selectedFile === filep
+                  }
+                  onDeleteClick={handleDeleteClick(filep)}
+                  onImgClick={handleImgClick(filep)}
+                />
+              ))}
             {files.map((filep) => (
               <FileBox
                 key={filep.name}
@@ -297,7 +349,7 @@ const UploadZone = ({
               />
             ))}
           </Box>
-        </> 
+        </>
       )}
       {file !== undefined && (
         <Box sx={{ m: 2 }}>

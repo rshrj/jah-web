@@ -13,7 +13,7 @@ import {
   MdMapsHomeWork,
   MdAccountBalance
 } from 'react-icons/md';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import RentLeaseForm from './RentLeaseForm';
 import SellApartmentForm from './SellApartmentForm';
@@ -110,10 +110,6 @@ const NewListingPage = () => {
     }
   });
 
-  useEffect(() => {
-    console.log(values.rentlease.name);
-  }, [values.rentlease.name]);
-
   const handleTabChange = (event, newVal) => {
     setTab(newVal);
   };
@@ -125,6 +121,7 @@ const NewListingPage = () => {
   const isPhone = useMediaQuery('(min-width:600px)');
 
   const loading = useSelector((state) => state.listings.loading === 'loading');
+  const errors = useSelector((state) => state.errors.formErrors);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -258,6 +255,7 @@ const NewListingPage = () => {
           <RentLeaseForm
             values={values.rentlease}
             onChange={handleChange('rentlease')}
+            errors={errors}
           />
         )}
         {tab === 'sellproject' && (

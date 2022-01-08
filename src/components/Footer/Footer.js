@@ -30,7 +30,7 @@ const IconsWrapper = styled.div`
 `;
 const Content = styled.div`
   width: 281px;
-  color: #828282;
+  color: ${({ theme }) => theme.palette.grey[600]};
   font-size: 16px;
   letter-spacing: 0.15px;
 `;
@@ -276,17 +276,17 @@ const Footer = () => {
         <Box
           component='div'
           sx={{
-            height: '30px',
+            height: '40px',
             width: '100%',
-            backgroundColor: '#E85D04',
+            backgroundColor: 'primary.main',
             color: 'white',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            fontSize: '12px'
+            fontSize: { xs: '11px', sm: '18px' }
           }}>
           Created with love &nbsp;<span style={{ color: 'red' }}>♥</span> &nbsp;
-          by Zenoholics. © 2021 All Rights Reserved
+          by Zenoholics. © {new Date().getFullYear()} All Rights Reserved
         </Box>
       </Box>
     </>

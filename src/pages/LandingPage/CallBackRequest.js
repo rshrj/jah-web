@@ -4,6 +4,7 @@ import {
   Container,
   FormGroup,
   Grid,
+  lighten,
   Typography,
   useMediaQuery
 } from '@mui/material';
@@ -14,14 +15,16 @@ import { submitCallBackRequest } from '../../redux/slices/callback/callbackSlice
 import { clearFormErrors } from '../../redux/slices/errors/errorsSlice';
 
 import { JInputField } from '../../components/JInputField';
+import { useTheme } from '@mui/material/styles';
 
 const CallBackRequest = () => {
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   const [values, setValues] = useState({
     name: '',
     phone: '',
-    message: ''
+    message: 'Please call me back'
   });
 
   const handleChange = (prop) => (event) => {
@@ -52,7 +55,7 @@ const CallBackRequest = () => {
   return (
     <Box
       sx={{
-        backgroundColor: 'common.white'
+        backgroundColor: lighten(theme.palette.primary.light, 0.93)
       }}>
       <Container maxWidth='xl'>
         <Box
@@ -112,7 +115,7 @@ const CallBackRequest = () => {
               <FormGroup>
                 <JInputField
                   topLabel='Message'
-                  placeholder='"Please call me back"'
+                  placeholder='Enter your message'
                   spacing={0}
                   value={values.message}
                   handleChange={handleChange('message')}
