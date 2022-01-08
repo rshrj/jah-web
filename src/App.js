@@ -25,17 +25,18 @@ import ListingView from './pages/ListingView';
 import LandingPage from './pages/LandingPage';
 import GalleryView from './pages/GalleryView';
 import NotFoundPage from './pages/NotFoundPage';
-import ListingsPage from './pages/ListingsPage/ListingsPage';
-import Users from './pages/Users/Users';
-import Testimonials from './pages/Testimonials/Testimonials';
-import CallbackRequests from './pages/CallbackRequests/CallbackRequests';
+import ListingsPage from './pages/ListingsPage';
+import Users from './pages/Users';
+import Testimonials from './pages/Testimonials';
+import CallbackRequests from './pages/CallbackRequests';
 import TermsAndConditions from './pages/TermsAndConditions';
 import ContactPage from './pages/ContactPage';
 import AboutPage from './pages/AboutPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
-import SubmitTestimonial from './pages/SubmitTestimonial/SubmitTestimonial';
-import HomeAd from './pages/HomeAd/HomeAd';
-import EditListing from './pages/EditListing/EditListing';
+import SubmitTestimonial from './pages/SubmitTestimonial';
+import HomeAd from './pages/HomeAd';
+import EditListing from './pages/EditListing';
+import ForgotPassword from './pages/ForgotPassword';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -69,6 +70,7 @@ const App = () => {
           <Routes>
             <Route path='/login' element={<LoginPage />} />
             <Route path='/signup' element={<SignupPage />} />
+            <Route path='/forgotpassword' element={<ForgotPassword />} />
             <Route path='/' element={<PublicPage />}>
               <Route index element={<LandingPage />} />
               <Route path='home' element={<LandingPage />} />
