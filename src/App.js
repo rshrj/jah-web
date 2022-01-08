@@ -27,7 +27,6 @@ import GalleryView from './pages/GalleryView';
 import NotFoundPage from './pages/NotFoundPage';
 import ListingsPage from './pages/ListingsPage';
 import Users from './pages/Users';
-import Testimonials from './pages/Testimonials';
 import CallbackRequests from './pages/CallbackRequests';
 import TermsAndConditions from './pages/TermsAndConditions';
 import ContactPage from './pages/ContactPage';
@@ -96,7 +95,7 @@ const App = () => {
                 <Route path='myaccount' element={<MyAccount />} />
                 <Route path='homead' element={<HomeAd />} />
                 <Route path='newlisting' element={<NewListingPage />} />
-                <Route path='testimonials' element={<Testimonials />} />
+                <Route path='testimonials' element={<SubmitTestimonial />} />
                 <Route path='callbackrequests' element={<CallbackRequests />} />
               </Route>
             </Route>
