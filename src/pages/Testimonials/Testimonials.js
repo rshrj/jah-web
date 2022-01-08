@@ -17,10 +17,13 @@ import { FaEdit, FaEye, FaTrash, FaCheck, FaTimes } from 'react-icons/fa';
 import { useTheme, styled } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearFormErrors } from '../../redux/slices/errors/errorsSlice';
+import Loader from '../../components/Loader';
 import {
   getAllTestimonials,
   updateTestimonialState,
+  updateTestimonial,
   deleteTestimonial,
+  setUpdateState,
 } from '../../redux/slices/testimonials/testimonialsSlice';
 
 const style = {
@@ -63,12 +66,13 @@ const Users = () => {
   const errors = useSelector((state) => state.errors.formErrors);
   const theme = useTheme();
   const loading = useSelector((state) => state.callback.loading === 'loading');
-  const [isUpdate, setUpdate] = useState(true);
+  const [isUpdate, setUpdate] = useState(false);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const [values, setValues] = useState({
+    id: '',
     name: '',
     company: '',
     message: '',
@@ -90,8 +94,11 @@ const Users = () => {
   };
 
   const openUpdateHandler = (data) => {
+    console.log(data);
     setUpdate(true);
+    dispatch(setUpdateState());
     setValues({
+      id: data.id,
       name: data.name,
       company: data.company,
       message: data.message,
@@ -112,17 +119,26 @@ const Users = () => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
+  const updatePending = useSelector(
+    (state) => state.testimonials.updatePending
+  );
+
+  if (!updatePending && isUpdate && open) {
+    handleClose();
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    //  dispatch(
-    //    submitTestimonial({
-    //      name: values.name,
-    //      company: values.company,
-    //      message: values.message,
-    //      phone: values.phone,
-    //    })
-    //  );
+    console.log('Update Click');
+    dispatch(
+      updateTestimonial({
+        testimonialId: values.id,
+        name: values.name,
+        company: values.company,
+        message: values.message,
+        phone: values.phone,
+      })
+    );
   };
 
   const columns = [
@@ -156,17 +172,17 @@ const Users = () => {
           {params.value === true
             ? 'Approved'
             : params.value === false
-            ? 'Rejected'
+            ? 'Denied'
             : 'Pending'}
         </Typography>
       ),
     },
-    // {
-    //   field: 'mobile',
-    //   headerName: 'Mobile No.',
-    //   description: 'Mobile number of the user',
-    //   flex: 1,
-    // },
+    {
+      field: 'phone',
+      headerName: 'Mobile No.',
+      description: 'Mobile number of the user',
+      flex: 1,
+    },
     {
       field: 'createdAt',
       headerName: 'Created At',
@@ -191,22 +207,32 @@ const Users = () => {
         return [
           <GridActionsCellItem
             icon={<FaCheck />}
+            label='Approve'
+            showInMenu
             onClick={() => changeTestimonialState(params.id, true)}
           />,
           <GridActionsCellItem
             icon={<FaTimes />}
+            label='Deny'
+            showInMenu
             onClick={() => changeTestimonialState(params.id, false)}
           />,
           <GridActionsCellItem
             icon={<FaEye />}
+            label='View'
+            showInMenu
             onClick={() => showTestimonial(data)}
           />,
           <GridActionsCellItem
             icon={<FaEdit />}
+            label='Edit'
+            showInMenu
             onClick={() => openUpdateHandler(params.row)}
           />,
           <GridActionsCellItem
             icon={<FaTrash />}
+            label='Delete'
+            showInMenu
             onClick={() =>
               dispatch(deleteTestimonial({ testimonialId: params.id }))
             }
@@ -269,8 +295,7 @@ const Users = () => {
         <Box sx={style}>
           {isUpdate ? (
             <>
-              <Typography
-                sx={{ mb: 1, textAlign: 'center', fontSize:'20px' }}>
+              <Typography sx={{ mb: 1, textAlign: 'center', fontSize: '20px' }}>
                 Update Testimonial
               </Typography>
               <Grid
@@ -380,7 +405,7 @@ const Users = () => {
                     sx={{ marginTop: 1, marginBottom: 1 }}
                     onClick={handleSubmit}
                     disabled={loading || values.message.length > 140}>
-                    Submit
+                    {loading ? <Loader /> : 'Submit'}
                   </Button>
                 </Grid>
               </Grid>

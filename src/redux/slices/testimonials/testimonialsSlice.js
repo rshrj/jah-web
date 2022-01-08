@@ -13,6 +13,7 @@ const initialState = {
     ids: [],
     testimonials: {},
   },
+  updatePending: false 
 };
 
 const getTestimonials = createAsyncThunk(
@@ -73,6 +74,37 @@ const updateTestimonialState = createAsyncThunk(
       error.cause?.toasts.forEach((toastMessage) =>
         dispatch(addToast({ type: 'error', message: toastMessage }))
       );
+      
+      return Promise.reject(error);
+    }
+  }
+);
+
+const updateTestimonial = createAsyncThunk(
+  'testimonials/updateTestimonial',
+  async ({ testimonialId, name, company, message, phone }, { dispatch }) => {
+    dispatch(setTopLoader());
+    try {
+      const data = await testimonialsService.updateTestimonial({
+        testimonialId,
+        name,
+        company,
+        message,
+        phone,
+      });
+      dispatch(addToast({ type: 'success', message: data.message }));
+      dispatch(clearTopLoader());
+      dispatch(getAllTestimonials());
+    } catch (error) {
+      dispatch(clearTopLoader());
+      if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
+        error.cause.toasts.forEach((toastMessage) =>
+          dispatch(addToast({ type: 'error', message: toastMessage }))
+        );
+      }
+       if (error.cause.errors !== undefined || error.cause.errors !== {}) {
+         dispatch(createFormErrors(error.cause.errors));
+       }
       return Promise.reject(error);
     }
   }
@@ -92,9 +124,11 @@ const deleteTestimonial = createAsyncThunk(
     } catch (error) {
       dispatch(clearTopLoader());
       console.log(error);
-      error.cause?.toasts.forEach((toastMessage) =>
-        dispatch(addToast({ type: 'error', message: toastMessage }))
-      );
+      if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
+        error.cause.toasts.forEach((toastMessage) =>
+          dispatch(addToast({ type: 'error', message: toastMessage }))
+        );
+      }
       return Promise.reject(error);
     }
   }
@@ -125,14 +159,27 @@ const submitTestimonial = createAsyncThunk(
 export const testimonialsSlice = createSlice({
   name: 'testimonials',
   initialState,
-  reducers: {},
+  reducers: {
+    setUpdateState : (state)=>{
+      state.updatePending = true;
+    }
+  },
   extraReducers: (builder) => {
+    builder.addCase(updateTestimonial.pending, (state, action) => {
+      state.fetchLoading = 'loading';
+    });
+    builder.addCase(updateTestimonial.fulfilled, (state, action) => {
+      state.fetchLoading = 'idle';
+      state.updatePending = false;
+    });
+    builder.addCase(updateTestimonial.rejected, (state, action) => {
+      state.fetchLoading = 'idle';
+    });
     builder.addCase(deleteTestimonial.pending, (state, action) => {
       state.fetchLoading = 'loading';
     });
     builder.addCase(deleteTestimonial.fulfilled, (state, action) => {
       state.fetchLoading = 'idle';
-     
     });
     builder.addCase(deleteTestimonial.rejected, (state, action) => {
       state.fetchLoading = 'idle';
@@ -171,12 +218,16 @@ export const testimonialsSlice = createSlice({
   },
 });
 
+const { setUpdateState } = testimonialsSlice.actions;
+
 export {
   getTestimonials,
   submitTestimonial,
   getAllTestimonials,
   updateTestimonialState,
   deleteTestimonial,
+  updateTestimonial,
+  setUpdateState,
 };
 
 export default testimonialsSlice.reducer;
