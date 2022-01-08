@@ -283,7 +283,7 @@ const Footer = () => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            fontSize: '18px'
+            fontSize: { xs: '11px', sm: '18px' }
           }}>
           Created with love &nbsp;<span style={{ color: 'red' }}>♥</span> &nbsp;
           by Zenoholics. © {new Date().getFullYear()} All Rights Reserved
