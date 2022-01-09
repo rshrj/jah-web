@@ -17,7 +17,7 @@ const listingTypes = [
   },
   {
     type: 'sellapartment',
-    label: 'Sell Apartment',
+    label: 'Apartment',
     labelCaption: '(resell homes)',
     schema: null,
     icon: MdMapsHomeWork,
@@ -25,7 +25,7 @@ const listingTypes = [
   },
   {
     type: 'sellproject',
-    label: 'Sell Project',
+    label: 'Project',
     labelCaption: '(several flats)',
     schema: null,
     icon: MdLocationCity,

@@ -112,82 +112,85 @@ const LoginPage = () => {
               Login
             </Typography>
 
-            <FormGroup>
-              <JInputField
-                topLabel='Email'
-                placeholder='Enter your email'
-                value={values.email}
-                handleChange={handleChange('email')}
-                errors={errors['email']}
-                disabled={loading}
-              />
-
-              <JPasswordField
-                topLabel='Password'
-                placeholder='Enter your password'
-                value={values.password}
-                handleChange={handleChange('password')}
-                errors={errors['password']}
-                handleClickShowPassword={handleClickShowPassword}
-                showPassword={values.showPassword}
-                disabled={loading}
-              />
-
-              <FormControl
-                sx={{
-                  marginBottom: 2
-                }}>
-                <FormControlLabel
-                  control={<Checkbox disabled={loading} />}
-                  label='Remember me'
-                />
-              </FormControl>
-
-              <FormControl
-                sx={{
-                  color: 'text.primary',
-                  marginBottom: 1
-                }}>
-                <Button
+            <form autocomplete>
+              <FormGroup>
+                <JInputField
+                  topLabel='Email'
+                  placeholder='Enter your email'
+                  value={values.email}
+                  handleChange={handleChange('email')}
+                  errors={errors['email']}
                   disabled={loading}
-                  variant='contained'
+                />
+
+                <JPasswordField
+                  topLabel='Password'
+                  placeholder='Enter your password'
+                  value={values.password}
+                  handleChange={handleChange('password')}
+                  errors={errors['password']}
+                  handleClickShowPassword={handleClickShowPassword}
+                  showPassword={values.showPassword}
+                  disabled={loading}
+                />
+
+                <FormControl
                   sx={{
-                    boxShadow: 'none',
-                    '&:hover': {
-                      boxShadow: 'none'
-                    }
-                  }}
-                  onClick={handleSubmit}>
-                  {loading ? <Loader /> : 'Login'}
-                </Button>
-              </FormControl>
+                    marginBottom: 2
+                  }}>
+                  <FormControlLabel
+                    control={<Checkbox disabled={loading} />}
+                    label='Remember me'
+                  />
+                </FormControl>
 
-              <FormControl
-                sx={{
-                  textAlign: 'center'
-                }}>
-                <Link
-                  component={RouterLink}
-                  to='/forgotpassword'
-                  underline='hover'
-                  color='primary'>
-                  Forgot Password
-                </Link>
-              </FormControl>
+                <FormControl
+                  sx={{
+                    color: 'text.primary',
+                    marginBottom: 1
+                  }}>
+                  <Button
+                    type='submit'
+                    disabled={loading}
+                    variant='contained'
+                    sx={{
+                      boxShadow: 'none',
+                      '&:hover': {
+                        boxShadow: 'none'
+                      }
+                    }}
+                    onClick={handleSubmit}>
+                    {loading ? <Loader /> : 'Login'}
+                  </Button>
+                </FormControl>
 
-              <FormControl
-                sx={{
-                  textAlign: 'center'
-                }}>
-                <Link
-                  component={RouterLink}
-                  to='/signup'
-                  underline='hover'
-                  color='primary'>
-                  New here? Sign up
-                </Link>
-              </FormControl>
-            </FormGroup>
+                <FormControl
+                  sx={{
+                    textAlign: 'center'
+                  }}>
+                  <Link
+                    component={RouterLink}
+                    to='/forgotpassword'
+                    underline='hover'
+                    color='primary'>
+                    Forgot Password
+                  </Link>
+                </FormControl>
+
+                <FormControl
+                  sx={{
+                    textAlign: 'center'
+                  }}>
+                  <Link
+                    component={RouterLink}
+                    to='/signup'
+                    underline='hover'
+                    color='primary'>
+                    New here? Sign up
+                  </Link>
+                </FormControl>
+              </FormGroup>
+            </form>
           </Box>
         </Grid>
         <Grid item xs={2} sm={2} lg={3} xl={4} />

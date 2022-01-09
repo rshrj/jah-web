@@ -203,17 +203,19 @@ const SellProjectView = ({ listing, name }) => {
                 }}>
                 Click to enlarge
               </Typography>
-              <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
-                <MdPlayArrow color={theme.palette.primary.main} />
-                <Link
-                  href={videoLink}
-                  target='_blank'
-                  rel='noopener noreferer'
-                  underline='hover'
-                  sx={{ marginLeft: 1 }}>
-                  Click here to play the video
-                </Link>
-              </Box>
+              {videoLink !== '' && (
+                <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                  <MdPlayArrow color={theme.palette.primary.main} />
+                  <Link
+                    href={videoLink}
+                    target='_blank'
+                    rel='noopener noreferer'
+                    underline='hover'
+                    sx={{ marginLeft: 1 }}>
+                    Click here to play the video
+                  </Link>
+                </Box>
+              )}
             </Box>
             <Backdrop
               sx={{

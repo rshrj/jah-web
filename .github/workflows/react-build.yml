@@ -6,7 +6,7 @@ on:
       - '.github/**'
       - '**.md'
     branches:
-      - main
+      - deployed
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Pull the repo
         uses: actions/checkout@v2
+        with:
+          ref: 'deployed'
       - name: Use Node.js v16
         uses: actions/setup-node@v2
         with:
@@ -32,8 +34,11 @@ jobs:
       - run: 'echo "$SSH_KEY" >> ~/.ssh/id_deploy_machine'
       - run: 'chmod 400 ~/.ssh/id_deploy_machine'
       - run: 'echo -e "Host deploy-machine\n\tUser $SSH_USER\n\tHostName $SSH_HOST\n\tIdentityFile ~/.ssh/id_deploy_machine\n\tStrictHostKeyChecking No" >> ~/.ssh/config'
+      - name: Enter maintainance mode on the server
+        run: 'ssh deploy-machine "~/setMaintainance.sh -t"'
       - name: Copy the build to the server
         run: 'rsync -a ${{ github.workspace }}/build deploy-machine:~/jaiambe/jah-web'
       - name: Restart Nginx
         run: 'ssh deploy-machine "sudo systemctl restart nginx"'
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+      - name: Exit maintainance mode
+        run: 'ssh deploy-machine "~/setMaintainance.sh -f"'

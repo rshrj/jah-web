@@ -93,7 +93,12 @@ const SubmitTestimonial = () => {
             justifyContent: 'space-between',
             alignItems: 'center'
           }}>
-          <Grid container spacing={2} sx={{ marginTop: 3, maxWidth: 600 }}>
+          <Grid
+            container
+            spacing={2}
+            sx={{ marginTop: 3, maxWidth: 600 }}
+            component='form'
+            autocomplete>
             <Grid item xs={12} sm={6}>
               <FormGroup>
                 <JInputField
@@ -185,6 +190,7 @@ const SubmitTestimonial = () => {
             </Grid>
             <Grid item xs={12} sm={12} textAlign='left'>
               <Button
+                type='submit'
                 variant='contained'
                 sx={{ marginTop: 2, marginBottom: 5 }}
                 onClick={handleSubmit}
