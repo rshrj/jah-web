@@ -106,6 +106,7 @@ export const updateListing = async ({
   newPictures,
   ...listingFormData
 }) => {
+  console.log(listingFormData)
   if (!listingKeys.includes(type)) {
     return rejectWithToast('Listing type is incorrect');
   }
@@ -181,6 +182,11 @@ export const updateListing = async ({
       indNew === -1 ? listingFormData.featuredPicture : newLinks[indNew];
     let links = listingFormData.pictures.concat(newLinks);
 
+    console.log({
+      ...listingFormData,
+      pictures: links,
+      featuredPicture: featuredLink,
+    });
     const res = await fetch(`${apiUrl}/listings/update/${type}`, {
       method: 'PUT',
       mode: 'cors',
@@ -195,16 +201,17 @@ export const updateListing = async ({
         featuredPicture: featuredLink
       })
     });
+    console.log(res);
 
     if (!res) {
       throw errorWithToast('Server did not respond');
     }
 
     const data = await res.json();
+    console.log(data);
     if (!res.ok) {
       throw new Error('Request error', { cause: data });
     }
-
     return data;
   } catch (e) {
     console.log(e);
@@ -262,6 +269,43 @@ export const deleteListing = async (listingId) => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ listingId: listingId }),
+    });
+
+    if (!res) {
+      throw errorWithToast('Server did not respond');
+    }
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error('Request error', { cause: data });
+    }
+
+    return data;
+  } catch (e) {
+    console.log(e);
+    if (e instanceof TypeError && e.message === 'Failed to fetch') {
+      return rejectWithToast('Server is offline');
+    }
+    return Promise.reject(e);
+  }
+};
+
+export const updateListingState = async ({listingId, state}) => {
+  let token = localStorage.getItem('token');
+  if (!token) {
+    return rejectWithToast('Not authorized to perform this action');
+  }
+
+  try {
+    const res = await fetch(`${apiUrl}/listings/updateState`, {
+      method: 'PUT',
+      mode: 'cors',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ listingId, state }),
     });
 
     if (!res) {
@@ -459,6 +503,7 @@ const listingsService = {
   getPublicListingById,
   getRelatedListings,
   deleteListing,
+  updateListingState,
 };
 
 export default listingsService;

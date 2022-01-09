@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
@@ -8,7 +8,7 @@ import {
   FaEye,
   FaTrash,
   FaCheck,
-  FaTimes
+  FaTimes,
 } from 'react-icons/fa';
 import { format } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,10 +16,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   getListings,
   deleteListing,
+  updateListingState,
 } from '../../redux/slices/listings/listingsSlice';
 
 import { listingObject } from '../../constants/listingTypes';
 import { useNavigate } from 'react-router-dom';
+import DialogBox from '../../components/DialogBox';
 
 // const data = [
 //   {
@@ -105,12 +107,23 @@ import { useNavigate } from 'react-router-dom';
 //   },
 // ];
 
-
 const ListingsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [openDelete, setOpenDelete] = useState(false);
+  const [deleteListingId, setDeleteListingId] = useState('');
 
   const { ids, listings } = useSelector((store) => store.listings.content);
+
+  const deleteAListing = () => {
+    dispatch(deleteListing({ listingId: deleteListingId }));
+    setOpenDelete(false);
+  };
+
+  const openDialogBoxHandler = (id) => {
+    setDeleteListingId(id);
+    setOpenDelete(true);
+  };
 
   const columns = useMemo(() => {
     const handleEdit = (id) => (e) => {
@@ -127,7 +140,7 @@ const ListingsPage = () => {
           <Box
             sx={{
               display: 'inline-flex',
-              alignItems: 'center'
+              alignItems: 'center',
             }}>
             <FaBuilding color='orange' />
             <Typography
@@ -137,14 +150,14 @@ const ListingsPage = () => {
               {params.value}
             </Typography>
           </Box>
-        )
+        ),
       },
       {
         field: 'postedBy',
         headerName: 'Posted By',
         description:
           'Customer who posted the property (click to open their profile)',
-        flex: 1
+        flex: 1,
       },
       {
         field: 'state',
@@ -156,17 +169,17 @@ const ListingsPage = () => {
             color={
               params.value === 'Approved'
                 ? '#28a745'
-                : params.value === 'Deactivated'
+                : params.value === 'Rejected'
                 ? '#dc3545'
                 : '#ffc107'
             }>
             {params.value === 'Approved'
               ? 'Approved'
-              : params.value === 'Deactivated'
-              ? 'Deactivated'
+              : params.value === 'Rejected'
+              ? 'Rejected'
               : 'Pending'}
           </Typography>
-        )
+        ),
       },
       {
         field: 'createdAt',
@@ -177,7 +190,7 @@ const ListingsPage = () => {
           <Typography>
             {format(new Date(params.value), 'MMM dd, yy')}
           </Typography>
-        )
+        ),
       },
       {
         field: 'type',
@@ -193,7 +206,7 @@ const ListingsPage = () => {
               {listingObject[params.value].label}
             </Typography>
           );
-        }
+        },
       },
       {
         field: 'actions',
@@ -202,8 +215,26 @@ const ListingsPage = () => {
         headerName: 'Actions',
         description: 'View, Edit, Delete buttons',
         getActions: (params) => [
-          <GridActionsCellItem icon={<FaCheck />} label='Approve' showInMenu />,
-          <GridActionsCellItem icon={<FaTimes />} label='Reject' showInMenu />,
+          <GridActionsCellItem
+            icon={<FaCheck />}
+            label='Approve'
+            showInMenu
+            onClick={() =>
+              dispatch(
+                updateListingState({ listingId: params.id, state: 'Approved' })
+              )
+            }
+          />,
+          <GridActionsCellItem
+            icon={<FaTimes />}
+            label='Reject'
+            showInMenu
+            onClick={() =>
+              dispatch(
+                updateListingState({ listingId: params.id, state: 'Rejected' })
+              )
+            }
+          />,
           <GridActionsCellItem icon={<FaEye />} label='View' showInMenu />,
           <GridActionsCellItem
             icon={<FaEdit />}
@@ -211,9 +242,14 @@ const ListingsPage = () => {
             onClick={handleEdit(params.id)}
             showInMenu
           />,
-          <GridActionsCellItem icon={<FaTrash />} label='Delete' showInMenu />
-        ]
-      }
+          <GridActionsCellItem
+            icon={<FaTrash />}
+            label='Delete'
+            showInMenu
+            onClick={() => openDialogBoxHandler(params.id)}
+          />,
+        ],
+      },
     ];
   }, [navigate]);
 
@@ -230,7 +266,6 @@ const ListingsPage = () => {
   useEffect(() => {
     dispatch(getListings());
   }, [dispatch]);
-
 
   // const columns = [
   //   {
@@ -325,8 +360,6 @@ const ListingsPage = () => {
   //   },
   // ];
 
-
-  
   return (
     <Box
       sx={{
@@ -334,14 +367,14 @@ const ListingsPage = () => {
         m: { xs: 0, md: 1 },
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
       }}>
       <Typography
         variant='h4'
         sx={{
           textAlign: 'center',
           color: 'primary.main',
-          marginBottom: 3
+          marginBottom: 3,
         }}>
         Listings
       </Typography>
@@ -351,7 +384,7 @@ const ListingsPage = () => {
           height: 600,
           width: { xs: '100vw', sm: '600px', md: '850px' },
           overflowX: { xs: 'scroll', md: 'hidden' },
-          px: 2
+          px: 2,
         }}>
         <Box sx={{ flexGrow: 1 }}>
           <DataGrid
@@ -360,16 +393,21 @@ const ListingsPage = () => {
             rows={data}
             sx={{
               '& .MuiDataGrid-iconSeparator': {
-                visibility: 'hidden'
+                visibility: 'hidden',
               },
               border: 'none',
-              width: 800
+              width: 800,
             }}
             pageSize={10}
             pagination
           />
         </Box>
       </Box>
+      <DialogBox
+        open={openDelete}
+        handleAccept={deleteAListing}
+        handleDecline={() => setOpenDelete(false)}
+      />
     </Box>
   );
 };
