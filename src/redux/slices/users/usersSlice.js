@@ -11,8 +11,8 @@ const initialState = {
   fetchLoading: 'idle',
   content: {
     ids: [],
-    users: {}
-  }
+    users: {},
+  },
 };
 
 const getUsers = createAsyncThunk(
@@ -23,6 +23,26 @@ const getUsers = createAsyncThunk(
       const data = await usersService.getUsers();
 
       dispatch(clearTopLoader());
+      return data.payload;
+    } catch (error) {
+      console.log(error);
+      error.cause?.toasts.forEach((toastMessage) =>
+        dispatch(addToast({ type: 'error', message: toastMessage }))
+      );
+      return Promise.reject(error);
+    }
+  }
+);
+
+const deleteUser = createAsyncThunk(
+  'users/deleteUser',
+  async ({ userId }, { dispatch }) => {
+    dispatch(setTopLoader());
+    try {
+      const data = await usersService.deleteUser(userId);
+      dispatch(addToast({ type: 'success', message: data.message }));
+      dispatch(clearTopLoader());
+      dispatch(getUsers());
       return data.payload;
     } catch (error) {
       console.log(error);
@@ -51,9 +71,18 @@ export const usersSlice = createSlice({
     builder.addCase(getUsers.rejected, (state, action) => {
       state.fetchLoading = 'idle';
     });
-  }
+    builder.addCase(deleteUser.pending, (state, action) => {
+      state.fetchLoading = 'loading';
+    });
+    builder.addCase(deleteUser.fulfilled, (state, action) => {
+      state.fetchLoading = 'idle';
+    });
+    builder.addCase(deleteUser.rejected, (state, action) => {
+      state.fetchLoading = 'idle';
+    });
+  },
 });
 
-export { getUsers };
+export { getUsers, deleteUser };
 
 export default usersSlice.reducer;

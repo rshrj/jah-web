@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
@@ -8,7 +8,7 @@ import {
   FaEye,
   FaTrash,
   FaCheck,
-  FaTimes
+  FaTimes,
 } from 'react-icons/fa';
 import { format } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,9 +17,15 @@ import { HashLoader } from 'react-spinners';
 import { useTheme } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { getListings } from '../../redux/slices/listings/listingsSlice';
+
+import {
+  getListings,
+  deleteListing,
+  updateListingState,
+} from '../../redux/slices/listings/listingsSlice';
 import { listingObject } from '../../constants/listingTypes';
 
+import DialogBox from '../../components/DialogBox';
 import NoRowsOverlay from '../../components/NoRowsOverlay';
 
 // const data = [
@@ -111,6 +117,9 @@ const ListingsPage = () => {
   const navigate = useNavigate();
   const theme = useTheme();
 
+  const [openDelete, setOpenDelete] = useState(false);
+  const [deleteListingId, setDeleteListingId] = useState('');
+
   const data = useSelector((state) =>
     state.listings.content.ids.map((id) => ({
       id,
@@ -121,6 +130,16 @@ const ListingsPage = () => {
     (state) => state.listings.fetchLoading === 'loading'
   );
   const role = useSelector((state) => state.auth.user.role);
+
+  const deleteAListing = () => {
+    dispatch(deleteListing({ listingId: deleteListingId }));
+    setOpenDelete(false);
+  };
+
+  const openDialogBoxHandler = (id) => {
+    setDeleteListingId(id);
+    setOpenDelete(true);
+  };
 
   const columns = useMemo(() => {
     const handleView = (id) => (e) => {
@@ -140,7 +159,7 @@ const ListingsPage = () => {
           <Box
             sx={{
               display: 'inline-flex',
-              alignItems: 'center'
+              alignItems: 'center',
             }}>
             <FaBuilding color='orange' />
             <Typography
@@ -150,7 +169,7 @@ const ListingsPage = () => {
               {params.value}
             </Typography>
           </Box>
-        )
+        ),
       },
       {
         field: 'createdBy',
@@ -178,17 +197,17 @@ const ListingsPage = () => {
             color={
               params.value === 'Approved'
                 ? '#28a745'
-                : params.value === 'Deactivated'
+                : params.value === 'Rejected'
                 ? '#dc3545'
                 : '#ffc107'
             }>
             {params.value === 'Approved'
               ? 'Approved'
-              : params.value === 'Deactivated'
-              ? 'Deactivated'
+              : params.value === 'Rejected'
+              ? 'Rejected'
               : 'Pending'}
           </Typography>
-        )
+        ),
       },
       {
         field: 'createdAt',
@@ -199,7 +218,7 @@ const ListingsPage = () => {
           <Typography>
             {format(new Date(params.value), 'MMM dd, yy')}
           </Typography>
-        )
+        ),
       },
       {
         field: 'type',
@@ -214,7 +233,7 @@ const ListingsPage = () => {
               {listingObject[params.value].label}
             </Typography>
           );
-        }
+        },
       },
       {
         field: 'actions',
@@ -223,8 +242,26 @@ const ListingsPage = () => {
         headerName: 'Actions',
         description: 'View, Edit, Delete buttons',
         getActions: (params) => [
-          <GridActionsCellItem icon={<FaCheck />} label='Approve' showInMenu />,
-          <GridActionsCellItem icon={<FaTimes />} label='Reject' showInMenu />,
+          <GridActionsCellItem
+            icon={<FaCheck />}
+            label='Approve'
+            showInMenu
+            onClick={() =>
+              dispatch(
+                updateListingState({ listingId: params.id, state: 'Approved' })
+              )
+            }
+          />,
+          <GridActionsCellItem
+            icon={<FaTimes />}
+            label='Reject'
+            showInMenu
+            onClick={() =>
+              dispatch(
+                updateListingState({ listingId: params.id, state: 'Rejected' })
+              )
+            }
+          />,
           <GridActionsCellItem
             icon={<FaEye />}
             label='View'
@@ -237,9 +274,14 @@ const ListingsPage = () => {
             onClick={handleEdit(params.id)}
             showInMenu
           />,
-          <GridActionsCellItem icon={<FaTrash />} label='Delete' showInMenu />
-        ]
-      }
+          <GridActionsCellItem
+            icon={<FaTrash />}
+            label='Delete'
+            showInMenu
+            onClick={() => openDialogBoxHandler(params.id)}
+          />,
+        ],
+      },
     ];
   }, [navigate]);
 
@@ -257,6 +299,99 @@ const ListingsPage = () => {
     dispatch(getListings());
   }, [dispatch]);
 
+  // const columns = [
+  //   {
+  //     field: 'name',
+  //     headerName: 'Listing name',
+  //     description: 'Name of the property / project',
+  //     type: 'string',
+  //     flex: 1,
+  //     renderCell: (params) => (
+  //       <Box
+  //         sx={{
+  //           display: 'inline-flex',
+  //           alignItems: 'center',
+  //         }}>
+  //         <FaBuilding color='orange' />
+  //         <Typography
+  //           color='text.primary'
+  //           variant='body1'
+  //           sx={{ fontWeight: 'bold', marginLeft: 2 }}>
+  //           {params.value}
+  //         </Typography>
+  //       </Box>
+  //     ),
+  //   },
+  //   {
+  //     field: 'postedBy',
+  //     headerName: 'Posted By',
+  //     description:
+  //       'Customer who posted the property (click to open their profile)',
+  //     flex: 1,
+  //   },
+  //   {
+  //     field: 'state',
+  //     headerName: 'Status',
+  //     description: 'status of listing',
+  //     flex: 1,
+  //     renderCell: (params) => (
+  //       <Typography
+  //         color={
+  //           params.value === 'Approved'
+  //             ? '#28a745'
+  //             : params.value === 'Deactivated'
+  //             ? '#dc3545'
+  //             : '#ffc107'
+  //         }>
+  //         {params.value === 'Approved'
+  //           ? 'Approved'
+  //           : params.value === 'Deactivated'
+  //           ? 'Deactivated'
+  //           : 'Pending'}
+  //       </Typography>
+  //     ),
+  //   },
+  //   {
+  //     field: 'createdAt',
+  //     headerName: 'Created At',
+  //     description: 'Time of listing creation',
+  //     flex: 1,
+  //   },
+  //   {
+  //     field: 'type',
+  //     headerName: 'Type',
+  //     description: 'Type of listing',
+  //     type: 'singleSelect',
+  //     flex: 1,
+  //     valueOptions: ['rentlease', 'sellapartment', 'sellproject'],
+  //     renderCell: (params) => {
+  //       console.log(params.value);
+  //       return (
+  //         <Typography color={listingObject[params.value].color}>
+  //           {listingObject[params.value].label}
+  //         </Typography>
+  //       );
+  //     },
+  //   },
+  //   {
+  //     field: 'actions',
+  //     type: 'actions',
+  //     flex: 1,
+  //     headerName: 'Actions',
+  //     description: 'View, Edit, Delete buttons',
+  //     getActions: (params) => [
+  //       <GridActionsCellItem icon={<FaCheck />} />,
+  //       <GridActionsCellItem icon={<FaTimes />} />,
+  //       <GridActionsCellItem icon={<FaEye />} />,
+  //       <GridActionsCellItem icon={<FaEdit />} />,
+  //       <GridActionsCellItem
+  //         icon={<FaTrash />}
+  //         onClick={() => dispatch(deleteListing({ listingId: params.id }))}
+  //       />,
+  //     ],
+  //   },
+  // ];
+
   return (
     <Box
       sx={{
@@ -264,14 +399,14 @@ const ListingsPage = () => {
         m: { xs: 0, md: 1 },
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
       }}>
       <Typography
         variant='h4'
         sx={{
           textAlign: 'center',
           color: 'primary.main',
-          marginBottom: 3
+          marginBottom: 3,
         }}>
         Listings
       </Typography>
@@ -281,7 +416,7 @@ const ListingsPage = () => {
           height: 600,
           width: { xs: '100vw', sm: '600px', md: '850px' },
           overflowX: { xs: 'scroll', md: 'hidden' },
-          px: 2
+          px: 2,
         }}>
         {loading && (
           <Box
@@ -325,6 +460,11 @@ const ListingsPage = () => {
           </Box>
         )}
       </Box>
+      <DialogBox
+        open={openDelete}
+        handleAccept={deleteAListing}
+        handleDecline={() => setOpenDelete(false)}
+      />
     </Box>
   );
 };

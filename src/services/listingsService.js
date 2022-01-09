@@ -1,7 +1,7 @@
 import {
   rejectWithToast,
   apiUrl,
-  errorWithToast
+  errorWithToast,
 } from '../utils/serviceHelpers';
 
 import { listingKeys } from '../constants/listingTypes';
@@ -36,9 +36,9 @@ export const addNewListing = async ({ type, ...listingFormData }) => {
           mode: 'cors',
           headers: {
             Accept: 'application/json',
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
-          body
+          body,
         });
         return res;
       })
@@ -59,8 +59,8 @@ export const addNewListing = async ({ type, ...listingFormData }) => {
       throw new Error('Request error', {
         cause: {
           success: false,
-          toasts: [].concat(picturesData.map((data) => data.toasts))
-        }
+          toasts: [].concat(picturesData.map((data) => data.toasts)),
+        },
       });
     }
 
@@ -73,13 +73,13 @@ export const addNewListing = async ({ type, ...listingFormData }) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json;charset=UTF-8',
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         ...listingFormData,
         pictures: links,
-        featuredPicture: featuredLink
-      })
+        featuredPicture: featuredLink,
+      }),
     });
 
     if (!res) {
@@ -106,6 +106,7 @@ export const updateListing = async ({
   newPictures,
   ...listingFormData
 }) => {
+  console.log(listingFormData)
   if (!listingKeys.includes(type)) {
     return rejectWithToast('Listing type is incorrect');
   }
@@ -181,6 +182,11 @@ export const updateListing = async ({
       indNew === -1 ? listingFormData.featuredPicture : newLinks[indNew];
     let links = listingFormData.pictures.concat(newLinks);
 
+    console.log({
+      ...listingFormData,
+      pictures: links,
+      featuredPicture: featuredLink,
+    });
     const res = await fetch(`${apiUrl}/listings/update/${type}`, {
       method: 'PUT',
       mode: 'cors',
@@ -194,6 +200,75 @@ export const updateListing = async ({
         pictures: links,
         featuredPicture: featuredLink
       })
+    });
+    console.log(res);
+
+    if (!res) {
+      throw errorWithToast('Server did not respond');
+    }
+
+    const data = await res.json();
+    console.log(data);
+    if (!res.ok) {
+      throw new Error('Request error', { cause: data });
+    }
+    return data;
+  } catch (e) {
+    console.log(e);
+    if (e instanceof TypeError && e.message === 'Failed to fetch') {
+      return rejectWithToast('Server is offline');
+    }
+    return Promise.reject(e);
+  }
+};
+
+export const getParticularListing = async (type, page = 1, size = 10) => {
+  try {
+    const res = await fetch(`${apiUrl}/listings/particular`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      body: JSON.stringify({ type, page, size }),
+    });
+
+    if (!res) {
+      throw errorWithToast('Server did not respond');
+    }
+
+    const data = await res.json();
+    console.log(data);
+    if (!res.ok) {
+      throw new Error('Request error', { cause: data });
+    }
+
+    return data;
+  } catch (e) {
+    if (e instanceof TypeError && e.message === 'Failed to fetch') {
+      return rejectWithToast('Server is offline');
+    }
+    return Promise.reject(e);
+  }
+};
+
+export const deleteListing = async (listingId) => {
+  let token = localStorage.getItem('token');
+  if (!token) {
+    return rejectWithToast('Not authorized to perform this action');
+  }
+
+  try {
+    const res = await fetch(`${apiUrl}/listings/delete`, {
+      method: 'DELETE',
+      mode: 'cors',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ listingId: listingId }),
     });
 
     if (!res) {
@@ -215,16 +290,22 @@ export const updateListing = async ({
   }
 };
 
-export const getParticularListing = async (type, page = 1, size = 10) => {
+export const updateListingState = async ({listingId, state}) => {
+  let token = localStorage.getItem('token');
+  if (!token) {
+    return rejectWithToast('Not authorized to perform this action');
+  }
+
   try {
-    const res = await fetch(`${apiUrl}/listings/particular`, {
-      method: 'POST',
+    const res = await fetch(`${apiUrl}/listings/updateState`, {
+      method: 'PUT',
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ type, page, size })
+      body: JSON.stringify({ listingId, state }),
     });
 
     if (!res) {
@@ -258,8 +339,8 @@ export const getListings = async () => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json;charset=UTF-8',
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (!res) {
@@ -288,12 +369,12 @@ export const getListingsFuzzy = async (query, type) => {
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
+        'Content-Type': 'application/json;charset=UTF-8',
       },
       body: JSON.stringify({
         query,
-        type
-      })
+        type,
+      }),
     });
 
     // const g = await (() =>
@@ -329,8 +410,8 @@ export const getFeaturedListings = async () => {
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
-      }
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
     });
 
     if (!res) {
@@ -359,8 +440,8 @@ export const getPublicListingById = async (id) => {
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
-      }
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
     });
 
     if (!res) {
@@ -389,8 +470,8 @@ export const getRelatedListings = async (id) => {
       mode: 'cors',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
-      }
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
     });
 
     if (!res) {
@@ -420,7 +501,9 @@ const listingsService = {
   getParticularListing,
   getFeaturedListings,
   getPublicListingById,
-  getRelatedListings
+  getRelatedListings,
+  deleteListing,
+  updateListingState,
 };
 
 export default listingsService;

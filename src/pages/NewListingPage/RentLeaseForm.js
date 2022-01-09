@@ -108,6 +108,8 @@ const RentLeaseForm = ({
   newPictures = [],
   disabled = false
 }) => {
+  console.log(values);
+  console.log(values.societyName);
   const isPhone = useMediaQuery('(min-width:600px)');
 
   const [addBuiltUpArea, setAddBuiltUpArea] = useState(false);
