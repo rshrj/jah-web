@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { Typography } from '@mui/material';
+import { Link, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import {
@@ -12,11 +12,15 @@ import {
 } from 'react-icons/fa';
 import { format } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { HashLoader } from 'react-spinners';
+import { useTheme } from '@mui/material/styles';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { getListings } from '../../redux/slices/listings/listingsSlice';
-
 import { listingObject } from '../../constants/listingTypes';
-import { useNavigate } from 'react-router-dom';
+
+import NoRowsOverlay from '../../components/NoRowsOverlay';
 
 // const data = [
 //   {
@@ -105,10 +109,23 @@ import { useNavigate } from 'react-router-dom';
 const ListingsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const theme = useTheme();
 
-  const { ids, listings } = useSelector((store) => store.listings.content);
+  const data = useSelector((state) =>
+    state.listings.content.ids.map((id) => ({
+      id,
+      ...state.listings.content.listings[id]
+    }))
+  );
+  const loading = useSelector(
+    (state) => state.listings.fetchLoading === 'loading'
+  );
+  const role = useSelector((state) => state.auth.user.role);
 
   const columns = useMemo(() => {
+    const handleView = (id) => (e) => {
+      navigate(`/listing/${id}`);
+    };
     const handleEdit = (id) => (e) => {
       navigate(`/dashboard/edit/${id}`);
     };
@@ -136,11 +153,20 @@ const ListingsPage = () => {
         )
       },
       {
-        field: 'postedBy',
+        field: 'createdBy',
         headerName: 'Posted By',
         description:
           'Customer who posted the property (click to open their profile)',
-        flex: 1
+        flex: 1,
+        type: 'string',
+        renderCell: (params) => (
+          <Link
+            component={RouterLink}
+            to={`/dashboard/users/${params.value._id}`}
+            sx={{ fontWeight: 'bold', marginLeft: 2, color: 'text.secondary' }}>
+            {params.value.name.first}
+          </Link>
+        )
       },
       {
         field: 'state',
@@ -183,7 +209,6 @@ const ListingsPage = () => {
         flex: 1,
         valueOptions: ['rentlease', 'sellapartment', 'sellproject'],
         renderCell: (params) => {
-          console.log(params.value);
           return (
             <Typography color={listingObject[params.value].color}>
               {listingObject[params.value].label}
@@ -200,7 +225,12 @@ const ListingsPage = () => {
         getActions: (params) => [
           <GridActionsCellItem icon={<FaCheck />} label='Approve' showInMenu />,
           <GridActionsCellItem icon={<FaTimes />} label='Reject' showInMenu />,
-          <GridActionsCellItem icon={<FaEye />} label='View' showInMenu />,
+          <GridActionsCellItem
+            icon={<FaEye />}
+            label='View'
+            onClick={handleView(params.id)}
+            showInMenu
+          />,
           <GridActionsCellItem
             icon={<FaEdit />}
             label='Edit'
@@ -213,15 +243,15 @@ const ListingsPage = () => {
     ];
   }, [navigate]);
 
-  let data = [];
-  if (ids.length !== 0) {
-    data = ids.map((id) => {
-      const { first, last } = listings[id].createdBy.name;
-      return { id, ...listings[id], postedBy: first + ' ' + last };
-    });
-  }
+  // let data = [];
+  // if (ids.length !== 0) {
+  //   data = ids.map((id) => {
+  //     const { first, last } = listings[id].createdBy.name;
+  //     return { id, ...listings[id], postedBy: first + ' ' + last };
+  //   });
+  // }
 
-  console.log(listings);
+  // console.log(listings);
 
   useEffect(() => {
     dispatch(getListings());
@@ -253,22 +283,47 @@ const ListingsPage = () => {
           overflowX: { xs: 'scroll', md: 'hidden' },
           px: 2
         }}>
-        <Box sx={{ flexGrow: 1 }}>
-          <DataGrid
-            // TODO: set default page size to 10 rows per page
-            columns={columns}
-            rows={data}
+        {loading && (
+          <Box
             sx={{
-              '& .MuiDataGrid-iconSeparator': {
-                visibility: 'hidden'
-              },
-              border: 'none',
-              width: 800
-            }}
-            pageSize={10}
-            pagination
-          />
-        </Box>
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              height: '100%',
+              pt: 20,
+              pb: 30,
+              backgroundColor: theme.palette.grey[0]
+            }}>
+            <HashLoader
+              color={theme.palette.primary.main}
+              style={{ display: 'block', margin: '100px' }}
+              size={150}
+            />
+          </Box>
+        )}
+        {!loading && (
+          <Box sx={{ flexGrow: 1 }}>
+            <DataGrid
+              columns={columns}
+              rows={data}
+              components={{
+                NoRowsOverlay
+              }}
+              sx={{
+                '& .MuiDataGrid-iconSeparator': {
+                  visibility: 'hidden'
+                },
+                border: 'none',
+                width: 800
+              }}
+              pageSize={10}
+              rowsPerPageOptions={[10, 20, 50, 100]}
+              pagination
+            />
+          </Box>
+        )}
       </Box>
     </Box>
   );

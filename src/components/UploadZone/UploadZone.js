@@ -261,8 +261,6 @@ const UploadZone = ({
     onFilesChange(event, undefined);
   };
 
-  console.log(oldFiles);
-
   let isFiles =
     (!edit && files.length > 0) ||
     (edit && oldFiles.length > 0) ||
