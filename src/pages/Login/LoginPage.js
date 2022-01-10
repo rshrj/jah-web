@@ -112,7 +112,7 @@ const LoginPage = () => {
               Login
             </Typography>
 
-            <form autocomplete>
+            <form autoComplete='on'>
               <FormGroup>
                 <JInputField
                   topLabel='Email'

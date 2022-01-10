@@ -118,7 +118,7 @@ const SignupPage = () => {
               Sign Up
             </Typography>
 
-            <form autocomplete>
+            <form autoComplete='off'>
               <FormGroup>
                 <FormControl sx={{ marginBottom: 1 }}>
                   <Box

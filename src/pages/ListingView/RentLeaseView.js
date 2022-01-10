@@ -113,7 +113,12 @@ const RentLeaseView = ({ listing }) => {
                   {societyName}
                 </Typography>
               )}
-              <Chip variant='outlined' color='primary' label='Home for rent' />
+              <Chip
+                variant='outlined'
+                color='primary'
+                size='small'
+                label='Home for rent'
+              />
             </Box>
           </Grid>
           <Grid item sm={4}>
@@ -184,7 +189,7 @@ const RentLeaseView = ({ listing }) => {
                 overflowY: 'hidden',
                 p: 2
               }}>
-              <ImageList variant='masonry' cols={3} gap={10}>
+              <ImageList variant='masonry' cols={2} gap={10}>
                 {pictures.map((picture) => (
                   <ImageListItem key={picture}>
                     <img src={picture} alt={picture} loading='lazy' />

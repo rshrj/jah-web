@@ -314,8 +314,6 @@ const deleteListing = createAsyncThunk(
 const updateListingState = createAsyncThunk(
   'listings/updateListingState',
   async ({ listingId, state }, { dispatch }) => {
-    console.log(listingId);
-    console.log('Called');
     dispatch(setTopLoader());
     try {
       const data = await listingsService.updateListingState({

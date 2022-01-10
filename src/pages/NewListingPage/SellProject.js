@@ -962,7 +962,7 @@ const SellProjectForm = ({
             variant='body2'
             color='text.secondary'
             sx={{ display: 'inline-block' }}>
-            (Atleast six)
+            (Atleast six. Size of each image must be less than 5 MB)
           </Typography>
         </FormLabel>
         <UploadZone

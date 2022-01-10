@@ -11,6 +11,7 @@ export default function DialogBox({
   handleDecline,
   handleAccept,
   title = 'Delete',
+  objectLabel = ''
 }) {
   return (
     <Dialog
@@ -23,13 +24,16 @@ export default function DialogBox({
       </DialogTitle>
       <DialogContent>
         <DialogContentText id='alert-dialog-description'>
-          It is an irreversible action. Are you sure ?
+          This is an irreversible action. Are you sure you want to delete
+          {objectLabel !== '' ? objectLabel : ''}?
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleDecline}>No</Button>
-        <Button onClick={handleAccept} autoFocus>
-          Yes
+        <Button color='primary' onClick={handleDecline}>
+          Cancel
+        </Button>
+        <Button color='error' onClick={handleAccept} autoFocus>
+          Delete
         </Button>
       </DialogActions>
     </Dialog>

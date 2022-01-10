@@ -11,9 +11,8 @@ const initialState = {
   fetchLoading: 'idle',
   content: {
     ids: [],
-    testimonials: {},
-  },
-  updatePending: false 
+    testimonials: {}
+  }
 };
 
 const getTestimonials = createAsyncThunk(
@@ -63,18 +62,19 @@ const updateTestimonialState = createAsyncThunk(
     try {
       const data = await testimonialsService.updateTestimonialState({
         testimonialId,
-        show,
+        show
       });
-
+      dispatch(addToast({ type: 'success', message: data.message }));
       dispatch(clearTopLoader());
       dispatch(getAllTestimonials());
+      return data.payload;
     } catch (error) {
       dispatch(clearTopLoader());
       console.log(error);
       error.cause?.toasts.forEach((toastMessage) =>
         dispatch(addToast({ type: 'error', message: toastMessage }))
       );
-      
+
       return Promise.reject(error);
     }
   }
@@ -82,7 +82,10 @@ const updateTestimonialState = createAsyncThunk(
 
 const updateTestimonial = createAsyncThunk(
   'testimonials/updateTestimonial',
-  async ({ testimonialId, name, company, message, phone }, { dispatch }) => {
+  async (
+    { testimonialId, name, company, message, phone, cancelHandler },
+    { dispatch }
+  ) => {
     dispatch(setTopLoader());
     try {
       const data = await testimonialsService.updateTestimonial({
@@ -91,10 +94,13 @@ const updateTestimonial = createAsyncThunk(
         company,
         message,
         phone,
+        cancelHandler
       });
       dispatch(addToast({ type: 'success', message: data.message }));
       dispatch(clearTopLoader());
+      cancelHandler();
       dispatch(getAllTestimonials());
+      return data.payload;
     } catch (error) {
       dispatch(clearTopLoader());
       if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
@@ -102,9 +108,9 @@ const updateTestimonial = createAsyncThunk(
           dispatch(addToast({ type: 'error', message: toastMessage }))
         );
       }
-       if (error.cause.errors !== undefined || error.cause.errors !== {}) {
-         dispatch(createFormErrors(error.cause.errors));
-       }
+      if (error.cause.errors !== undefined || error.cause.errors !== {}) {
+        dispatch(createFormErrors(error.cause.errors));
+      }
       return Promise.reject(error);
     }
   }
@@ -116,7 +122,7 @@ const deleteTestimonial = createAsyncThunk(
     dispatch(setTopLoader());
     try {
       const data = await testimonialsService.deleteTestimonial({
-        testimonialId,
+        testimonialId
       });
       dispatch(addToast({ type: 'success', message: data.message }));
       dispatch(clearTopLoader());
@@ -159,22 +165,27 @@ const submitTestimonial = createAsyncThunk(
 export const testimonialsSlice = createSlice({
   name: 'testimonials',
   initialState,
-  reducers: {
-    setUpdateState : (state)=>{
-      state.updatePending = true;
-    }
-  },
   extraReducers: (builder) => {
     builder.addCase(updateTestimonial.pending, (state, action) => {
-      state.fetchLoading = 'loading';
+      state.loading = 'loading';
     });
     builder.addCase(updateTestimonial.fulfilled, (state, action) => {
-      state.fetchLoading = 'idle';
-      state.updatePending = false;
+      state.loading = 'idle';
     });
     builder.addCase(updateTestimonial.rejected, (state, action) => {
-      state.fetchLoading = 'idle';
+      state.loading = 'idle';
     });
+
+    builder.addCase(submitTestimonial.pending, (state, action) => {
+      state.loading = 'loading';
+    });
+    builder.addCase(submitTestimonial.fulfilled, (state, action) => {
+      state.loading = 'idle';
+    });
+    builder.addCase(submitTestimonial.rejected, (state, action) => {
+      state.loading = 'idle';
+    });
+
     builder.addCase(deleteTestimonial.pending, (state, action) => {
       state.fetchLoading = 'loading';
     });
@@ -184,6 +195,7 @@ export const testimonialsSlice = createSlice({
     builder.addCase(deleteTestimonial.rejected, (state, action) => {
       state.fetchLoading = 'idle';
     });
+
     builder.addCase(getTestimonials.pending, (state, action) => {
       state.fetchLoading = 'loading';
     });
@@ -195,6 +207,7 @@ export const testimonialsSlice = createSlice({
     builder.addCase(getTestimonials.rejected, (state, action) => {
       state.fetchLoading = 'idle';
     });
+
     builder.addCase(getAllTestimonials.pending, (state, action) => {
       state.fetchLoading = 'loading';
     });
@@ -206,6 +219,7 @@ export const testimonialsSlice = createSlice({
     builder.addCase(getAllTestimonials.rejected, (state, action) => {
       state.fetchLoading = 'idle';
     });
+
     builder.addCase(updateTestimonialState.pending, (state, action) => {
       state.fetchLoading = 'loading';
     });
@@ -215,10 +229,8 @@ export const testimonialsSlice = createSlice({
     builder.addCase(updateTestimonialState.rejected, (state, action) => {
       state.fetchLoading = 'idle';
     });
-  },
+  }
 });
-
-const { setUpdateState } = testimonialsSlice.actions;
 
 export {
   getTestimonials,
@@ -226,8 +238,7 @@ export {
   getAllTestimonials,
   updateTestimonialState,
   deleteTestimonial,
-  updateTestimonial,
-  setUpdateState,
+  updateTestimonial
 };
 
 export default testimonialsSlice.reducer;

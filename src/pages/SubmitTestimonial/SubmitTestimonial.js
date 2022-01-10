@@ -71,7 +71,9 @@ const SubmitTestimonial = () => {
   };
 
   const errors = useSelector((state) => state.errors.formErrors);
-  const loading = useSelector((state) => state.callback.loading === 'loading');
+  const loading = useSelector(
+    (state) => state.testimonials.loading === 'loading'
+  );
 
   return (
     <>
@@ -98,7 +100,7 @@ const SubmitTestimonial = () => {
             spacing={2}
             sx={{ marginTop: 3, maxWidth: 600 }}
             component='form'
-            autocomplete>
+            autoComplete='off'>
             <Grid item xs={12} sm={6}>
               <FormGroup>
                 <JInputField

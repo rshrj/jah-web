@@ -100,7 +100,12 @@ const SellProjectView = ({ listing, name }) => {
                   .map((type) => unitLabels[type])
                   .join(', ')} for sale in ${location}`}
               </Typography>
-              <Chip variant='outlined' color='primary' label='Homes for sale' />
+              <Chip
+                variant='outlined'
+                color='primary'
+                size='small'
+                label='Homes for sale'
+              />
             </Box>
           </Grid>
           <Grid item sm={4}>
@@ -175,7 +180,7 @@ const SellProjectView = ({ listing, name }) => {
                 overflowY: 'hidden',
                 p: 2
               }}>
-              <ImageList variant='masonry' cols={3} gap={10}>
+              <ImageList variant='masonry' cols={2} gap={10}>
                 {pictures.map((picture) => (
                   <ImageListItem key={picture}>
                     <img src={picture} alt={picture} loading='lazy' />
