@@ -106,7 +106,7 @@ export const updateListing = async ({
   newPictures,
   ...listingFormData
 }) => {
-  console.log(listingFormData)
+  console.log(listingFormData);
   if (!listingKeys.includes(type)) {
     return rejectWithToast('Listing type is incorrect');
   }
@@ -148,9 +148,9 @@ export const updateListing = async ({
             mode: 'cors',
             headers: {
               Accept: 'application/json',
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${token}`,
             },
-            body
+            body,
           });
           return res;
         })
@@ -171,8 +171,8 @@ export const updateListing = async ({
         throw new Error('Request error', {
           cause: {
             success: false,
-            toasts: [].concat(picturesData.map((data) => data.toasts))
-          }
+            toasts: [].concat(picturesData.map((data) => data.toasts)),
+          },
         });
       }
       newLinks = picturesData.map((data) => data.payload.path);
@@ -193,13 +193,13 @@ export const updateListing = async ({
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json;charset=UTF-8',
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         ...listingFormData,
         pictures: links,
-        featuredPicture: featuredLink
-      })
+        featuredPicture: featuredLink,
+      }),
     });
     console.log(res);
 
@@ -290,7 +290,7 @@ export const deleteListing = async (listingId) => {
   }
 };
 
-export const updateListingState = async ({listingId, state}) => {
+export const updateListingState = async ({ listingId, state }) => {
   let token = localStorage.getItem('token');
   if (!token) {
     return rejectWithToast('Not authorized to perform this action');
@@ -434,6 +434,7 @@ export const getFeaturedListings = async () => {
 };
 
 export const getPublicListingById = async (id) => {
+  const token = localStorage.getItem('token');
   try {
     const res = await fetch(`${apiUrl}/listings/${id}`, {
       method: 'GET',
@@ -441,6 +442,7 @@ export const getPublicListingById = async (id) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `Bearer ${token}`,
       },
     });
 
