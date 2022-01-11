@@ -236,6 +236,7 @@ const UploadZone = ({
   };
 
   const handleSingleChange = (e) => {
+    console.log(e.target.files[0]);
     if (!onFilesChange) {
       return;
     }
@@ -354,7 +355,7 @@ const UploadZone = ({
           <FileBox
             key={file.name}
             file={file}
-            onDeleteClick={handleSingleDeleteClick(file)}
+            onDeleteClick={()=>handleSingleDeleteClick(file)}
           />
         </Box>
       )}
