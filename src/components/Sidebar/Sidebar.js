@@ -132,9 +132,9 @@ const Sidebar = () => {
           md: collapsed ? 100 : 200,
           lg: collapsed ? 100 : 300
         },
-        height: 'calc(100vh - 80px)',
+        height: 'calc(100vh - 92px)',
         position: 'sticky',
-        top: 80
+        top: '92px'
       }}>
       <Box
         sx={{
@@ -234,7 +234,7 @@ const Sidebar = () => {
               md: collapsed ? 100 : 200,
               lg: collapsed ? 100 : 300
             },
-            paddingBottom: 2,
+            marginBottom: 1,
             display: {
               xs: 'none',
               md: 'inline-block'

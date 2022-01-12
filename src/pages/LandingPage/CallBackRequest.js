@@ -84,7 +84,12 @@ const CallBackRequest = () => {
             </Typography>
           </Box>
 
-          <Grid container spacing={2} sx={{ marginTop: 3, maxWidth: 600 }}>
+          <Grid
+            container
+            spacing={2}
+            sx={{ marginTop: 3, maxWidth: 600 }}
+            component='form'
+            autoComplete='off'>
             <Grid item xs={12} sm={6}>
               <FormGroup>
                 <JInputField
@@ -126,8 +131,9 @@ const CallBackRequest = () => {
             </Grid>
             <Grid item xs={12} sm={12} textAlign='center'>
               <Button
+                type='submit'
                 variant='contained'
-                sx={{ marginTop: 2, marginBottom: 5 }}
+                sx={{ marginTop: 2, marginBottom: 5, width: '100%' }}
                 disabled={loading}
                 onClick={handleSubmit}>
                 Call Me

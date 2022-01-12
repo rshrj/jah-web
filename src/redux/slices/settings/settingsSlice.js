@@ -11,15 +11,22 @@ const initialState = {
 
 const submitHomeAdChange = createAsyncThunk(
   'settings/submitHomeAdChange',
-  async (formData, { dispatch }) => {
-    console.log(formData);
+  async ({ setValues, ...formData }, { dispatch }) => {
+    
     dispatch(setTopLoader());
     try {
       const data = await settingsService.submitHomeAdChange(formData);
 
       dispatch(addToast({ type: 'success', message: data.message }));
       dispatch(clearTopLoader());
-
+      setValues({
+        title: '',
+        tagline: '',
+        image: '',
+        buttonTitle: '',
+        buttonLink: '',
+        adImage: undefined,
+      });
       return data.payload;
     } catch (error) {
       dispatch(clearTopLoader());
