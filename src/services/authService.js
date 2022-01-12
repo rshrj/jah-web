@@ -203,6 +203,37 @@ export const verifyResetToken = async (token) => {
   }
 };
 
+export const verifyToken = async (token) => {
+  try {
+    const res = await fetch(`${apiUrl}/auth/verify/${token}`, {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+    });
+
+    if (!res) {
+      throw errorWithToast('Server did not respond');
+    }
+
+    const data = await res.json();
+    console.log(data);
+
+    if (!res.ok) {
+      throw new Error('Request error', { cause: data });
+    }
+
+    return data;
+  } catch (e) {
+    if (e instanceof TypeError && e.message === 'Failed to fetch') {
+      return rejectWithToast('Server is offline');
+    }
+    return Promise.reject(e);
+  }
+};
+
 export const resetPassword = async ({ token, password, password2 }) => {
   try {
     const res = await fetch(`${apiUrl}/auth/resetpassword`, {
@@ -247,6 +278,7 @@ const authService = {
   forgotPassword,
   verifyResetToken,
   resetPassword,
+  verifyToken,
 };
 
 export default authService;

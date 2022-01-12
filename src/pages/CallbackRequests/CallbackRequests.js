@@ -1,16 +1,20 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Typography, Modal } from '@mui/material';
+import { useCallback, useEffect, useState, useMemo } from 'react';
+import { Typography, Modal, Link } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
-import { FaTrash, FaUser, FaEye } from 'react-icons/fa';
+import { FaTrash, FaUser, FaEye, FaPhoneAlt } from 'react-icons/fa';
+import { useTheme } from '@mui/material/styles';
+import { format } from 'date-fns';
+import { HashLoader } from 'react-spinners';
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchCallBackRequests,
   updateState,
+  deleteCallbackRequest,
 } from '../../redux/slices/callback/callbackSlice';
-
-
+import NoRowsOverlay from '../../components/NoRowsOverlay';
+import DialogBox from '../../components/DialogBox';
 
 const style = {
   position: 'absolute',
@@ -29,12 +33,18 @@ const style = {
   overflow: 'hidden',
 };
 
-
 const CallbackRequests = () => {
   const dispatch = useDispatch();
+  const theme = useTheme();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [deleteId, setDeleteId] = useState('');
+
+   const loading = useSelector(
+     (state) => state.users.fetchLoading === 'loading'
+   );
 
   const [one, setOne] = useState({
     createdAt: '',
@@ -88,12 +98,25 @@ const CallbackRequests = () => {
     dispatch(fetchCallBackRequests());
   }, [dispatch]);
 
-  const columns = [
-    {
+   const deleteACallback= () => {
+     dispatch(deleteCallbackRequest({ callbackId: deleteId }));
+     setOpenDelete(false);
+   };
+
+   const openDialogBoxHandler = (id) => {
+     setDeleteId(id);
+     setOpenDelete(true);
+   };
+
+  const columns = useMemo(() => {
+
+  
+
+    const fieldName = {
       field: 'name',
       headerName: 'Full Name',
       description: 'Name of Person',
-      flex: 1,
+      flex: 1.2,
       headerClassName: {},
       renderCell: (params) => (
         <Box
@@ -101,23 +124,45 @@ const CallbackRequests = () => {
             display: 'inline-flex',
             alignItems: 'center',
           }}>
-          <FaUser color='black' />
+          <FaUser color={theme.palette.primary.main} />
           <Typography
-            color='text.primary'
             variant='body1'
-            sx={{ fontWeight: 'bold', marginLeft: 2 }}>
+            sx={{ fontWeight: 'bold', marginLeft: 2, color: 'text.secondary' }}>
             {params.value}
           </Typography>
         </Box>
       ),
-    },
-    {
+    };
+
+    const fieldPhone = {
       field: 'phone',
       headerName: 'Phone No.',
-      description: 'Phone no of the user',
-      flex: 1,
-    },
-    {
+      description: 'Mobile number of the user',
+      type: 'string',
+      flex: 0.8,
+      renderCell: (params) => {
+        return (
+          <Box
+            sx={{
+              display: 'inline-flex',
+              alignItems: 'center',
+            }}>
+            <FaPhoneAlt color={theme.palette.text.secondary} />
+            <Link
+              href={`tel:${params.value}`}
+              sx={{
+                fontWeight: 'bold',
+                marginLeft: 2,
+                color: 'text.secondary',
+              }}>
+              {params.value}
+            </Link>
+          </Box>
+        );
+      },
+    };
+
+    const fieldState = {
       field: 'state',
       headerName: 'Status',
       description: 'Status of the callback request',
@@ -132,38 +177,55 @@ const CallbackRequests = () => {
           {params.value === 'calledAlready' ? 'Called Already' : 'Pending Call'}
         </Typography>
       ),
-      //  renderEditCell: renderRatingEditInputCell,
-    },
-    {
+    };
+
+    const fieldCreatedAt = {
       field: 'createdAt',
-      headerName: 'Created At',
-      type: 'dateTime',
-      description: 'Time of user creation',
-      flex: 1,
-    },
-    {
+      headerName: 'Created on',
+      description: 'When the callback request came',
+      flex: 0.7,
+      renderCell: (params) => (
+        <Typography>{format(new Date(params.value), 'MMM dd, yy')}</Typography>
+      ),
+    };
+
+    const fieldActions = {
       field: 'actions',
       type: 'actions',
-      flex: 1,
+      flex: 0.5,
       headerName: 'Actions',
+      description: 'Show, Delete callback',
+
       getActions: (params) => {
-        console.log(params.row);
-        return [
+        const actionShow = (
           <GridActionsCellItem
             icon={<FaEye />}
+            label='Show'
+            showInMenu
             onClick={() => showCallbackRequest(params.row)}
-          />,
-          <GridActionsCellItem icon={<FaTrash />} />,
-        ];
+          />
+        );
+        const actionDelete = (
+          <GridActionsCellItem
+            icon={<FaTrash />}
+            label='Delete'
+            showInMenu
+            onClick={() => openDialogBoxHandler( params.id)}
+          />
+        );
+        return [actionShow, actionDelete];
       },
-    },
-  ];
+    };
+
+    return [fieldName, fieldPhone, fieldState, fieldCreatedAt, fieldActions];
+  }, [theme]);
+
 
   return (
     <Box
       sx={{
-        p: { xs: 0, md: 5 },
-        m: { xs: 0, md: 2 },
+        p: { xs: 0, md: 3 },
+        m: { xs: 0, md: 1 },
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -173,24 +235,67 @@ const CallbackRequests = () => {
         sx={{
           textAlign: 'center',
           color: 'primary.main',
-          marginBottom: 2,
+          marginBottom: 3,
         }}>
         Callback Requests
       </Typography>
-      <Box sx={{ display: 'flex', height: 600, width: '80%' }}>
-        <Box sx={{ flexGrow: 1 }}>
-          <DataGrid
-            columns={columns}
-            rows={data}
+      <Box
+        sx={{
+          display: 'flex',
+          height: 600,
+          width: { xs: '100vw', sm: '600px', md: '850px' },
+          overflowX: { xs: 'scroll', md: 'hidden' },
+          px: 2,
+        }}>
+        {loading && (
+          <Box
             sx={{
-              '& .MuiDataGrid-iconSeparator': {
-                visibility: 'hidden',
-              },
-            }}
-            onEditRowsModelChange={handleEditRowsModelChange}
-          />
-        </Box>
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              height: '100%',
+              pt: 20,
+              pb: 30,
+              backgroundColor: theme.palette.grey[0],
+            }}>
+            <HashLoader
+              color={theme.palette.primary.main}
+              style={{ display: 'block', margin: '100px' }}
+              size={150}
+            />
+          </Box>
+        )}
+        {!loading && (
+          <Box sx={{ flexGrow: 1 }}>
+            <DataGrid
+              columns={columns}
+              rows={data}
+              components={{
+                NoRowsOverlay,
+              }}
+              sx={{
+                '& .MuiDataGrid-iconSeparator': {
+                  visibility: 'hidden',
+                },
+                border: 'none',
+                width: 800,
+              }}
+              pageSize={10}
+              rowsPerPageOptions={[10, 20, 50, 100]}
+              pagination
+              onEditRowsModelChange={handleEditRowsModelChange}
+            />
+          </Box>
+        )}
       </Box>
+      <DialogBox
+        open={openDelete}
+        handleAccept={deleteACallback}
+        handleDecline={() => setOpenDelete(false)}
+      />
+     
       <Modal
         open={open}
         onClose={handleClose}

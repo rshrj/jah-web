@@ -133,33 +133,6 @@ const Users = () => {
         );
       }
     };
-    // const fieldState = {
-    //   field: 'state',
-    //   headerName: 'Status',
-    //   description: 'status of listing',
-    //   flex: 1,
-    //   align: 'center',
-    //   headerAlign: 'center',
-    //   renderCell: (params) => (
-    //     <Chip
-    //       color={
-    //         params.value === 'Approved'
-    //           ? 'success'
-    //           : params.value === 'Rejected'
-    //           ? 'error'
-    //           : 'warning'
-    //       }
-    //       size='small'
-    //       label={
-    //         params.value === 'Approved'
-    //           ? 'Approved'
-    //           : params.value === 'Rejected'
-    //           ? 'Rejected'
-    //           : 'Pending'
-    //       }
-    //     />
-    //   )
-    // };
     const fieldCreatedAt = {
       field: 'createdAt',
       headerName: 'Created on',

@@ -13,6 +13,8 @@ import PrivateRoute from './components/PrivateRoute';
 import JSnackbar from './components/JSnackbar';
 import ScrollReset from './components/ScrollReset';
 
+import VerifyToken from './pages/VerifyToken';
+import NotVerified from './pages/NotVerified';
 import LoginPage from './pages/Login';
 import SignupPage from './pages/Signup';
 import DashboardPage from './pages/Dashboard';
@@ -67,6 +69,8 @@ const App = () => {
           <Routes>
             <Route path='/login' element={<LoginPage />} />
             <Route path='/signup' element={<SignupPage />} />
+            <Route path='/notverified' element={<NotVerified />} />
+            <Route path='/verifyToken/:token' element={<VerifyToken />} />
             {/* <Route path='/forgotpassword' element={<ForgotPassword />} /> */}
             <Route path='/' element={<PublicPage />}>
               <Route index element={<LandingPage />} />
