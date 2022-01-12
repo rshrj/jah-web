@@ -1,5 +1,5 @@
-import { useEffect, useMemo } from 'react';
-import { Typography } from '@mui/material';
+import { useEffect, useMemo, useState } from 'react';
+import { Chip, Link, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import {
@@ -8,224 +8,254 @@ import {
   FaEye,
   FaTrash,
   FaCheck,
-  FaTimes
+  FaTimes,
+  FaUser
 } from 'react-icons/fa';
 import { format } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { HashLoader } from 'react-spinners';
+import { useTheme } from '@mui/material/styles';
 
-import { getListings } from '../../redux/slices/listings/listingsSlice';
-
+import {
+  getListings,
+  deleteListing,
+  updateListingState
+} from '../../redux/slices/listings/listingsSlice';
 import { listingObject } from '../../constants/listingTypes';
-import { useNavigate } from 'react-router-dom';
 
-// const data = [
-//   {
-//     id: 1,
-//     name: 'Hiranandani',
-//     postedBy: 'Rishi',
-//     createdAt: new Date(),
-//     type: 'rentlease',
-//     status: ''
-//   },
-//   {
-//     id: 2,
-//     name: 'Abc',
-//     postedBy: 'Rishiga',
-//     createdAt: new Date(),
-//     type: 'sellapartment'
-//   },
-//   {
-//     id: 3,
-//     name: 'Zyx',
-//     postedBy: 'Rigfshisa',
-//     createdAt: new Date(),
-//     type: 'sellproject'
-//   },
-//   {
-//     id: 4,
-//     name: 'Gasf',
-//     postedBy: 'gasRishi',
-//     createdAt: new Date(),
-//     type: 'rentlease'
-//   }
-// ];
-
-// const listings = [
-//   {
-//     name: '2BHK in Mankhurd',
-//     state: 'pending',
-//     listingType: 'sellapartment',
-//     sellapartment: {
-//       societyname: 'Gokuldham Hillview',
-//       location: 'Mankhurd',
-//       landmark: 'Near HBCSE',
-//       apartmentType: '2bhk',
-//       price: '8345000',
-//       pricePerSqFt: '10000',
-//       allInclusivePrice: false,
-//       taxAndGovtChargesExcluded: true,
-//       priceNegotiable: true,
-//       numBathrooms: '2',
-//       numBalconies: '2',
-//       carpetArea: '834',
-//       builtUpArea: '',
-//       superBuiltUpArea: '1350',
-//       otherRooms: ['poojaRoom', 'studyRoom'],
-//       furnishing: 'furnished',
-//       coveredParking: '2',
-//       openParking: '0',
-//       totalFloors: '10',
-//       propertyOnFloor: '8',
-//       ageOfProperty: '0-1yrs',
-//       availabilityStatus: 'readyToMove',
-//       ownershipType: 'freehold',
-//       usp: 'A very nice place!',
-//       pictures: [
-//         'https://i.picsum.photos/id/164/800/600.jpg?hmac=PXOkqOXBrKf4yZjDeJ3q5KtnTSFO4DOIJKNhBRDlKiY',
-//         'https://i.picsum.photos/id/12/800/600.jpg?hmac=OnuvMhu3pBo7i6hErvnN-U922LRgjb8pBHux29xEv34',
-//         'https://i.picsum.photos/id/229/800/600.jpg?hmac=XBz4BdHCdXDT8GerLNU_gH41Hv6gKY0beR0wprsUesQ',
-//         'https://i.picsum.photos/id/41/500/900.jpg?hmac=anOtTY6nmGpH2yWQzb8DA9QMUktr6y8X5QVfpuYpHXY',
-//         'https://i.picsum.photos/id/950/600/500.jpg?hmac=NplsaUFi8hC7-nsbDSXR9b0QBGtfo7-g11beSBNBpUc',
-//         'https://i.picsum.photos/id/570/800/600.jpg?hmac=uKkwPFnmvK2ixiYuqFoYCJE8CoEWXxFTCDF0syKNm0I',
-//         'https://i.picsum.photos/id/182/800/600.jpg?hmac=tljGSjfYZx-pg_MFSQUL-Emf_FGXS3FCXB3nlEBYFtY',
-//         'https://i.picsum.photos/id/699/500/900.jpg?hmac=CC4usCtofVGSafR68gmrqfIoqKyUeWbqDfGXNlsnBMI',
-//         'https://i.picsum.photos/id/689/800/600.jpg?hmac=9Ewgx9LpNR5YK4XHAXstG8gMaBlRyWG-EirYYVkaEVU',
-//         'https://i.picsum.photos/id/187/600/800.jpg?hmac=TtgRrLawCBefKSnxolzreh-dUucf0jxrfN0cQJ4Vmzg',
-//       ],
-//       featuredPicture:
-//         'https://i.picsum.photos/id/164/800/600.jpg?hmac=PXOkqOXBrKf4yZjDeJ3q5KtnTSFO4DOIJKNhBRDlKiY',
-//       videoLink:
-//         'https://www.youtube.com/watch?v=2YBtspm8j8M&ab_channel=Dissolve',
-//     },
-//     createdBy: '61c86363686210e7fe8ffde0',
-//     createdAt: Date.now(),
-//   },
-// ];
+import DialogBox from '../../components/DialogBox';
+import NoRowsOverlay from '../../components/NoRowsOverlay';
 
 const ListingsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const theme = useTheme();
 
-  const { ids, listings } = useSelector((store) => store.listings.content);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [deleteListingId, setDeleteListingId] = useState('');
+
+  useEffect(() => {
+    dispatch(getListings());
+  }, [dispatch]);
+
+  const data = useSelector((state) =>
+    state.listings.content.ids.map((id) => ({
+      id,
+      ...state.listings.content.listings[id]
+    }))
+  );
+  const loading = useSelector(
+    (state) => state.listings.fetchLoading === 'loading'
+  );
+  const role = useSelector((state) => state.auth.user.role);
+
+  const deleteAListing = () => {
+    dispatch(deleteListing({ listingId: deleteListingId }));
+    setOpenDelete(false);
+  };
+
+  const openDialogBoxHandler = (id) => {
+    setDeleteListingId(id);
+    setOpenDelete(true);
+  };
 
   const columns = useMemo(() => {
+    const handleApprove = (id) => (e) => {
+      dispatch(updateListingState({ listingId: id, state: 'Approved' }));
+    };
+    const handleReject = (id) => (e) => {
+      dispatch(updateListingState({ listingId: id, state: 'Rejected' }));
+    };
+    const handleView = (id) => (e) => {
+      navigate(`/listing/${id}`);
+    };
     const handleEdit = (id) => (e) => {
       navigate(`/dashboard/edit/${id}`);
     };
-    return [
-      {
-        field: 'name',
-        headerName: 'Listing name',
-        description: 'Name of the property / project',
-        type: 'string',
-        flex: 3,
-        renderCell: (params) => (
+    const handleDelete = (id) => (e) => {
+      openDialogBoxHandler(id);
+    };
+
+    const fieldName = {
+      field: 'name',
+      headerName: 'Listing name',
+      description: 'Name of the property / project',
+      type: 'string',
+      flex: 3,
+      renderCell: (params) => (
+        <Box
+          sx={{
+            display: 'inline-flex',
+            alignItems: 'center'
+          }}>
+          <FaBuilding color={theme.palette.primary.main} />
+          <Typography
+            color='text.primary'
+            variant='body1'
+            sx={{ fontWeight: 'bold', marginLeft: 2 }}>
+            {params.value}
+          </Typography>
+        </Box>
+      )
+    };
+    const fieldCreatedBy = {
+      field: 'createdBy',
+      headerName: 'Posted By',
+      description:
+        'Customer who posted the property (click to open their profile)',
+      flex: 1.5,
+      type: 'string',
+      renderCell: (params) =>
+        params.value !== null ? (
           <Box
             sx={{
               display: 'inline-flex',
               alignItems: 'center'
             }}>
-            <FaBuilding color='orange' />
-            <Typography
-              color='text.primary'
-              variant='body1'
-              sx={{ fontWeight: 'bold', marginLeft: 2 }}>
-              {params.value}
-            </Typography>
+            <FaUser color={theme.palette.text.secondary} />
+            <Link
+              component={RouterLink}
+              to={`/dashboard/users/${params.value._id}`}
+              sx={{
+                fontWeight: 'bold',
+                marginLeft: 2,
+                color: 'text.secondary'
+              }}>
+              {params.value.name.first} {params.value.name.last}
+            </Link>
           </Box>
-        )
-      },
-      {
-        field: 'postedBy',
-        headerName: 'Posted By',
-        description:
-          'Customer who posted the property (click to open their profile)',
-        flex: 1
-      },
-      {
-        field: 'state',
-        headerName: 'Status',
-        description: 'status of listing',
-        flex: 1,
-        renderCell: (params) => (
+        ) : (
           <Typography
-            color={
-              params.value === 'Approved'
-                ? '#28a745'
-                : params.value === 'Deactivated'
-                ? '#dc3545'
-                : '#ffc107'
-            }>
-            {params.value === 'Approved'
+            variant='body2'
+            color='text.secondary'
+            sx={{ marginLeft: 3 }}>
+            Deleted
+          </Typography>
+        )
+    };
+    const fieldState = {
+      field: 'state',
+      headerName: 'Status',
+      description: 'status of listing',
+      flex: 1,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params) => (
+        <Chip
+          color={
+            params.value === 'Approved'
+              ? 'success'
+              : params.value === 'Rejected'
+              ? 'error'
+              : 'warning'
+          }
+          size='small'
+          label={
+            params.value === 'Approved'
               ? 'Approved'
-              : params.value === 'Deactivated'
-              ? 'Deactivated'
-              : 'Pending'}
-          </Typography>
-        )
-      },
-      {
-        field: 'createdAt',
-        headerName: 'Created At',
-        description: 'Time of listing creation',
-        flex: 1,
-        renderCell: (params) => (
-          <Typography>
-            {format(new Date(params.value), 'MMM dd, yy')}
-          </Typography>
-        )
-      },
-      {
-        field: 'type',
-        headerName: 'Type',
-        description: 'Type of listing',
-        type: 'singleSelect',
-        flex: 1,
-        valueOptions: ['rentlease', 'sellapartment', 'sellproject'],
-        renderCell: (params) => {
-          console.log(params.value);
-          return (
-            <Typography color={listingObject[params.value].color}>
-              {listingObject[params.value].label}
-            </Typography>
-          );
-        }
-      },
-      {
-        field: 'actions',
-        type: 'actions',
-        flex: 1,
-        headerName: 'Actions',
-        description: 'View, Edit, Delete buttons',
-        getActions: (params) => [
-          <GridActionsCellItem icon={<FaCheck />} label='Approve' showInMenu />,
-          <GridActionsCellItem icon={<FaTimes />} label='Reject' showInMenu />,
-          <GridActionsCellItem icon={<FaEye />} label='View' showInMenu />,
+              : params.value === 'Rejected'
+              ? 'Rejected'
+              : 'Pending'
+          }
+        />
+      )
+    };
+    const fieldCreatedAt = {
+      field: 'createdAt',
+      headerName: 'Created At',
+      description: 'Time of listing creation',
+      flex: 1,
+      renderCell: (params) => (
+        <Typography>{format(new Date(params.value), 'MMM dd, yy')}</Typography>
+      )
+    };
+    const fieldType = {
+      field: 'type',
+      headerName: 'Type',
+      description: 'Type of listing',
+      type: 'singleSelect',
+      flex: 1,
+      align: 'center',
+      headerAlign: 'center',
+      valueOptions: ['rentlease', 'sellapartment', 'sellproject'],
+      renderCell: (params) => {
+        return (
+          <Chip
+            variant='outlined'
+            color={listingObject[params.value].color}
+            size='small'
+            label={listingObject[params.value].label}
+          />
+        );
+      }
+    };
+    const fieldActions = {
+      field: 'actions',
+      type: 'actions',
+      flex: 0.5,
+      headerName: 'Actions',
+      description: 'View, Edit, Delete buttons',
+      getActions: (params) => {
+        const actionApprove = (
+          <GridActionsCellItem
+            icon={<FaCheck />}
+            label='Approve'
+            showInMenu
+            onClick={handleApprove(params.id)}
+          />
+        );
+        const actionReject = (
+          <GridActionsCellItem
+            icon={<FaTimes />}
+            label='Reject'
+            showInMenu
+            onClick={handleReject(params.id)}
+          />
+        );
+        const actionView = (
+          <GridActionsCellItem
+            icon={<FaEye />}
+            label='View'
+            onClick={handleView(params.id)}
+            showInMenu
+          />
+        );
+        const actionEdit = (
           <GridActionsCellItem
             icon={<FaEdit />}
             label='Edit'
             onClick={handleEdit(params.id)}
             showInMenu
-          />,
-          <GridActionsCellItem icon={<FaTrash />} label='Delete' showInMenu />
-        ]
+          />
+        );
+        const actionDelete = (
+          <GridActionsCellItem
+            icon={<FaTrash />}
+            label='Delete'
+            color='error'
+            showInMenu
+            onClick={handleDelete(params.id)}
+          />
+        );
+
+        return role === 'ADMIN'
+          ? [actionApprove, actionReject, actionView, actionEdit, actionDelete]
+          : [actionView, actionEdit, actionDelete];
       }
-    ];
-  }, [navigate]);
+    };
 
-  let data = [];
-  if (ids.length !== 0) {
-    data = ids.map((id) => {
-      const { first, last } = listings[id].createdBy.name;
-      return { id, ...listings[id], postedBy: first + ' ' + last };
-    });
-  }
-
-  console.log(listings);
-
-  useEffect(() => {
-    dispatch(getListings());
-  }, [dispatch]);
+    return role === 'ADMIN'
+      ? [
+          fieldName,
+          fieldCreatedBy,
+          fieldCreatedAt,
+          fieldType,
+          fieldState,
+          fieldActions
+        ]
+      : [fieldName, fieldCreatedAt, fieldType, fieldState, fieldActions];
+  }, [dispatch, navigate, role, theme]);
 
   return (
     <Box
@@ -253,23 +283,53 @@ const ListingsPage = () => {
           overflowX: { xs: 'scroll', md: 'hidden' },
           px: 2
         }}>
-        <Box sx={{ flexGrow: 1 }}>
-          <DataGrid
-            // TODO: set default page size to 10 rows per page
-            columns={columns}
-            rows={data}
+        {loading && (
+          <Box
             sx={{
-              '& .MuiDataGrid-iconSeparator': {
-                visibility: 'hidden'
-              },
-              border: 'none',
-              width: 800
-            }}
-            pageSize={10}
-            pagination
-          />
-        </Box>
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              height: '100%',
+              pt: 20,
+              pb: 30,
+              backgroundColor: theme.palette.grey[0]
+            }}>
+            <HashLoader
+              color={theme.palette.primary.main}
+              style={{ display: 'block', margin: '100px' }}
+              size={150}
+            />
+          </Box>
+        )}
+        {!loading && (
+          <Box sx={{ flexGrow: 1 }}>
+            <DataGrid
+              columns={columns}
+              rows={data}
+              components={{
+                NoRowsOverlay
+              }}
+              sx={{
+                '& .MuiDataGrid-iconSeparator': {
+                  visibility: 'hidden'
+                },
+                border: 'none',
+                width: 800
+              }}
+              pageSize={10}
+              rowsPerPageOptions={[10, 20, 50, 100]}
+              pagination
+            />
+          </Box>
+        )}
       </Box>
+      <DialogBox
+        open={openDelete}
+        handleAccept={deleteAListing}
+        handleDecline={() => setOpenDelete(false)}
+      />
     </Box>
   );
 };

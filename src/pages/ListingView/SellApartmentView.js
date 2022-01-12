@@ -106,7 +106,12 @@ const SellApartmentView = ({ listing }) => {
                   {societyName}
                 </Typography>
               )}
-              <Chip variant='outlined' color='primary' label='Home for sale' />
+              <Chip
+                variant='outlined'
+                color='primary'
+                size='small'
+                label='Home for sale'
+              />
             </Box>
           </Grid>
           <Grid item sm={4}>
@@ -162,11 +167,11 @@ const SellApartmentView = ({ listing }) => {
               onClick={handleGalleryClick}
               sx={{
                 width: '100%',
-                height: 400,
+                maxHeight: 400,
                 overflowY: 'hidden',
                 p: 2
               }}>
-              <ImageList variant='masonry' cols={3} gap={10}>
+              <ImageList variant='masonry' cols={2} gap={10}>
                 {pictures.map((picture) => (
                   <ImageListItem key={picture}>
                     <img src={picture} alt={picture} loading='lazy' />
@@ -194,17 +199,19 @@ const SellApartmentView = ({ listing }) => {
                 }}>
                 Click to enlarge
               </Typography>
-              <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
-                <MdPlayArrow color={theme.palette.primary.main} />
-                <Link
-                  href={videoLink}
-                  target='_blank'
-                  rel='noopener noreferer'
-                  underline='hover'
-                  sx={{ marginLeft: 1 }}>
-                  Click here to play the video
-                </Link>
-              </Box>
+              {videoLink !== '' && (
+                <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                  <MdPlayArrow color={theme.palette.primary.main} />
+                  <Link
+                    href={videoLink}
+                    target='_blank'
+                    rel='noopener noreferer'
+                    underline='hover'
+                    sx={{ marginLeft: 1 }}>
+                    Click here to play the video
+                  </Link>
+                </Box>
+              )}
             </Box>
             <Backdrop
               sx={{

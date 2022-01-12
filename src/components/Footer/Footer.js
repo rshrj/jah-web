@@ -78,7 +78,7 @@ const Footer = () => {
       <Box
         sx={{
           pt: '50px',
-          backgroundColor: 'white'
+          backgroundColor: 'white',
         }}>
         <Grid container spacing={2} sx={{ mb: '30px' }}>
           <Grid container item sx={{ width: { xs: '100%', md: '40%' } }}>
@@ -89,7 +89,7 @@ const Footer = () => {
                 width: '100%',
                 margin: 'auto',
                 display: 'flex',
-                justifyContent: { xs: 'center', md: 'flex-start' }
+                justifyContent: { xs: 'center', md: 'flex-start' },
               }}>
               <Logo size={60} />
             </Grid>
@@ -99,7 +99,7 @@ const Footer = () => {
                 mt: '20px',
                 width: '100%',
                 display: 'flex',
-                justifyContent: 'center'
+                justifyContent: 'center',
               }}>
               <Content>
                 We build relationships that last a lifetime and help you get the
@@ -112,14 +112,14 @@ const Footer = () => {
             item
             sx={{
               width: { xs: '100%', md: '60%' },
-              textAlign: { xs: 'center', md: 'left' }
+              textAlign: { xs: 'center', md: 'left' },
             }}>
             <Grid
               container
               item
               sx={{
                 width: { xs: '100%', md: '33.33%' },
-                mt: { xs: '20px', md: '0' }
+                mt: { xs: '20px', md: '0' },
               }}>
               <Grid item xs={12} sx={{ fontSize: '20px', mb: '10px' }}>
                 Links
@@ -130,7 +130,7 @@ const Footer = () => {
                     cursor: 'pointer',
                     textDecoration: 'none',
                     color: '#828282',
-                    fontSize: '15px'
+                    fontSize: '15px',
                   }}
                   to='/forbuyers?type=projects'
                   component={RouterLink}>
@@ -143,7 +143,7 @@ const Footer = () => {
                     cursor: 'pointer',
                     textDecoration: 'none',
                     color: '#828282',
-                    fontSize: '15px'
+                    fontSize: '15px',
                   }}
                   to='/forbuyers?type=apartments'
                   component={RouterLink}>
@@ -156,7 +156,7 @@ const Footer = () => {
                     cursor: 'pointer',
                     textDecoration: 'none',
                     color: '#828282',
-                    fontSize: '15px'
+                    fontSize: '15px',
                   }}
                   to='/fortenants'
                   component={RouterLink}>
@@ -169,7 +169,7 @@ const Footer = () => {
               item
               sx={{
                 width: { xs: '100%', md: '33.33%' },
-                mt: { xs: '20px', md: '0' }
+                mt: { xs: '20px', md: '0' },
               }}>
               <Grid item xs={12} sx={{ fontSize: '20px', mb: '10px' }}>
                 Legal
@@ -180,7 +180,7 @@ const Footer = () => {
                     cursor: 'pointer',
                     textDecoration: 'none',
                     color: '#828282',
-                    fontSize: '15px'
+                    fontSize: '15px',
                   }}
                   to='/tnc'
                   component={RouterLink}>
@@ -193,7 +193,7 @@ const Footer = () => {
                     cursor: 'pointer',
                     textDecoration: 'none',
                     color: '#828282',
-                    fontSize: '15px'
+                    fontSize: '15px',
                   }}
                   to='/privacy'
                   component={RouterLink}>
@@ -206,7 +206,7 @@ const Footer = () => {
                     cursor: 'pointer',
                     textDecoration: 'none',
                     color: '#828282',
-                    fontSize: '15px'
+                    fontSize: '15px',
                   }}
                   to='/about'
                   component={RouterLink}>
@@ -219,7 +219,7 @@ const Footer = () => {
               item
               sx={{
                 width: { xs: '100%', md: '33.33%' },
-                mt: { xs: '20px', md: '0' }
+                mt: { xs: '20px', md: '0' },
               }}>
               <Grid item xs={12} sx={{ fontSize: '20px', mb: '10px' }}>
                 Contact
@@ -230,7 +230,7 @@ const Footer = () => {
                     cursor: 'pointer',
                     textDecoration: 'none',
                     color: '#828282',
-                    fontSize: '15px'
+                    fontSize: '15px',
                   }}
                   href={`tel:${contactInfo.phone}`}>
                   {contactInfo.phone}
@@ -242,7 +242,7 @@ const Footer = () => {
                     cursor: 'pointer',
                     textDecoration: 'none',
                     color: '#828282',
-                    fontSize: '15px'
+                    fontSize: '15px',
                   }}
                   href={`mailto:${contactInfo.email}`}>
                   {contactInfo.email}
@@ -254,7 +254,7 @@ const Footer = () => {
                 sx={{
                   mt: '15px',
                   display: 'flex',
-                  justifyContent: { xs: 'center', md: 'flex-start' }
+                  justifyContent: { xs: 'center', md: 'flex-start' },
                 }}>
                 <IconsWrapper>
                   {Icons}
@@ -283,10 +283,17 @@ const Footer = () => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            fontSize: { xs: '11px', sm: '18px' }
+            fontSize: { xs: '11px', sm: '18px' },
           }}>
           Created with love &nbsp;<span style={{ color: 'red' }}>♥</span> &nbsp;
-          by Zenoholics. © {new Date().getFullYear()} All Rights Reserved
+          by&nbsp;
+          <a
+            href='https://zenoholics.com/'
+            target='_blank'
+            rel='noopener noreferrer'>
+            Zenoholics
+          </a>
+          . © {new Date().getFullYear()} All Rights Reserved
         </Box>
       </Box>
     </>

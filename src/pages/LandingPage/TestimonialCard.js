@@ -16,7 +16,7 @@ const TestimonialCard = ({ message, name, company }) => {
         justifyContent: 'center',
         alignItems: 'flex-start',
         px: 4,
-        py: 2,
+        py: 3,
         maxWidth: 350,
         m: 2,
         borderLeft: `10px solid ${theme.palette.primary.main}`
@@ -24,14 +24,17 @@ const TestimonialCard = ({ message, name, company }) => {
       <Box sx={{ textAlign: 'left' }}>
         <FaQuoteLeft fontSize={30} color={theme.palette.primary.main} />
       </Box>
-      <Typography variant='body1' sx={{ marginTop: 1 }}>
+      <Typography
+        variant='body1'
+        sx={{ marginTop: 1, height: '100px', overflow: 'hidden' }}
+        component='div'>
         {message}
       </Typography>
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'flex-start',
+          alignItems: 'center',
           marginTop: 2
         }}>
         <Avatar
@@ -43,9 +46,14 @@ const TestimonialCard = ({ message, name, company }) => {
           })}
         />
         <Box>
-          <Typography variant='h6'>{name}</Typography>
+          <Typography variant='h6' component='div'>
+            {name}
+          </Typography>
           {company !== undefined && (
-            <Typography variant='subtitle2' color='text.secondary'>
+            <Typography
+              variant='subtitle2'
+              color='text.secondary'
+              component='div'>
               {company}
             </Typography>
           )}

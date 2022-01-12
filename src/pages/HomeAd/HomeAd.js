@@ -25,12 +25,11 @@ const HomeAd = () => {
   const [values, setValues] = useState({
     title: '',
     tagline: '',
-    image: '',
     buttonTitle: '',
     buttonLink: '',
-    adImage: '',
+    adImage: undefined,
   });
-  console.log(values);
+  
 
   const handleChange = (prop) => (event) => {
     if (Object.entries(errors).length !== 0) {
@@ -42,12 +41,13 @@ const HomeAd = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+  
     dispatch(
       submitHomeAdChange({
+        setValues : setValues,
         title: values.title,
         tagline: values.tagline,
-        image: values.image,
+        image: values.adImage,
         buttonTitle: values.buttonTitle,
         buttonLink: values.buttonLink,
       })
@@ -55,10 +55,13 @@ const HomeAd = () => {
   };
 
   const handleFilesChange = (event, newFiles) => {
-    setValues({
-      ...values,
-      adImage: newFiles,
-    });
+ 
+    
+      setValues({
+        ...values,
+        adImage: newFiles,
+      });
+    
   };
 
 
@@ -126,19 +129,7 @@ const HomeAd = () => {
                 />
               </FormGroup>
             </Grid>
-            <Grid item xs={12} sm={12}>
-              <FormGroup>
-                <JInputField
-                  topLabel='Image Link'
-                  placeholder='Please enter a link to the image'
-                  spacing={0}
-                  value={values.image}
-                  handleChange={handleChange('image')}
-                  errors={errors['image']}
-                  disabled={loading}
-                />
-              </FormGroup>
-            </Grid>
+           
             <Grid item xs={12} sm={12}>
               <FormGroup>
                 <JInputField

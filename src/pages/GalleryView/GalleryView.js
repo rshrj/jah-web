@@ -159,7 +159,9 @@ const GalleryView = ({ mode = 'buy', initTab = 0 }) => {
               alignItems='center'
               width={{ xs: '100%', md: '85%' }}
               mt={mode === 'buy' ? 3 : 0}
-              sx={{ px: 3 }}>
+              sx={{ px: 3 }}
+              component='form'
+              autoComplete='off'>
               <Autocomplete
                 freeSolo
                 sx={{ width: '100%' }}
@@ -203,6 +205,7 @@ const GalleryView = ({ mode = 'buy', initTab = 0 }) => {
                 )}
               />
               <Button
+                type='submit'
                 sx={{ marginLeft: 2, height: 50 }}
                 variant='contained'
                 onClick={handleSearchSubmit}

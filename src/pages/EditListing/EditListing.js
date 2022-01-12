@@ -104,7 +104,9 @@ const EditListing = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const errors = useSelector((state) => state.errors.formErrors);
   let [values, setValues] = useState(initState);
+  console.log(values);
 
   let [newPictures, setNewPictures] = useState([]);
 
@@ -124,12 +126,14 @@ const EditListing = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    console.log(values);
+    console.log(values._id);
     let type = values.type;
+    
     dispatch(
       updateListing({
         navigate,
-        listing: { _id: values._id, type, ...values[type], newPictures }
+        listing: { ...values[type], _id: values._id, type, newPictures },
       })
     );
   };
@@ -148,14 +152,14 @@ const EditListing = () => {
         m: 2,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
       }}>
       <Typography
         variant='h4'
         sx={{
           textAlign: 'center',
           color: 'primary.main',
-          marginBottom: 2
+          marginBottom: 2,
         }}>
         Edit listing
       </Typography>
@@ -166,6 +170,7 @@ const EditListing = () => {
               values={values.rentlease}
               onChange={handleChange('rentlease')}
               newPictures={newPictures}
+              errors={errors}
               edit
             />
           )}

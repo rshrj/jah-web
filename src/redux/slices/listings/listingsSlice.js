@@ -97,6 +97,7 @@ const addNewListing = createAsyncThunk(
 const updateListing = createAsyncThunk(
   'listings/updateListing',
   async ({ navigate, listing }, { dispatch }) => {
+    console.log(listing);
     dispatch(setTopLoader());
     try {
       const data = await listingsService.updateListing(listing);
@@ -107,6 +108,7 @@ const updateListing = createAsyncThunk(
       navigate(`/listing/${data.payload._id}`);
       return data.payload;
     } catch (error) {
+      console.log(error);
       dispatch(clearTopLoader());
       if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
         error.cause.toasts.forEach((toastMessage) =>
@@ -128,10 +130,11 @@ const getListings = createAsyncThunk(
     dispatch(setTopLoader());
     try {
       const data = await listingsService.getListings();
+      console.log('listings', data.payload);
       dispatch(clearTopLoader());
-      console.log(data.payload);
       return data.payload;
     } catch (error) {
+      dispatch(clearTopLoader());
       if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
         error.cause.toasts.forEach((toastMessage) =>
           dispatch(addToast({ type: 'error', message: toastMessage }))
@@ -281,11 +284,82 @@ const getListingsFuzzy = createAsyncThunk(
   }
 );
 
+
+const deleteListing = createAsyncThunk(
+  'listings/deleteListing',
+  async ({ listingId }, { dispatch }) => {
+    console.log(listingId);
+    console.log('Called');
+    dispatch(setTopLoader());
+    try {
+      const data = await listingsService.deleteListing(listingId);
+      dispatch(addToast({ type: 'success', message: data.message }));
+      dispatch(clearTopLoader());
+      dispatch(getListings());
+      return data.payload;
+      
+    } catch (error) {
+      dispatch(clearTopLoader());
+      if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
+        error.cause.toasts.forEach((toastMessage) =>
+          dispatch(addToast({ type: 'error', message: toastMessage }))
+        );
+      }
+
+      return Promise.reject(error);
+    }
+  }
+);
+
+const updateListingState = createAsyncThunk(
+  'listings/updateListingState',
+  async ({ listingId, state }, { dispatch }) => {
+    dispatch(setTopLoader());
+    try {
+      const data = await listingsService.updateListingState({
+        listingId,
+        state,
+      });
+      dispatch(addToast({ type: 'success', message: data.message }));
+      dispatch(clearTopLoader());
+      dispatch(getListings());
+      return data.payload;
+    } catch (error) {
+      dispatch(clearTopLoader());
+      if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
+        error.cause.toasts.forEach((toastMessage) =>
+          dispatch(addToast({ type: 'error', message: toastMessage }))
+        );
+      }
+
+      return Promise.reject(error);
+    }
+  }
+);
+
 export const listingsSlice = createSlice({
   name: 'listings',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(updateListingState.pending, (state, action) => {
+      state.loading = 'loading';
+    });
+    builder.addCase(updateListingState.fulfilled, (state, action) => {
+      state.loading = 'idle';
+    });
+    builder.addCase(updateListingState.rejected, (state, action) => {
+      state.loading = 'idle';
+    });
+    builder.addCase(deleteListing.pending, (state, action) => {
+      state.loading = 'loading';
+    });
+    builder.addCase(deleteListing.fulfilled, (state, action) => {
+      state.loading = 'idle';
+    });
+    builder.addCase(deleteListing.rejected, (state, action) => {
+      state.loading = 'idle';
+    });
     builder.addCase(getListingById.pending, (state, action) => {
       state.loading = 'loading';
     });
@@ -320,8 +394,6 @@ export const listingsSlice = createSlice({
       state.fetchLoading = 'loading';
     });
     builder.addCase(getListings.fulfilled, (state, action) => {
-      console.log('Done');
-      console.log(action.payload);
       state.fetchLoading = 'idle';
       state.content.listings = arrayToObject('_id', action.payload);
       state.content.ids = action.payload.map((listing) => listing._id);
@@ -329,6 +401,7 @@ export const listingsSlice = createSlice({
     builder.addCase(getListings.rejected, (state, action) => {
       state.fetchLoading = 'idle';
     });
+
     builder.addCase(getPublicListingById.pending, (state, action) => {
       state.fetchLoading = 'loading';
     });
@@ -413,7 +486,9 @@ export {
   getBuyProperties,
   getRentBuyProperties,
   getFeaturedListings,
-  getRelatedListings
+  getRelatedListings,
+  deleteListing,
+  updateListingState,
 };
 
 export default listingsSlice.reducer;

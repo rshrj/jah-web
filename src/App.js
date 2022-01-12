@@ -1,6 +1,5 @@
 import { CssBaseline, Stack } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
-import { Global } from '@emotion/react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,6 +33,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import SubmitTestimonial from './pages/SubmitTestimonial';
 import HomeAd from './pages/HomeAd';
 import EditListing from './pages/EditListing';
+import Testimonials from './pages/Testimonials'
 // import ForgotPassword from './pages/ForgotPassword';
 
 const App = () => {
@@ -93,7 +93,7 @@ const App = () => {
                 <Route path='myaccount' element={<MyAccount />} />
                 <Route path='homead' element={<HomeAd />} />
                 <Route path='newlisting' element={<NewListingPage />} />
-                <Route path='testimonials' element={<SubmitTestimonial />} />
+                <Route path='testimonials' element={<Testimonials />} />
                 <Route path='callbackrequests' element={<CallbackRequests />} />
               </Route>
             </Route>

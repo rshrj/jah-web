@@ -108,6 +108,8 @@ const RentLeaseForm = ({
   newPictures = [],
   disabled = false
 }) => {
+  console.log(values);
+  console.log(values.societyName);
   const isPhone = useMediaQuery('(min-width:600px)');
 
   const [addBuiltUpArea, setAddBuiltUpArea] = useState(false);
@@ -901,7 +903,7 @@ const RentLeaseForm = ({
             variant='body2'
             color='text.secondary'
             sx={{ display: 'inline-block' }}>
-            (Atleast six)
+            (Atleast six. Size of each image must be less than 5 MB)
           </Typography>
         </FormLabel>
         <UploadZone

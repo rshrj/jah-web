@@ -13,23 +13,23 @@ const listingTypes = [
     labelCaption: undefined,
     schema: null,
     icon: MdAccountBalance,
-    color: 'success.main'
+    color: 'warning'
   },
   {
     type: 'sellapartment',
-    label: 'Sell Apartment',
+    label: 'Apartment',
     labelCaption: '(resell homes)',
     schema: null,
     icon: MdMapsHomeWork,
-    color: 'info.main'
+    color: 'info'
   },
   {
     type: 'sellproject',
-    label: 'Sell Project',
+    label: 'Project',
     labelCaption: '(several flats)',
     schema: null,
     icon: MdLocationCity,
-    color: 'secondary.main'
+    color: 'success'
   }
 ];
 
