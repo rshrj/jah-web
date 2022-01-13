@@ -36,7 +36,7 @@ import SubmitTestimonial from './pages/SubmitTestimonial';
 import HomeAd from './pages/HomeAd';
 import EditListing from './pages/EditListing';
 import Testimonials from './pages/Testimonials'
-// import ForgotPassword from './pages/ForgotPassword';
+import ForgotPassword from './pages/ForgotPassword';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -71,7 +71,7 @@ const App = () => {
             <Route path='/signup' element={<SignupPage />} />
             <Route path='/notverified' element={<NotVerified />} />
             <Route path='/verifyToken/:token' element={<VerifyToken />} />
-            {/* <Route path='/forgotpassword' element={<ForgotPassword />} /> */}
+            <Route path='/forgotpassword' element={<ForgotPassword />} />
             <Route path='/' element={<PublicPage />}>
               <Route index element={<LandingPage />} />
               <Route path='home' element={<LandingPage />} />

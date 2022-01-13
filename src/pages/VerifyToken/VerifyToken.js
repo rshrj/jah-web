@@ -34,8 +34,8 @@ const VerifyToken = () => {
     }
   }, [dispatch, loggedIn, navigate, from, token]);
 
-  const goToDashboard = () => {
-    navigate('/dashboard');
+  const goToLogin = () => {
+    navigate('/login');
   };
 
   let data = <></>;
@@ -74,8 +74,8 @@ const VerifyToken = () => {
               boxShadow: 'none',
             },
           }}
-          onClick={goToDashboard}>
-          Go to Dashboard
+          onClick={goToLogin}>
+          Go to Login
         </Button>
       </Box>
     );
