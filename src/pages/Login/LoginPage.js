@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 
 import { clearFormErrors } from '../../redux/slices/errors/errorsSlice';
-import { login } from '../../redux/slices/auth/authSlice';
+import { login, setNotVerifiedEmail } from '../../redux/slices/auth/authSlice';
 
 import Background from '../../components/AuthBackground/AuthBackground';
 import { JInputField, JPasswordField } from '../../components/JInputField';
@@ -63,6 +63,7 @@ const LoginPage = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    dispatch(setNotVerifiedEmail(values.email));
     dispatch(
       login({
         email: values.email,
