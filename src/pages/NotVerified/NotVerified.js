@@ -1,6 +1,6 @@
 import { Grid, Typography, FormControl, Link, Button } from '@mui/material';
 import { Box } from '@mui/system';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 
@@ -8,6 +8,13 @@ import { resendToken } from '../../redux/slices/auth/authSlice';
 import Background from '../../components/AuthBackground/AuthBackground';
 
 const NotVerified = () => {
+  const [timer, setTimer] = useState(60);
+
+  useEffect(() => {
+    const time = timer > 0 && setInterval(() => setTimer(timer - 1), 1000);
+    return () => clearInterval(time);
+  }, [timer]);
+
   const location = useLocation();
 
   const navigate = useNavigate();
@@ -33,7 +40,7 @@ const NotVerified = () => {
   }, [loggedIn, navigate, from]);
 
   const resendEmail = () =>{
-    dispatch(resendToken({ email: email }));
+    dispatch(resendToken({ setTimer, email: email }));
   }
 
   return (
@@ -62,15 +69,15 @@ const NotVerified = () => {
             sx={{
               textAlign: 'center',
               mb: 2,
-              display:'flex',
-              flexDirection:'row',
-              justifyContent:'center'
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
             }}>
             <Button
-              disabled={loading}
+              disabled={loading || timer !== 0}
               variant='contained'
               sx={{
-                width:'150px',
+                width: '150px',
                 boxShadow: 'none',
                 '&:hover': {
                   boxShadow: 'none',
@@ -78,7 +85,7 @@ const NotVerified = () => {
               }}
               onClick={resendEmail}
               color='primary'>
-              Resend email
+              {timer !== 0 ? `Resend in ${timer}` : 'Resend email'}
             </Button>
           </FormControl>
           <FormControl

@@ -34,7 +34,7 @@ const ForgotPassword = () => {
   const theme = useTheme();
 
   const [timer, setTimer] = useState(60);
-  
+
   useEffect(() => {
     const time = timer > 0 && setInterval(() => setTimer(timer - 1), 1000);
     return () => clearInterval(time);
@@ -52,9 +52,8 @@ const ForgotPassword = () => {
 
   const errors = useSelector((store) => store.errors.formErrors);
 
-  const { requestSent, isValidToken, resetDone } = useSelector(
-    (store) => store.auth.forgotPassword
-  );
+  //states : DEFAULT, REQUEST_SENT, VALID_TOKEN, INVALID_TOKEN, REST_DONE
+  const [state, setState] = useState('DEFAULT');
 
   const loading = useSelector((store) => store.auth.loading === 'loading');
 
@@ -70,7 +69,7 @@ const ForgotPassword = () => {
 
   useEffect(() => {
     if (verificationToken) {
-      dispatch(verifyResetToken({ token: verificationToken }));
+      dispatch(verifyResetToken({ setState, token: verificationToken }));
     }
     if (loggedIn) {
       navigate(from, { replace: true });
@@ -87,19 +86,19 @@ const ForgotPassword = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(forgotPassword({ email: values.email }));
+    dispatch(forgotPassword({ setTimer, setState, email: values.email }));
   };
-  
+
   const resendEmail = (event) => {
     event.preventDefault();
-    setTimer(60);
-    dispatch(forgotPassword({ email: values.email }));
+    dispatch(forgotPassword({ setTimer, setState, email: values.email }));
   };
 
   const handleResetSubmit = (event) => {
     event.preventDefault();
     dispatch(
       resetPassword({
+        setState,
         token: verificationToken,
         password: values.password,
         password2: values.password2,
@@ -133,82 +132,7 @@ const ForgotPassword = () => {
         />
       </Box>
     );
-  } else if (!verificationToken) {
-    let data;
-
-    if (requestSent) {
-      data = (
-        <>
-          <Typography
-            variant='body1'
-            sx={{
-              mb: 4,
-              mt: 2,
-              fontWeight: 'bold',
-              color: '#28a745',
-            }}>
-            Please check your email.
-          </Typography>
-          <FormControl
-            sx={{
-              textAlign: 'center',
-              mb: 2,
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-            }}>
-            <Button
-              disabled={timer !== 0}
-              variant='contained'
-              sx={{
-                width: '150px',
-                boxShadow: 'none',
-                '&:hover': {
-                  boxShadow: 'none',
-                },
-              }}
-              onClick={resendEmail}
-              color='primary'>
-              {timer !== 0 ? timer : 'Resend email'}
-            </Button>
-          </FormControl>
-        </>
-      );
-    } else {
-      data = (
-        <>
-          <JInputField
-            topLabel='Your Registered Email'
-            placeholder='Enter your email'
-            value={values.email}
-            handleChange={handleChange('email')}
-            errors={errors['email']}
-            disabled={loading}
-          />
-
-          <FormControl
-            sx={{
-              color: 'text.primary',
-              mb: 2,
-              mt: 3,
-            }}>
-            <Button
-              disabled={loading}
-              variant='contained'
-              sx={{
-                boxShadow: 'none',
-                '&:hover': {
-                  boxShadow: 'none',
-                },
-              }}
-              onClick={handleSubmit}>
-              {loading ? <Loader /> : 'Submit'}
-            </Button>
-          </FormControl>
-        </>
-      );
-    }
-
+  } else if (state === 'DEFAULT' || state === 'REQUEST_SENT') {
     content = (
       <>
         <Link
@@ -220,12 +144,15 @@ const ForgotPassword = () => {
             display: 'inline-flex',
             alignItems: 'center',
             marginBottom: 2,
+            color: 'primary.main',
           }}>
-          <FaArrowLeft />
-          <Typography sx={{ marginLeft: 1 }}>Back to Home</Typography>
+          <FaArrowLeft style={{ color: 'inherit' }} />
+          <Typography sx={{ marginLeft: 1, color: 'inherit' }}>
+            Back to Home
+          </Typography>
         </Link>
         <Typography
-          variant='h5'
+          variant='h3'
           sx={{
             marginBottom: 4,
             fontWeight: 'bold',
@@ -234,7 +161,74 @@ const ForgotPassword = () => {
         </Typography>
 
         <FormGroup>
-          {data}
+          {state === 'DEFAULT' ? (
+            <>
+              <JInputField
+                topLabel='Your Registered Email'
+                placeholder='Enter your email'
+                value={values.email}
+                handleChange={handleChange('email')}
+                errors={errors['email']}
+                disabled={loading}
+              />
+
+              <FormControl
+                sx={{
+                  color: 'text.primary',
+                  mb: 2,
+                  mt: 3,
+                }}>
+                <Button
+                  disabled={loading}
+                  variant='contained'
+                  sx={{
+                    boxShadow: 'none',
+                    '&:hover': {
+                      boxShadow: 'none',
+                    },
+                  }}
+                  onClick={handleSubmit}>
+                  {loading ? <Loader /> : 'Submit'}
+                </Button>
+              </FormControl>
+            </>
+          ) : (
+            <>
+              <Typography
+                variant='body1'
+                sx={{
+                  mb: 4,
+                  mt: 2,
+                  fontWeight: 'bold',
+                  color: '#28a745',
+                  textAlign: 'center',
+                }}>
+                Please check your email.
+              </Typography>
+              <FormControl
+                sx={{
+                  textAlign: 'center',
+                  mb: 2,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                }}>
+                <Button
+                  disabled={timer !== 0}
+                  variant='contained'
+                  sx={{
+                    boxShadow: 'none',
+                    '&:hover': {
+                      boxShadow: 'none',
+                    },
+                  }}
+                  onClick={resendEmail}
+                  color='primary'>
+                  {timer !== 0 ? `Resend in ${timer}` : 'Resend email'}
+                </Button>
+              </FormControl>
+            </>
+          )}
           <FormControl
             sx={{
               textAlign: 'center',
@@ -263,7 +257,7 @@ const ForgotPassword = () => {
         </FormGroup>
       </>
     );
-  } else if (!isValidToken) {
+  } else if (state === 'INVALID_TOKEN') {
     content = (
       <Box
         component='div'
@@ -297,11 +291,11 @@ const ForgotPassword = () => {
         </Typography>
       </Box>
     );
-  } else if (!resetDone) {
+  } else if (state === 'VALID_TOKEN') {
     content = (
       <>
         <Typography
-          variant='h5'
+          variant='h3'
           sx={{
             marginBottom: 4,
             fontWeight: 'bold',
@@ -354,7 +348,7 @@ const ForgotPassword = () => {
         </FormGroup>
       </>
     );
-  } else {
+  } else if (state === 'REST_DONE') {
     content = (
       <>
         <Typography
@@ -382,12 +376,38 @@ const ForgotPassword = () => {
         </FormControl>
       </>
     );
+  } else {
+    content = (
+      <Box
+        component='div'
+        sx={{
+          display: 'flex',
+          width: '100%',
+          height: '100%',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Typography
+          variant='body1'
+          sx={{
+            mb: 4,
+            mt: 2,
+            fontWeight: 'bold',
+            color: '#dc3545',
+          }}>
+          Something went wrong. Close this window.
+        </Typography>
+      </Box>
+    );
   }
+
   return (
     <>
       <Grid container sx={{ backgroundColor: 'white' }}>
-        <Grid item container xs={12} sm={8} lg={6} justifyContent='center'>
-          <Grid item>
+        <Grid item container xs={12} sm={8} lg={6}>
+          <Grid item xs={2} sm={2} lg={3} xl={4} />
+          <Grid item xs={8} sm={8} lg={6} xl={4}>
             <Box
               sx={{
                 display: 'flex',
@@ -398,6 +418,7 @@ const ForgotPassword = () => {
               {content}
             </Box>
           </Grid>
+          <Grid item xs={2} sm={2} lg={3} xl={4} />
         </Grid>
         <Background />
       </Grid>

@@ -7,12 +7,6 @@ import authService from '../../../services/authService';
 const initialState = {
   loading: 'init',
   user: {},
-  forgotPassword: {
-    requestSent: false,
-    isValidToken: false,
-    token: '',
-    resetDone: false,
-  },
   notVerifiedEmail:''
 };
 
@@ -100,10 +94,11 @@ const logout = createAsyncThunk('auth/logout', async (data, { dispatch }) => {
 
 const resendToken = createAsyncThunk(
   'auth/resendToken',
-  async ({ email }, { dispatch }) => {
+  async ({ setTimer, email }, { dispatch }) => {
     try {
       const data = await authService.resendToken(email);
       dispatch(addToast({ type: 'success', message: data.message }));
+      setTimer(60);
       return;
     } catch (error) {
       if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
@@ -111,7 +106,7 @@ const resendToken = createAsyncThunk(
           dispatch(addToast({ type: 'error', message: toastMessage }))
         );
       }
-      
+
       return Promise.reject(error);
     }
   }
@@ -119,10 +114,12 @@ const resendToken = createAsyncThunk(
 
 const forgotPassword = createAsyncThunk(
   'auth/forgotPassword',
-  async ({ email }, { dispatch }) => {
+  async ({ setTimer, setState, email }, { dispatch }) => {
     try {
       const data = await authService.forgotPassword(email);
       dispatch(addToast({ type: 'success', message: data.message }));
+      setTimer(60);
+      setState('REQUEST_SENT');
       return;
     } catch (error) {
       if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
@@ -144,12 +141,14 @@ const forgotPassword = createAsyncThunk(
 
 const verifyResetToken = createAsyncThunk(
   'auth/verifyResetToken',
-  async ({ token }, { dispatch }) => {
+  async ({ setState, token }, { dispatch }) => {
     try {
       const data = await authService.verifyResetToken(token);
       dispatch(addToast({ type: 'success', message: data.message }));
+     setState('VALID_TOKEN');
       return data.payload;
     } catch (error) {
+      setState('INVALID_TOKEN');
       if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
         error.cause.toasts.forEach((toastMessage) =>
           dispatch(addToast({ type: 'error', message: toastMessage }))
@@ -198,7 +197,7 @@ const verifyToken = createAsyncThunk(
 
 const resetPassword = createAsyncThunk(
   'auth/resetPassword',
-  async ({ token, password, password2 }, { dispatch }) => {
+  async ({ setState, token, password, password2 }, { dispatch }) => {
     try {
       const data = await authService.resetPassword({
         token,
@@ -206,6 +205,7 @@ const resetPassword = createAsyncThunk(
         password2,
       });
       dispatch(addToast({ type: 'success', message: data.message }));
+      setState('REST_DONE');
       return;
     } catch (error) {
       if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
@@ -257,7 +257,6 @@ export const authSlice = createSlice({
     });
     builder.addCase(resetPassword.fulfilled, (state, action) => {
       state.loading = 'idle';
-      state.forgotPassword.resetDone = true;
     });
     builder.addCase(resetPassword.rejected, (state, action) => {
       state.loading = 'idle';
@@ -267,7 +266,7 @@ export const authSlice = createSlice({
     });
     builder.addCase(verifyResetToken.fulfilled, (state, action) => {
       state.loading = 'idle';
-      state.forgotPassword.isValidToken = true;
+     
       state.user = action.payload;
     });
     builder.addCase(verifyResetToken.rejected, (state, action) => {
@@ -278,7 +277,6 @@ export const authSlice = createSlice({
     });
     builder.addCase(forgotPassword.fulfilled, (state, action) => {
       state.loading = 'idle';
-      state.forgotPassword.requestSent = true;
     });
     builder.addCase(forgotPassword.rejected, (state, action) => {
       state.loading = 'idle';
