@@ -93,6 +93,8 @@ const NavBar = () => {
 
   const topLoading = useSelector((state) => state.misc.topLoading);
 
+  const transparent = useSelector((state) => state.settings.transparent);
+
   const loggedIn = useSelector((state) => state.auth.loading === 'loggedIn');
   const name = useSelector((state) => state.auth.user?.name);
   const role = useSelector((state) => state.auth.user?.role);
@@ -113,7 +115,9 @@ const NavBar = () => {
       <AppBar
         position='sticky'
         sx={{
-          backgroundColor: theme.palette.common.white
+          backgroundColor: transparent
+            ? 'transparent'
+            : theme.palette.common.white
         }}
         elevation={0}>
         <Container maxWidth='xl'>
@@ -129,7 +133,11 @@ const NavBar = () => {
               component={RouterLink}
               to='/'
               sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}>
-              <Logo size={60} />
+              <Logo
+                size={60}
+                transparent={transparent}
+                sx={{ position: 'relative', zIndex: 1000000 }}
+              />
             </StyledToolbar>
 
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -140,7 +148,7 @@ const NavBar = () => {
                 aria-haspopup='true'
                 onClick={handleOpenNavMenu}
                 color='inherit'
-                sx={{ color: 'text.secondary' }}>
+                sx={{ color: transparent ? 'white' : 'text.secondary' }}>
                 <FaBars />
               </IconButton>
               <Menu
@@ -220,7 +228,11 @@ const NavBar = () => {
               sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
               component={RouterLink}
               to='/'>
-              <Logo size={50} />
+              <Logo
+                size={50}
+                transparent={transparent}
+                sx={{ position: 'relative', zIndex: 1000000 }}
+              />
             </StyledToolbar>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               {pages.map((page) => (
@@ -232,7 +244,7 @@ const NavBar = () => {
                   sx={{
                     mx: 1,
                     my: 0,
-                    color: 'text.secondary',
+                    color: transparent ? 'white' : 'text.secondary',
                     fontWeight: 'bold',
                     display: 'block'
                   }}>
@@ -248,8 +260,10 @@ const NavBar = () => {
                     <IconButton
                       component={RouterLink}
                       to={'/dashboard/newlisting'}
-                      color='primary'
-                      sx={{ mx: 3 }}>
+                      sx={{
+                        mx: 3,
+                        color: transparent ? 'white' : 'primary.main'
+                      }}>
                       <FaPlus />
                     </IconButton>
                   </Tooltip>
@@ -266,7 +280,8 @@ const NavBar = () => {
                         boxShadow: 'none',
                         '&:hover': {
                           boxShadow: 'none'
-                        }
+                        },
+                        color: transparent ? 'white' : 'primary.main'
                       }}>
                       New listing
                     </Button>
@@ -312,7 +327,7 @@ const NavBar = () => {
                       component={RouterLink}
                       to='/login'
                       sx={{
-                        color: 'text.secondary',
+                        color: transparent ? 'white' : 'text.secondary',
                         fontWeight: 'bold'
                       }}>
                       <FaSignInAlt />
@@ -331,7 +346,8 @@ const NavBar = () => {
                         boxShadow: 'none',
                         '&:hover': {
                           boxShadow: 'none'
-                        }
+                        },
+                        color: transparent ? 'white' : 'primary.main'
                       }}>
                       New listing
                     </Button>
@@ -343,7 +359,7 @@ const NavBar = () => {
                       to='/login'
                       startIcon={<FaSignInAlt />}
                       sx={{
-                        color: 'text.secondary',
+                        color: transparent ? 'white' : 'text.secondary',
                         fontWeight: 'bold'
                       }}>
                       Login
