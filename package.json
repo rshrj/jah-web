@@ -30,7 +30,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint ."
   },
   "eslintConfig": {
     "extends": [
@@ -50,7 +51,7 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "/_H2Dv2bgWkihpvEUQ86Qe2BH/",
+  "homepage": "/",
   "author": "Rishi Raj \"rishiraj.1012exp@gmail.com\"",
   "license": "SEE LICENSE IN LICENSE.md"
 }

@@ -62,7 +62,7 @@ const App = () => {
         </Stack>
       )}
 
-      <BrowserRouter basename={'_H2Dv2bgWkihpvEUQ86Qe2BH'}>
+      <BrowserRouter>
         <ScrollReset>
           <Routes>
             <Route path='/login' element={<LoginPage />} />

@@ -6,13 +6,13 @@ import settingsService from '../../../services/settingsService';
 import { clearTopLoader, setTopLoader } from '../misc/miscSlice';
 
 const initialState = {
-  loading: 'idle'
+  loading: 'idle',
+  transparent: false
 };
 
 const submitHomeAdChange = createAsyncThunk(
   'settings/submitHomeAdChange',
   async ({ setValues, ...formData }, { dispatch }) => {
-    
     dispatch(setTopLoader());
     try {
       const data = await settingsService.submitHomeAdChange(formData);
@@ -25,7 +25,7 @@ const submitHomeAdChange = createAsyncThunk(
         image: '',
         buttonTitle: '',
         buttonLink: '',
-        adImage: undefined,
+        adImage: undefined
       });
       return data.payload;
     } catch (error) {
@@ -46,7 +46,11 @@ const submitHomeAdChange = createAsyncThunk(
 export const settingsSlice = createSlice({
   name: 'settings',
   initialState,
-  reducers: {},
+  reducers: {
+    setTransparent: (state, action) => {
+      state.transparent = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(submitHomeAdChange.pending, (state, action) => {
       state.loading = 'loading';
@@ -61,5 +65,7 @@ export const settingsSlice = createSlice({
 });
 
 export { submitHomeAdChange };
+
+export const { setTransparent } = settingsSlice.actions;
 
 export default settingsSlice.reducer;
