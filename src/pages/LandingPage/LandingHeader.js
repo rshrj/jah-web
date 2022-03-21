@@ -12,14 +12,11 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import homeAdPlaceholder from '../../assets/images/homead-placeholder-2.png';
+import backgroundVideo from '../../assets/videos/background.mp4';
 
 import { getHomeAd } from '../../redux/slices/misc/miscSlice';
 
 const Poster = styled(Grid)(({ theme }) => ({
-  backgroundImage: `url("${homeAdPlaceholder}")`,
-  backgroundSize: 'cover',
-  backdropFilter: `blur(1.5rem)`,
-  WebkitBackdropFilter: `blur(1.5rem)`,
   minHeight: '250px',
   position: 'relative',
   '&:after': {
@@ -29,7 +26,8 @@ const Poster = styled(Grid)(({ theme }) => ({
     left: 0,
     width: '100%',
     height: '100%',
-    backgroundImage: `linear-gradient(120deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+    // backgroundImage: `linear-gradient(120deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+    background: 'transparent',
     opacity: 0.8
   },
   '& > *': {
@@ -48,6 +46,48 @@ const LandingHeader = () => {
 
   return (
     <Poster container>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '-92px',
+          left: 0,
+          width: '100%',
+          height: '560px',
+          backgroundColor: 'transparent',
+          overflow: 'hidden',
+          // opacity: ,
+          zIndex: -1000,
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            display: 'block',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: -900
+          }
+        }}>
+        <video
+          autoPlay
+          muted
+          loop
+          id='myVideo'
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            height: '700px',
+            zIndex: -10001,
+            objectFit: 'cover',
+            objectPosition: 'center',
+            textAlign: 'center'
+          }}>
+          <source src={backgroundVideo} type='video/mp4' />
+        </video>
+      </Box>
       <Container
         sx={{
           display: 'flex',

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
   styled,
@@ -33,6 +33,7 @@ import Testimonials from './Testimonials';
 import CallBackRequest from './CallBackRequest';
 import FeaturedProperties from './FeaturedProperties';
 import LandingHeader from './LandingHeader';
+import { setTransparent } from '../../redux/slices/settings/settingsSlice';
 
 const SearchCard = styled(Card)({
   maxWidth: '700px',
@@ -48,9 +49,30 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const theme = useTheme();
 
+  const dispatch = useDispatch();
+
   let [tab, setTab] = useState(0);
   const [searchInput, setSearchInput] = useState('');
   const [autoCompleteInput, setAutoCompleteInput] = useState('');
+
+  // const transparent = useSelector((state) => state.settings.transparent);
+
+  useEffect(() => {
+    const listenScrollEvent = (e) => {
+      if (window.scrollY > 560) {
+        dispatch(setTransparent(false));
+      } else if (window.scrollY < 560) {
+        dispatch(setTransparent(true));
+      }
+    };
+
+    dispatch(setTransparent(true));
+    window.addEventListener('scroll', listenScrollEvent);
+    return () => {
+      dispatch(setTransparent(false));
+      window.removeEventListener('scroll', listenScrollEvent);
+    };
+  }, [dispatch]);
 
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
@@ -91,7 +113,7 @@ const LandingPage = () => {
     <>
       <LandingHeader />
 
-      <Container maxWidth='xl' sx={{}}>
+      <Container maxWidth='xl' sx={{ zIndex: 100, position: 'relative' }}>
         <SearchCard
           sx={{
             py: 3,
@@ -166,7 +188,7 @@ const LandingPage = () => {
           </Box>
         </SearchCard>
 
-        <Box>
+        <Box sx={{ zIndex: 1000, position: 'relative', marginTop: '150px' }}>
           <Typography
             textAlign='center'
             variant={isPhone ? 'h4' : 'h3'}
