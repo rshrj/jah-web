@@ -6,7 +6,7 @@ import {
   FormControlLabel,
   Checkbox,
   Button,
-  Link
+  Link,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 
 import { clearFormErrors } from '../../redux/slices/errors/errorsSlice';
-import { login } from '../../redux/slices/auth/authSlice';
+import { login, setNotVerifiedEmail } from '../../redux/slices/auth/authSlice';
 
 import Background from '../../components/AuthBackground/AuthBackground';
 import { JInputField, JPasswordField } from '../../components/JInputField';
@@ -25,7 +25,7 @@ const LoginPage = () => {
   const [values, setValues] = useState({
     email: '',
     password: '',
-    showPassword: false
+    showPassword: false,
   });
   const location = useLocation();
 
@@ -41,6 +41,11 @@ const LoginPage = () => {
 
   const from = location.state?.from?.pathname || '/dashboard';
 
+  if (errors['notVerified']) {
+    dispatch(clearFormErrors());
+    navigate('/notverified');
+  }
+  
   useEffect(() => {
     if (loggedIn) {
       navigate(from, { replace: true });
@@ -58,10 +63,11 @@ const LoginPage = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    dispatch(setNotVerifiedEmail(values.email));
     dispatch(
       login({
         email: values.email,
-        password: values.password
+        password: values.password,
       })
     );
   };
@@ -69,7 +75,7 @@ const LoginPage = () => {
   const handleClickShowPassword = () => {
     setValues({
       ...values,
-      showPassword: !values.showPassword
+      showPassword: !values.showPassword,
     });
   };
 
@@ -84,7 +90,7 @@ const LoginPage = () => {
               flexDirection: 'column',
               width: '100%',
               height: '100%',
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}>
             <Link
               underline='hover'
@@ -95,7 +101,7 @@ const LoginPage = () => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 marginBottom: 2,
-                color: 'primary.main'
+                color: 'primary.main',
               }}>
               <FaArrowLeft style={{ color: 'inherit' }} />
               <Typography sx={{ marginLeft: 1, color: 'inherit' }}>
@@ -107,7 +113,7 @@ const LoginPage = () => {
               variant='h3'
               sx={{
                 marginBottom: 4,
-                fontWeight: 'bold'
+                fontWeight: 'bold',
               }}>
               Login
             </Typography>
@@ -136,7 +142,7 @@ const LoginPage = () => {
 
                 <FormControl
                   sx={{
-                    marginBottom: 2
+                    marginBottom: 2,
                   }}>
                   <FormControlLabel
                     control={<Checkbox disabled={loading} />}
@@ -147,7 +153,7 @@ const LoginPage = () => {
                 <FormControl
                   sx={{
                     color: 'text.primary',
-                    marginBottom: 1
+                    marginBottom: 1,
                   }}>
                   <Button
                     type='submit'
@@ -156,8 +162,8 @@ const LoginPage = () => {
                     sx={{
                       boxShadow: 'none',
                       '&:hover': {
-                        boxShadow: 'none'
-                      }
+                        boxShadow: 'none',
+                      },
                     }}
                     onClick={handleSubmit}>
                     {loading ? <Loader /> : 'Login'}
@@ -166,7 +172,7 @@ const LoginPage = () => {
 
                 <FormControl
                   sx={{
-                    textAlign: 'center'
+                    textAlign: 'center',
                   }}>
                   <Link
                     component={RouterLink}
@@ -179,7 +185,7 @@ const LoginPage = () => {
 
                 <FormControl
                   sx={{
-                    textAlign: 'center'
+                    textAlign: 'center',
                   }}>
                   <Link
                     component={RouterLink}

@@ -138,6 +138,40 @@ export const verifyEmail = async (token) => {
   }
 };
 
+export const resendToken = async (email) => {
+  try {
+    const res = await fetch(`${apiUrl}/auth/resendToken`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      body: JSON.stringify({
+        email: email,
+      }),
+    });
+
+    if (!res) {
+      throw errorWithToast('Server did not respond');
+    }
+
+    const data = await res.json();
+    console.log(data);
+
+    if (!res.ok) {
+      throw new Error('Request error', { cause: data });
+    }
+
+    return data;
+  } catch (e) {
+    if (e instanceof TypeError && e.message === 'Failed to fetch') {
+      return rejectWithToast('Server is offline');
+    }
+    return Promise.reject(e);
+  }
+};
+
 export const forgotPassword = async (email) => {
   try {
     const res = await fetch(`${apiUrl}/auth/forgotpassword`, {
@@ -175,6 +209,37 @@ export const forgotPassword = async (email) => {
 export const verifyResetToken = async (token) => {
   try {
     const res = await fetch(`${apiUrl}/auth/forgotpassword/${token}`, {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+    });
+
+    if (!res) {
+      throw errorWithToast('Server did not respond');
+    }
+
+    const data = await res.json();
+    console.log(data);
+
+    if (!res.ok) {
+      throw new Error('Request error', { cause: data });
+    }
+
+    return data;
+  } catch (e) {
+    if (e instanceof TypeError && e.message === 'Failed to fetch') {
+      return rejectWithToast('Server is offline');
+    }
+    return Promise.reject(e);
+  }
+};
+
+export const verifyToken = async (token) => {
+  try {
+    const res = await fetch(`${apiUrl}/auth/verify/${token}`, {
       method: 'GET',
       mode: 'cors',
       headers: {
@@ -247,6 +312,8 @@ const authService = {
   forgotPassword,
   verifyResetToken,
   resetPassword,
+  verifyToken,
+  resendToken,
 };
 
 export default authService;
