@@ -32,6 +32,7 @@ const pages = [
   { name: 'For Tenants', link: '/fortenants' },
   { name: 'About', link: '/about' },
   { name: 'Testimonials', link: '/submittestimonial' },
+  { name: 'Our Clients', link: '/ourclients' },
   { name: 'Contact Us', link: '/contact' }
 ];
 

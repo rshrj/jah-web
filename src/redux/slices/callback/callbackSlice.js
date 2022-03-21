@@ -90,11 +90,46 @@ const updateState = createAsyncThunk(
   }
 );
 
+const deleteCallbackRequest = createAsyncThunk(
+  'callback/deleteCallbackRequest',
+  async ({callbackId}, { dispatch }) => {
+    try {
+     
+      const data = await callbackService.deleteCallbackRequest(callbackId);
+      if(data.message){
+        dispatch(addToast({ type: 'success', message: data.message }));
+      }
+      dispatch(fetchCallBackRequests());
+      
+    } catch (error) {
+      if (error.cause.toasts !== undefined && error.cause.toasts.length > 0) {
+        error.cause.toasts.forEach((toastMessage) =>
+          dispatch(addToast({ type: 'error', message: toastMessage }))
+        );
+      }
+      if (error.cause.errors !== undefined || error.cause.errors !== {}) {
+        dispatch(createFormErrors(error.cause.errors));
+      }
+
+      return Promise.reject(error);
+    }
+  }
+);
+
 export const callbackSlice = createSlice({
   name: 'callback',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(deleteCallbackRequest.pending, (state, action) => {
+      state.loading = 'loading';
+    });
+    builder.addCase(deleteCallbackRequest.fulfilled, (state, action) => {
+      state.loading = 'idle';
+    });
+    builder.addCase(deleteCallbackRequest.rejected, (state, action) => {
+      state.loading = 'idle';
+    });
     builder.addCase(submitCallBackRequest.pending, (state, action) => {
       state.loading = 'loading';
     });
@@ -127,6 +162,11 @@ export const callbackSlice = createSlice({
   }
 });
 
-export { submitCallBackRequest, fetchCallBackRequests, updateState };
+export {
+  submitCallBackRequest,
+  fetchCallBackRequests,
+  updateState,
+  deleteCallbackRequest,
+};
 
 export default callbackSlice.reducer;

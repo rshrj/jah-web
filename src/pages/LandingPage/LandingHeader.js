@@ -4,7 +4,8 @@ import {
   Container,
   Grid,
   Link,
-  Typography
+  Typography,
+  useMediaQuery
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
@@ -43,6 +44,8 @@ const LandingHeader = () => {
   }, [dispatch]);
 
   const homead = useSelector((state) => state.misc.homead);
+
+  const isPhone = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
   return (
     <Poster container>
@@ -105,7 +108,10 @@ const LandingHeader = () => {
             justifyContent: 'center',
             alignItems: 'stretch'
           }}>
-          <Typography variant='h4' color='common.white' sx={{ maxWidth: 400 }}>
+          <Typography
+            variant={isPhone ? 'h5' : 'h4'}
+            color='common.white'
+            sx={{ maxWidth: 400 }}>
             Helping Mumbaikars find their perfect places
           </Typography>
           <Typography

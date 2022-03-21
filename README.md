@@ -1,1 +1,1 @@
-# Jai Ambe Homes React.js frontend
+# Jai Ambe Advisory React.js frontend

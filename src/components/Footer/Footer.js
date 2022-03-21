@@ -26,7 +26,7 @@ const IconsWrapper = styled.div`
   width: 180px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
 `;
 const Content = styled.div`
   width: 281px;
@@ -38,7 +38,7 @@ const Content = styled.div`
 const icons = [
   {
     icon: <FaFacebook size={30} />,
-    link: ''
+    link: 'https://www.facebook.com/Jai-Ambe-Advisory-Pvt-Ltd-100107012553389'
   },
   {
     icon: (
@@ -46,29 +46,13 @@ const icons = [
         <FaInstagram />
       </Icon>
     ),
-    link: ''
-  },
-  {
-    icon: (
-      <Icon>
-        <FaTwitter />
-      </Icon>
-    ),
-    link: ''
-  },
-  {
-    icon: (
-      <Icon>
-        <FaLinkedinIn />
-      </Icon>
-    ),
-    link: ''
+    link: 'https://www.instagram.com/jaiambeadvisorypvtltd'
   }
 ];
 
 const Footer = () => {
   const Icons = icons.map((m, i) => (
-    <Link href={m.link} sx={{ color: 'black' }} underline='none' key={i}>
+    <Link href={m.link} sx={{ color: 'black', mx: 1 }} underline='none' key={i}>
       {m.icon}
     </Link>
   ));
@@ -88,7 +72,7 @@ const Footer = () => {
                 maxWidth: '281px',
                 width: '100%',
                 margin: 'auto',
-                display: 'flex',
+                display: { sm: 'flex', xs: 'none' },
                 justifyContent: { xs: 'center', md: 'flex-start' }
               }}>
               <Logo size={60} />

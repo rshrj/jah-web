@@ -12,7 +12,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { signup } from '../../redux/slices/auth/authSlice';
+import { signup, setNotVerifiedEmail } from '../../redux/slices/auth/authSlice';
 
 import Background from '../../components/AuthBackground/AuthBackground';
 import { JInputField, JPasswordField } from '../../components/JInputField';
@@ -60,8 +60,11 @@ const SignupPage = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    dispatch(setNotVerifiedEmail(values.email));
+    
     dispatch(
       signup({
+        navigate:navigate,
         email: values.email,
         password: values.password,
         password2: values.password2,

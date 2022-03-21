@@ -151,7 +151,7 @@ const AboutPage = () => {
                 color='primary.main'
                 fontWeight='bold'
                 sx={{ marginBottom: 2, marginTop: 0, paddingTop: 0 }}>
-                Vijay Mishra
+                Vijay Kumar
               </Typography>
               <Typography>
                 Vijay is an acclaimed high-touch partner with a piece of
@@ -162,16 +162,22 @@ const AboutPage = () => {
                 last eighteen years. With an exemplary record in providing
                 quality service to build relationships with clients, he
                 maintains those relationships by communicating effectively. He
-                is also the founder of Jai Ambe Homes and has served over
+                is also the founder of Jai Ambe Advisory and has served over
                 10,000+ customers.
               </Typography>
             </Box>
-            <Box>
+            <Box
+              sx={{
+                width: 'calc(100% - 650px)',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}>
               <img
                 src={about0}
                 style={{
-                  width: isPhone ? '100%' : 500,
-                  height: isPhone ? 'auto' : 330
+                  // width: isPhone ? '100%' : 500,
+                  height: isPhone ? 400 : 250
                 }}
                 alt='abc'
               />
@@ -179,7 +185,7 @@ const AboutPage = () => {
           </Paper>
           <AboutCard
             title='Vision: Dynamic Business Transformation In Real Estate'
-            text='At Jai Ambe Advisory, we envision to build a ecosystem where both customers and sellers are happy. We guarantee the perfect fit of homes for our customers and quick sales for the sellers enlisted with us. We envision to be the pioneers in the Exclusive Mandate marketplace as a first-choice preferred partner for all top-notch developers. We will be the catalyst enabling the real estate business to move from traditional sales to the Exclusive Mandate business.'
+            text='At Jai Ambe Advisory, we envision to build an ecosystem where both customers and sellers are happy. We guarantee the perfect fit of homes for our customers and quick sales for the sellers enlisted with us. We envision to be the pioneers in the Exclusive Mandate marketplace as a first-choice preferred partner for all top-notch developers. We will be the catalyst enabling the real estate business to move from traditional sales to the Exclusive Mandate business.'
             picture={about1}
           />
           <AboutCard

@@ -1,11 +1,22 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import { Button, Container, FormGroup, Grid, Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import {
+  Button,
+  Container,
+  Divider,
+  FormGroup,
+  Grid,
+  Link,
+  Typography,
+  useMediaQuery
+} from '@mui/material';
+import { Box, textAlign } from '@mui/system';
 
 import illustration from '../../assets/vectors/illustration.svg';
 import { clearFormErrors } from '../../redux/slices/errors/errorsSlice';
 import { submitCallBackRequest } from '../../redux/slices/callback/callbackSlice';
+
+import aboutPic from '../../assets/images/about-pic.jpeg';
 
 import { JInputField } from '../../components/JInputField';
 import Footer from '../../components/Footer';
@@ -42,6 +53,8 @@ const ContactPage = () => {
   const errors = useSelector((state) => state.errors.formErrors);
   const loading = useSelector((state) => state.callback.loading === 'loading');
 
+  const isPhone = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+
   return (
     <>
       <Container maxWidth='lg'>
@@ -62,6 +75,56 @@ const ContactPage = () => {
             with us, or just want to meet up with us for coffee, fill the form
             and we will call you in 4 working hours.
           </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            pt: 4,
+            display: 'flex',
+            flexDirection: isPhone ? 'column' : 'row',
+            alignItems: isPhone ? 'flex-start' : 'center',
+            justifyContent: 'center'
+          }}>
+          <img
+            src={aboutPic}
+            alt={'Jai Ambe Advisory'}
+            style={{
+              width: isPhone ? '100%' : '550px',
+              height: 'auto'
+            }}
+          />
+          <Box sx={{ mx: { xs: 0, sm: 5 } }}>
+            <Typography variant='h5'>Jai Ambe Advisory Pvt Ltd</Typography>
+            <Divider sx={{ mt: 1, mb: 2 }} />
+            <Typography fontWeight='bold'>Address</Typography>
+            <Typography color='text.secondary'>
+              617, Swastik Disha Business Park, LBS Marg
+            </Typography>
+            <Typography color='text.secondary'>
+              Ghatkopar, West Mumbai 400086
+            </Typography>
+
+            <Typography fontWeight='bold' sx={{ mt: 2 }}>
+              Contact details
+            </Typography>
+            <Typography color='text.secondary'>Vijay Kumar</Typography>
+
+            <Typography
+              color='text.secondary'
+              component={Link}
+              href='tel:+919820274540'
+              display='block'>
+              9820274540
+            </Typography>
+
+            <Typography
+              color='text.secondary'
+              component={Link}
+              href='mailto:vijay@jaiambehomes.com'
+              display='block'>
+              vijay@jaiambehomes.com
+            </Typography>
+          </Box>
         </Box>
 
         <Grid
@@ -130,12 +193,13 @@ const ContactPage = () => {
           <Grid item>
             <Box
               sx={{
-                width: 500,
-                height: 500,
+                width: isPhone ? 400 : 500,
+                height: isPhone ? 400 : 500,
                 backgroundImage: `url(${illustration})`,
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center'
+                backgroundPosition: 'center',
+                textAlign: 'center'
               }}></Box>
           </Grid>
         </Grid>
