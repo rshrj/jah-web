@@ -35,8 +35,9 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import SubmitTestimonial from './pages/SubmitTestimonial';
 import HomeAd from './pages/HomeAd';
 import EditListing from './pages/EditListing';
-import Testimonials from './pages/Testimonials'
+import Testimonials from './pages/Testimonials';
 import ForgotPassword from './pages/ForgotPassword';
+import OurClients from './pages/OurClients';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -80,6 +81,7 @@ const App = () => {
               <Route path='fortenants' element={<GalleryView mode='rent' />} />
               <Route path='contact' element={<ContactPage />} />
               <Route path='tnc' element={<TermsAndConditions />} />
+              <Route path='ourclients' element={<OurClients />} />
               <Route path='submittestimonial' element={<SubmitTestimonial />} />
               <Route path='privacy' element={<PrivacyPolicy />} />
               <Route path='about' element={<AboutPage />} />

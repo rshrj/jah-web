@@ -103,8 +103,8 @@ const LandingPage = () => {
     (state) => state.listings.fetchLoading === 'loading'
   );
 
-  const tabs = ['Projects', 'Resale Homes', 'Rent / Lease'].map((l, i) => (
-    <Tab key={i} label={l} sx={{ fontWeight: 'bold' }} />
+  const tabs = ['New Projects', 'Resale Homes', 'Rent / Lease'].map((l, i) => (
+    <Tab key={i} label={l} sx={{ fontWeight: 'bold', fontSize: '0.8em' }} />
   ));
 
   const isPhone = useMediaQuery((theme) => theme.breakpoints.down('sm'));
@@ -194,7 +194,7 @@ const LandingPage = () => {
             variant={isPhone ? 'h4' : 'h3'}
             color='text.secondary'
             sx={{ marginTop: 5 }}>
-            Mumbai's Best Real Estate Consultant
+            Mumbai’s Best Real Estate Advisory Firm
           </Typography>
           <Typography
             textAlign='center'
@@ -221,7 +221,7 @@ const LandingPage = () => {
               variant={isPhone ? 'h4' : 'h3'}
               color='primary.main'
               sx={{ marginTop: 5, marginBottom: 1, paddingTop: 5 }}>
-              Why Jai Ambe Homes?
+              Why Jai Ambe Advisory?
             </Typography>
             <Typography
               textAlign='center'
@@ -399,7 +399,7 @@ const LandingPage = () => {
                 m: 2
               }}>
               <Typography variant='h2' color='primary.main'>
-                21+
+                18+
               </Typography>
               <Typography variant='h6' sx={{ marginTop: 3 }}>
                 Successful Years

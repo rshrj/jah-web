@@ -8,7 +8,8 @@ import {
   FormLabel,
   Grid,
   TextareaAutosize,
-  Typography
+  Typography,
+  useMediaQuery
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { JInputField } from '../../components/JInputField';
@@ -16,7 +17,7 @@ import { useTheme, styled } from '@mui/material/styles';
 
 import { clearFormErrors } from '../../redux/slices/errors/errorsSlice';
 import { submitTestimonial } from '../../redux/slices/testimonials/testimonialsSlice';
-import illustration from '../../assets/vectors/submit-testimonial.svg';
+import illustration from '../../assets/vectors/testimonial-illustration.svg';
 import Footer from '../../components/Footer';
 import Testimonials from '../LandingPage/Testimonials';
 
@@ -74,6 +75,8 @@ const SubmitTestimonial = () => {
   const loading = useSelector(
     (state) => state.testimonials.loading === 'loading'
   );
+
+  const isPhone = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
   return (
     <>
@@ -205,8 +208,8 @@ const SubmitTestimonial = () => {
           <Grid item>
             <Box
               sx={{
-                width: 500,
-                height: 500,
+                width: isPhone ? 330 : 500,
+                height: isPhone ? 330 : 500,
                 backgroundImage: `url(${illustration})`,
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
