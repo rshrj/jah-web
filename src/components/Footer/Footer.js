@@ -47,6 +47,22 @@ const icons = [
       </Icon>
     ),
     link: 'https://www.instagram.com/jaiambeadvisorypvtltd'
+  },
+  {
+    icon: (
+      <Icon>
+        <FaTwitter />
+      </Icon>
+    ),
+    link: 'https://twitter.com/ambe_ltd'
+  },
+  {
+    icon: (
+      <Icon>
+        <FaLinkedinIn />
+      </Icon>
+    ),
+    link: 'https://www.linkedin.com/in/jai-ambe-advisory-private-limited-1a4676229'
   }
 ];
 
