@@ -20,7 +20,7 @@ const theme = createTheme({
   components: {
     MuiButton: {
       styleOverrides: {
-        root: {
+        contained: {
           '&:hover': {
             color: 'white'
           }
