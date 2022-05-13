@@ -98,7 +98,7 @@ const ContactPage = () => {
             <Divider sx={{ mt: 1, mb: 2 }} />
             <Typography fontWeight='bold'>Address</Typography>
             <Typography color='text.secondary'>
-              617, Swastik Disha Business Park, LBS Marg
+              412, GoldCrest Business Park LBS Marg
             </Typography>
             <Typography color='text.secondary'>
               Ghatkopar, West Mumbai 400086
