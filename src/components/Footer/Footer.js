@@ -47,6 +47,22 @@ const icons = [
       </Icon>
     ),
     link: 'https://www.instagram.com/jaiambeadvisorypvtltd'
+  },
+  {
+    icon: (
+      <Icon>
+        <FaTwitter />
+      </Icon>
+    ),
+    link: 'https://twitter.com/ambe_ltd'
+  },
+  {
+    icon: (
+      <Icon>
+        <FaLinkedinIn />
+      </Icon>
+    ),
+    link: 'https://www.linkedin.com/in/jai-ambe-advisory-private-limited-1a4676229'
   }
 ];
 
@@ -270,20 +286,7 @@ const Footer = () => {
             fontSize: { xs: '8px', sm: '11px' },
             textWrapping: 'wrap'
           }}>
-          Copyright &copy; {new Date().getFullYear()} Jai Ambe Advisory | All{' '}
-          Rights Reserved | Created with love &nbsp;
-          <span style={{ color: 'red' }}>♥</span> &nbsp; by&nbsp;
-          <Link
-            href='https://zenoholics.com/'
-            target='_blank'
-            rel='noopener noreferrer'
-            sx={{
-              color: 'white',
-              textDecorate: 'none',
-              '&:hover': { textDecorate: 'underline' }
-            }}>
-            Zenoholics
-          </Link>
+          Copyright &copy; {new Date().getFullYear()} | All Rights Reserved with Jai Ambe Advisory Pvt. Ltd.
         </Box>
       </Box>
     </>

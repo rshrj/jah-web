@@ -16,6 +16,17 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: '"Sen",  sans-serif'
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        contained: {
+          '&:hover': {
+            color: 'white'
+          }
+        }
+      }
+    }
   }
 });
 

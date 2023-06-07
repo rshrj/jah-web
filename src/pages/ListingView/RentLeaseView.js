@@ -288,8 +288,8 @@ const RentLeaseView = ({ listing }) => {
             <Typography
               variant='body1'
               sx={{ marginBottom: 3, textAlign: 'justify' }}>
-              Jai Ambe Real Estate Consultants are here to help you with your
-              hunt for the best deal. With a track record of 10,000+ customers,
+              Jai Ambe Advisory is here to help you with your
+              hunt for the best deal in real estate. With a track record of 10,000+ customers,
               we excel in bringing smiles on faces.
             </Typography>
             <Button
